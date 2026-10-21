@@ -485,10 +485,21 @@ function bgmTrackName(){try{var s=bgmFile();for(var k in bgmNames){if(s.includes
 function stopGameMusic(){try{ngMusicMode=ngTracks.length;if(typeof ngMusic!=='undefined'&&ngMusic)ngMusic.pause();var _mb=document.getElementById('ngMenuMusic');if(_mb)_mb.textContent=ngMusicLabel()}catch(e){}}
 function playBgm(arg,say){
 var a=(arg||'').toLowerCase().replace(/[^a-z0-9]/g,'');
-if(typeof currentZone!=='undefined'&&currentZone==='cb_menu'&&!window._trAudioLock)a='box';
-if(a==='moon'||a==='moon1857'||a==='moonrot1857'||a==='overdose'||a==='od'){switchTrack('moon1857');say('music: moon_rot_1857 [OVERDOSE]');return true}
-if(a==='stanley'||a==='wakeup'||a==='wakeupstanley'){try{window._bgmStarted=true}catch(e){}try{bgm.pause()}catch(e){}try{moonEl.pause()}catch(e){}try{ngMusicMode=0;ngMusicApply()}catch(e){}say('music: Wakeupstanley');return true}
-if(a==='box'||a==='bro'||a==='boxlmao'){try{window._bgmStarted=true}catch(e){}try{bgm.pause()}catch(e){}try{moonEl.pause()}catch(e){}try{ngMusicMode=1;ngMusicApply()}catch(e){}say('music: bro is in a box lmao imagine');return true}
+// school edition: no cb_menu force-box rewrite — whatever track you ask for plays
+if(a==='moon'||a==='moon1857'||a==='moonrot1857'||a==='overdose'||a==='od'){
+if(!audioCtx)initAudio();activeTrack='moon1857';
+try{stopGameMusic()}catch(e){}
+try{bgm.pause()}catch(e){}try{moonEl.pause()}catch(e){}
+if(odActive)hideOdWarn(false);
+var mf='moon_rot_1857.mp3';
+fetch(mf).then(function(r){if(!r.ok)throw 0;return r.blob()}).then(function(b){
+try{moonEl.src=URL.createObjectURL(new Blob([b],{type:'audio/mpeg'}))}catch(e){}
+moonEl.play().catch(function(){});
+}).catch(function(){moonEl.play().catch(function(){})});
+showOdWarn();
+say('music: moon_rot_1857 [OVERDOSE]');return true}
+if(a==='stanley'||a==='wakeup'||a==='wakeupstanley'){if(!audioCtx)initAudio();activeTrack='bgm';try{moonEl.pause()}catch(e){}stopGameMusic();if(odActive)hideOdWarn(false);if(!bgmFile().includes('Wakeupstanley.mp3')){bgmBlobLoad('Wakeupstanley.mp3',true)}else{bgm.play().catch(function(){})}say('music: Wakeupstanley');return true}
+if(a==='box'||a==='bro'||a==='boxlmao'){if(!audioCtx)initAudio();activeTrack='bgm';try{moonEl.pause()}catch(e){}stopGameMusic();if(odActive)hideOdWarn(false);if(!bgmFile().includes('bro is in a box lmao imagine.mp3')){bgmBlobLoad('bro is in a box lmao imagine.mp3',true)}else{bgm.play().catch(function(){})}say('music: '+bgmNames['bro is in a box lmao imagine.mp3']);return true}
 if(a==='off'){try{bgm.pause()}catch(e){}try{moonEl.pause()}catch(e){}stopGameMusic();try{noliLyricStop()}catch(e){}try{empLyricStop()}catch(e){}say('music: off');return true}
 if(a==='downfall'||a==='shutdown'||a==='sciencesdownfall'){
 if(!bgmDownfallUnlocked()){say('bgm: downfall is locked. (it plays during the shutdown — stay in the room, or leave it.)');return true}
