@@ -513,7 +513,14 @@ function openOsWin(pos,tab){
 function lyNorm(s){
   return String(s||'').toLowerCase().replace(/\[[^\]]*\]/g,'').replace(/[^a-z0-9]/g,'');
 }
-function lyRender(tr,txt,meta){
+var LYR_PRESETS={
+  'friday.mp3':{
+    head:'Windows96 - Landscaping',
+    body:'[instrumental]\n\nfrom the album "Reflections" (2017), track 12.\npure vaporwave - no vocals, nothing to sing along to.\n\n(lrclib thinks you meant "Landscaping" by Shordie.\nlrclib is wrong.)'
+  }
+};
+
+function lyRender(tr,txt,meta,head,preset){
   var pane=document.getElementById('paneLyrics');
   if(pane.dataset.f!==tr.f)return;
   pane.innerHTML='';
@@ -525,7 +532,7 @@ function lyRender(tr,txt,meta){
   }else{
     var hit=document.createElement('div');
     hit.className='lyHit';
-    hit.textContent=meta?((meta.artistName?meta.artistName+' - ':'')+(meta.trackName||'')):tr.n;
+    hit.textContent=head||(meta?((meta.artistName?meta.artistName+' - ':'')+(meta.trackName||'')):tr.n);
     pane.appendChild(hit);
     var body=document.createElement('div');
     body.textContent=txt;
@@ -533,17 +540,23 @@ function lyRender(tr,txt,meta){
   }
   var foot=document.createElement('div');
   foot.className='lyMeta';
-  foot.textContent='via ';
-  var a=document.createElement('a');
-  a.href='https://lrclib.net';a.target='_blank';a.rel='noopener';
-  a.textContent='lrclib.net';
-  foot.appendChild(a);
+  if(preset){
+    foot.textContent='void records preset';
+  }else{
+    foot.textContent='via ';
+    var a=document.createElement('a');
+    a.href='https://lrclib.net';a.target='_blank';a.rel='noopener';
+    a.textContent='lrclib.net';
+    foot.appendChild(a);
+  }
   pane.appendChild(foot);
 }
 function lyLoad(pos){
   var tr=TRACKS[pos];
   var pane=document.getElementById('paneLyrics');
   pane.dataset.f=tr.f;
+  var pre=LYR_PRESETS[tr.f];
+  if(pre){lyRender(tr,pre.body,null,pre.head,true);return}
   if(lyCache[tr.f]!==undefined){lyRender(tr,lyCache[tr.f],null);return}
   pane.innerHTML='<div class="lyState">searching lrclib&hellip;</div>';
   var q=tr.n.replace(/\[[^\]]*\]/g,'').trim();
