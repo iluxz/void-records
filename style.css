@@ -280,6 +280,22 @@ footer{
   flex-shrink:0;transition:all .12s;
 }
 .lyBtn:hover{border-color:var(--cyan);color:var(--cyan);box-shadow:0 0 8px rgba(94,230,255,.4)}
+.favBtn{
+  font-family:inherit;font-size:11px;line-height:1;
+  background:#1c1633;color:#3f3860;
+  border:1px solid var(--line);
+  width:24px;height:22px;
+  border-radius:3px;cursor:pointer;
+  flex-shrink:0;transition:all .12s;
+}
+.favBtn:hover{border-color:var(--amber);color:var(--amber)}
+.favBtn.on{color:var(--amber);border-color:rgba(255,180,58,.5);text-shadow:0 0 8px rgba(255,180,58,.7)}
+li.emptyNote{
+  justify-content:center;
+  color:#4a4368;font-style:italic;font-size:12px;
+  cursor:default;border-bottom:none;
+}
+li.emptyNote:hover{background:transparent}
 
 /* ── OS window ── */
 #osWin{

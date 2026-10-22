@@ -33,7 +33,7 @@ function makeDsp(){
     ring1=new Float32Array(ringSize);
     pitchNode=audioCtx.createScriptProcessor(4096,2,2);
     toneFilter=audioCtx.createBiquadFilter();
-    toneFilter.type='lowpass';toneFilter.frequency.value=16000;toneFilter.Q.value=.5;
+    toneFilter.type='lowpass';toneFilter.frequency.value=toneHz;toneFilter.Q.value=.5;
     pitchNode.onaudioprocess=function(e){
       var inb=e.inputBuffer,out=e.outputBuffer;
       var n=inb.length,sr2=inb.sampleRate;
@@ -75,7 +75,8 @@ function ringRead(ring,delaySamples){
   return a+(b-a)*frac;
 }
 window.setPitchRatio=function(r){try{pitchRatio=r}catch(e){}};
-window.setTone=function(hz){try{if(toneFilter)toneFilter.frequency.value=hz}catch(e){}};
+var toneHz=16000;
+window.setTone=function(hz){try{toneHz=hz;if(toneFilter)toneFilter.frequency.value=hz}catch(e){}};
 
 var crackleGain=null;
 function makeCrackle(){
