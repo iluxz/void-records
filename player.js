@@ -476,7 +476,11 @@ function lyLoad(pos){
   var q=tr.n.replace(/\[[^\]]*\]/g,'').trim();
   var title=lyNorm(q.split(' - ').pop());
   fetch('https://lrclib.net/api/search?q='+encodeURIComponent(q))
-  .then(function(r){if(!r.ok)throw 0;return r.json()})
+  .then(function(r){
+    if(r.status===429)throw{tired:true};
+    if(!r.ok)throw{tired:false};
+    return r.json();
+  })
   .then(function(arr){
     var best=null,bestScore=-1;
     for(var i=0;i<(arr||[]).length;i++){
@@ -493,9 +497,13 @@ function lyLoad(pos){
     lyCache[tr.f]=txt;
     lyRender(tr,txt,best);
   })
-  .catch(function(){
+  .catch(function(err){
     if(pane.dataset.f!==tr.f)return;
-    pane.innerHTML='<div class="lyState">lrclib unreachable - network or filter in the way</div>';
+    if(err&&err.tired){
+      pane.innerHTML='<div class="lyState">lrclib is tired - give it a minute, then click the note again.</div>';
+    }else{
+      pane.innerHTML='<div class="lyState">lrclib unreachable - network or filter in the way</div>';
+    }
   });
 }
 function infoRender(pos){
