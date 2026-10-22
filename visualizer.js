@@ -3,6 +3,7 @@ var audioCtx=null,analyser=null,freqData=null;
 
 function initVisualizer(el){
   if(audioCtx)return;
+  if(location.protocol==='file:')return;
   try{
     audioEl=el;
     audioCtx=new(window.AudioContext||window.webkitAudioContext)();
