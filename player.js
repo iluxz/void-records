@@ -253,3 +253,124 @@ document.getElementById('setToneS').addEventListener('input',function(){
   if(window.setTone)setTone(hz);
   document.getElementById('setToneV').textContent=hz>=15500?'open':(hz>=1000?(hz/1000).toFixed(1)+'k':hz+'hz');
 });
+
+var tutSpot=document.getElementById('tutSpot');
+var tutTip=document.getElementById('tutTip');
+var tutSkip=document.getElementById('tutSkip');
+var tutTitle=tutTip.querySelector('.tutTitle');
+var tutBody=tutTip.querySelector('.tutBody');
+var tutBtn=tutTip.querySelector('.tutBtn');
+var tutActive=false,tutI=0,tutTimer=null;
+
+var tutSteps=[
+  {center:true,btn:'start',title:'void records',
+   text:'68 records, one deck. quick tour - ten clicks, then you are free. you can replay it any time from the footer.'},
+  {el:'#list li',title:'the shelf',
+   text:'every record in the collection. click one and it loads straight onto the deck. the amber row is what is spinning.'},
+  {el:'#turntable',title:'the deck',
+   text:'the disc only spins while music plays - needle sits on the groove when it is live, rests on the rim when it is not.'},
+  {el:'#controls',title:'transport',
+   text:'prev / play / next. shuffle rearranges the order (S), loop-one repeats (L). space = play or pause.'},
+  {el:'#seek',title:'the groove marker',
+   text:'drag to scrub through the record. elapsed time on the left, total duration on the right.'},
+  {el:'#volWrap',title:'volume',
+   text:'as it says. louder than wisdom recommends.'},
+  {el:'#chips',title:'odds and ends',
+   text:'the wavy chip is vinyl crackle - needle hiss and pops over the music (C). the clock is a sleep timer: 15 / 30 / 60 minutes, then it pauses the deck and lets you go.'},
+  {el:'#btnSet',title:'music settings',
+   text:'the gear opens speed (0.5-2x), independent pitch (-12 to +12 semitones) and tone. pitch is real DSP - it does not touch the speed.'},
+  {el:'#filter',title:'the filter',
+   text:'type to narrow the shelf. names, aliases and filenames all match - try "employment" or "sm07".'},
+  {center:true,btn:'done',title:"you're free",
+   text:'keys: space, arrows, S, L, C. drag any mp3 onto the deck for local files. deep links: ?track=employment. replay from the footer whenever.'}
+];
+
+function tutSpotAt(r,pad){
+  tutSpot.style.left=(r.left-pad)+'px';
+  tutSpot.style.top=(r.top-pad)+'px';
+  tutSpot.style.width=(r.width+pad*2)+'px';
+  tutSpot.style.height=(r.height+pad*2)+'px';
+}
+function tutPlaceTip(r){
+  tutTip.style.transform='';
+  var tr=tutTip.getBoundingClientRect();
+  var top=r.bottom+20;
+  var above=false;
+  if(top+tr.height>window.innerHeight-12){top=r.top-tr.height-20;above=true}
+  if(top<12){top=Math.min(r.bottom+20,window.innerHeight-tr.height-12);above=false}
+  if(top<12){top=12;above=true}
+  tutTip.classList.toggle('noArrow',above);
+  var left=r.left+r.width/2-tr.width/2;
+  left=Math.max(12,Math.min(left,window.innerWidth-tr.width-12));
+  tutTip.style.left=left+'px';
+  tutTip.style.top=Math.max(12,top)+'px';
+}
+function tutShow(){
+  var s=tutSteps[tutI];
+  if(!s){tutDone();return}
+  var hi=document.querySelector('.tutHi');
+  if(hi)hi.classList.remove('tutHi');
+  tutSpot.hidden=false;tutTip.hidden=false;tutSkip.hidden=false;
+  tutTitle.textContent=s.title;
+  tutBody.textContent=s.text;
+  if(s.center){
+    tutTip.classList.add('noArrow');
+    tutBtn.hidden=false;tutBtn.textContent=s.btn;
+    requestAnimationFrame(function(){
+      tutTip.style.left='0px';tutTip.style.top='0px';
+      var tr=tutTip.getBoundingClientRect();
+      tutTip.style.left=Math.round((window.innerWidth-tr.width)/2)+'px';
+      tutTip.style.top=Math.round((window.innerHeight-tr.height)/2)+'px';
+      requestAnimationFrame(function(){tutSpotAt(tutTip.getBoundingClientRect(),12)});
+    });
+    return;
+  }
+  tutTip.classList.remove('noArrow');
+  tutBtn.hidden=true;
+  var el=document.querySelector(s.el);
+  if(!el){tutAdvance();return}
+  el.classList.add('tutHi');
+  try{el.scrollIntoView({block:'center'})}catch(e){}
+  clearTimeout(tutTimer);
+  tutTimer=setTimeout(function(){
+    var r=el.getBoundingClientRect();
+    tutSpotAt(r,14);
+    tutPlaceTip(r);
+  },380);
+}
+function tutAdvance(){
+  tutI++;
+  if(tutI>=tutSteps.length){tutDone();return}
+  tutShow();
+}
+function tutFinish(){
+  try{localStorage.setItem('tutorialCompleted','1')}catch(e){}
+}
+function tutDone(){
+  tutFinish();
+  tutActive=false;
+  clearTimeout(tutTimer);
+  var hi=document.querySelector('.tutHi');
+  if(hi)hi.classList.remove('tutHi');
+  tutSpot.hidden=true;tutTip.hidden=true;tutSkip.hidden=true;
+}
+function tutStart(){
+  tutActive=true;
+  tutI=0;
+  tutShow();
+}
+tutBtn.addEventListener('click',function(){tutAdvance()});
+tutSkip.addEventListener('click',function(){tutDone()});
+document.addEventListener('click',function(e){
+  if(!tutActive)return;
+  var s=tutSteps[tutI];
+  if(!s||s.center)return;
+  var el=document.querySelector(s.el);
+  if(el&&el.contains(e.target))tutAdvance();
+},true);
+window.addEventListener('resize',function(){if(tutActive)tutShow()});
+document.getElementById('btnTutorial').addEventListener('click',tutStart);
+
+try{
+  if(!localStorage.getItem('tutorialCompleted'))setTimeout(tutStart,700);
+}catch(e){setTimeout(tutStart,700)}
