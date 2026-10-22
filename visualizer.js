@@ -15,8 +15,34 @@ function initVisualizer(el){
     src.connect(analyser);
     analyser.connect(audioCtx.destination);
     freqData=new Uint8Array(analyser.frequencyBinCount);
+    makeCrackle();
   }catch(e){}
 }
+
+var crackleGain=null;
+function makeCrackle(){
+  try{
+    var sr=audioCtx.sampleRate;
+    var buf=audioCtx.createBuffer(1,sr*3,sr);
+    var d=buf.getChannelData(0);
+    for(var i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*.045;
+    var t=0;
+    while(t<d.length){
+      t+=Math.floor(Math.random()*sr*.3)+300;
+      if(t>=d.length)break;
+      var amp=.12+Math.random()*.32;
+      var dur=Math.floor(Math.random()*350)+180;
+      for(var j=0;j<dur&&t+j<d.length;j++)d[t+j]+=(Math.random()*2-1)*amp*(1-j/dur);
+    }
+    var s=audioCtx.createBufferSource();s.buffer=buf;s.loop=true;
+    var hp=audioCtx.createBiquadFilter();hp.type='highpass';hp.frequency.value=180;
+    var lp=audioCtx.createBiquadFilter();lp.type='lowpass';lp.frequency.value=6800;
+    crackleGain=audioCtx.createGain();crackleGain.gain.value=0;
+    s.connect(hp);hp.connect(lp);lp.connect(crackleGain);crackleGain.connect(audioCtx.destination);
+    s.start(0);
+  }catch(e){}
+}
+window.setCrackleLevel=function(v){try{if(crackleGain)crackleGain.gain.value=v}catch(e){}};
 document.addEventListener('click',function(){
   if(audioCtx&&audioCtx.state==='suspended')audioCtx.resume().catch(function(){});
   else if(!audioCtx&&audioEl)initVisualizer(audioEl);

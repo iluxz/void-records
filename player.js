@@ -122,8 +122,8 @@ document.getElementById('vol').addEventListener('input',function(){
 seek.addEventListener('input',function(){
   if(audio.duration)audio.currentTime=(this.value/1000)*audio.duration;
 });
-audio.addEventListener('play',function(){setPlayingUI(true);markPlaying()});
-audio.addEventListener('pause',function(){setPlayingUI(false)});
+audio.addEventListener('play',function(){setPlayingUI(true);markPlaying();if(window.setCrackleLevel&&crackleWanted)setCrackleLevel(1)});
+audio.addEventListener('pause',function(){setPlayingUI(false);if(window.setCrackleLevel)setCrackleLevel(0)});
 audio.addEventListener('ended',function(){if(!loopOne)nextTrack()});
 audio.addEventListener('timeupdate',function(){
   tCur.textContent=fmt(audio.currentTime);
@@ -164,6 +164,72 @@ function buildList(filter){
 }
 document.getElementById('filter').addEventListener('input',function(){buildList(this.value)});
 
+var crackleWanted=true;
+var sleepMins=0,sleepTimer=null;
+
 initVisualizer(audio);
 rebuildOrder();
 buildList('');
+
+var btnCrackle=document.getElementById('btnCrackle');
+var btnSleep=document.getElementById('btnSleep');
+btnCrackle.addEventListener('click',function(){
+  crackleWanted=!crackleWanted;
+  btnCrackle.classList.toggle('on',crackleWanted);
+  if(window.setCrackleLevel)setCrackleLevel(crackleWanted&&!audio.paused?1:0);
+});
+btnSleep.addEventListener('click',function(){
+  sleepMins=sleepMins===0?15:sleepMins===15?30:sleepMins===30?60:0;
+  if(sleepTimer){clearInterval(sleepTimer);sleepTimer=null}
+  if(sleepMins===0){btnSleep.textContent='\u23F1';btnSleep.classList.remove('on');return}
+  btnSleep.classList.add('on');
+  btnSleep.textContent=sleepMins+'m';
+  sleepTimer=setInterval(function(){
+    sleepMins--;
+    if(sleepMins<=0){
+      clearInterval(sleepTimer);sleepTimer=null;
+      btnSleep.textContent='\u23F1';btnSleep.classList.remove('on');
+      audio.pause();
+      nowMeta.textContent='sleep timer ended. goodnight.';
+    }else{btnSleep.textContent=sleepMins+'m'}
+  },60000);
+});
+
+document.addEventListener('keydown',function(e){
+  var tag=(e.target&&e.target.tagName)||'';
+  if(tag==='INPUT'||tag==='TEXTAREA')return;
+  if(e.code==='Space'){e.preventDefault();playPause()}
+  else if(e.code==='ArrowRight'){e.preventDefault();nextTrack()}
+  else if(e.code==='ArrowLeft'){e.preventDefault();prevTrack()}
+  else if(e.key==='s'||e.key==='S'){btnShuffle.click()}
+  else if(e.key==='l'||e.key==='L'){btnLoop.click()}
+  else if(e.key==='c'||e.key==='C'){btnCrackle.click()}
+});
+
+var turntable=document.getElementById('turntable');
+document.addEventListener('dragover',function(e){e.preventDefault();turntable.classList.add('drop')});
+document.addEventListener('dragleave',function(e){if(!e.relatedTarget)turntable.classList.remove('drop')});
+document.addEventListener('drop',function(e){
+  e.preventDefault();
+  turntable.classList.remove('drop');
+  var f=e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files[0];
+  if(!f)return;
+  if(!/^audio\//.test(f.type)&&!/\.(mp3|wav|ogg|webm|m4a|mp4)$/i.test(f.name))return;
+  pos=-1;
+  markPlaying();
+  audio.src=URL.createObjectURL(f);
+  nowTitle.textContent=f.name;
+  nowMeta.textContent='local file - not in the collection';
+  labelTitle.textContent=f.name;
+  tDur.textContent='--:--';
+  tryPlay();
+});
+
+var qTrack=new URLSearchParams(location.search).get('track');
+if(qTrack){
+  var qq=qTrack.toLowerCase().replace(/[^a-z0-9]/g,'');
+  for(var qi=0;qi<TRACKS.length;qi++){
+    var hay=(TRACKS[qi].n+' '+TRACKS[qi].a.join(' ')+' '+TRACKS[qi].f).toLowerCase().replace(/[^a-z0-9]/g,'');
+    if(qq&&hay.indexOf(qq)>=0){loadTrack(qi,false);break}
+  }
+}
