@@ -49,10 +49,23 @@ function rebuildOrder(start){
   }
 }
 
+var hxTimer=null;
+function havexyEgg(f){
+  var el=document.getElementById('havexyEgg');
+  if(!el)return;
+  if(!/^hv-|^havexy-/.test(f))return;
+  el.hidden=false;
+  el.classList.remove('pop');
+  void el.offsetWidth;
+  el.classList.add('pop');
+  if(hxTimer)clearTimeout(hxTimer);
+  hxTimer=setTimeout(function(){el.hidden=true;el.classList.remove('pop')},4300);
+}
 function loadTrack(i,autoplay){
   if(i<0||i>=TRACKS.length)return;
   pos=i;
   var tr=TRACKS[i];
+  havexyEgg(tr.f);
   try{
     vrPlays[tr.f]=(vrPlays[tr.f]||0)+1;
     vrLast[tr.f]=Date.now();

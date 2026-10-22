@@ -1,0 +1,116 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" width="300" height="300">
+<style>
+.twA{transform-box:fill-box;transform-origin:8% 8%;animation:twA 2.6s ease-in-out infinite alternate}
+.twB{transform-box:fill-box;transform-origin:92% 8%;animation:twA 2.6s ease-in-out .6s infinite alternate}
+.twC{transform-box:fill-box;transform-origin:20% 4%;animation:twA 3.1s ease-in-out .3s infinite alternate alternate}
+.twD{transform-box:fill-box;transform-origin:80% 4%;animation:twA 3.1s ease-in-out .9s infinite alternate}
+@keyframes twA{from{transform:rotate(-5deg)}to{transform:rotate(6deg)}}
+.tng{transform-box:fill-box;transform-origin:50% 4%;animation:tng 2.2s ease-in-out infinite alternate}
+@keyframes tng{from{transform:rotate(-4deg) translateY(0)}to{transform:rotate(4deg) translateY(2px)}}
+.flk{animation:flk 1.7s ease-in-out infinite alternate}
+@keyframes flk{from{opacity:.65}to{opacity:1}}
+.spark{animation:sp 1.4s ease-in-out infinite alternate}
+@keyframes sp{from{opacity:.35;transform:translateY(0)}to{opacity:.95;transform:translateY(-4px)}}
+</style>
+<defs>
+<radialGradient id="gBody" cx="46%" cy="30%" r="78%">
+<stop offset="0%" stop-color="#ff9448"/>
+<stop offset="48%" stop-color="#f4552b"/>
+<stop offset="100%" stop-color="#a41a06"/>
+</radialGradient>
+<radialGradient id="gGlow" cx="50%" cy="50%" r="50%">
+<stop offset="0%" stop-color="#ff7a1e" stop-opacity=".9"/>
+<stop offset="55%" stop-color="#ff4a00" stop-opacity=".32"/>
+<stop offset="100%" stop-color="#ff3a00" stop-opacity="0"/>
+</radialGradient>
+<radialGradient id="gMouth" cx="50%" cy="34%" r="70%">
+<stop offset="0%" stop-color="#43060a"/>
+<stop offset="70%" stop-color="#1c0203"/>
+<stop offset="100%" stop-color="#0b0101"/>
+</radialGradient>
+<linearGradient id="gTent" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0%" stop-color="#ff8438"/>
+<stop offset="100%" stop-color="#c22a08"/>
+</linearGradient>
+<linearGradient id="gTentDk" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0%" stop-color="#e15a26"/>
+<stop offset="100%" stop-color="#8c1a04"/>
+</linearGradient>
+<linearGradient id="gTng" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0%" stop-color="#ef5424"/>
+<stop offset="100%" stop-color="#c02611"/>
+</linearGradient>
+<filter id="soft" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="10"/></filter>
+</defs>
+
+<g class="flk">
+<circle cx="150" cy="152" r="128" fill="url(#gGlow)" filter="url(#soft)"/>
+</g>
+
+<g class="spark" fill="#ffb020">
+<circle cx="44" cy="86" r="4"/><circle cx="256" cy="78" r="3.4"/>
+<circle cx="28" cy="188" r="3"/><circle cx="274" cy="196" r="4"/>
+<circle cx="86" cy="34" r="3"/><circle cx="214" cy="30" r="4"/>
+<circle cx="150" cy="18" r="3"/>
+</g>
+
+<!-- back tentacles -->
+<g class="twC" fill="none" stroke="url(#gTentDk)" stroke-width="17" stroke-linecap="round" opacity=".9">
+<path d="M120 240 C92 262 88 290 112 295"/>
+</g>
+<g class="twD" fill="none" stroke="url(#gTentDk)" stroke-width="17" stroke-linecap="round" opacity=".9">
+<path d="M180 240 C208 262 212 290 188 295"/>
+</g>
+
+<!-- head -->
+<path fill="url(#gBody)" stroke="#7e1204" stroke-width="3" stroke-linejoin="round"
+d="M64 148 C64 92 98 48 132 46 C137 33 147 33 150 47 C153 33 163 33 168 46 C202 48 236 92 236 148 C236 191 214 225 184 238 C170 245 130 245 116 238 C86 225 64 191 64 148 Z"/>
+
+<!-- head shading -->
+<path fill="#8c1200" opacity=".22" d="M64 148 C64 191 86 225 116 238 C130 245 170 245 184 238 C150 232 96 200 64 148 Z"/>
+<ellipse cx="122" cy="86" rx="40" ry="22" fill="#ffb27a" opacity=".28" transform="rotate(-16 122 86)"/>
+<circle cx="96" cy="72" r="2.6" fill="#7e1204" opacity=".5"/>
+<circle cx="206" cy="80" r="2.4" fill="#7e1204" opacity=".5"/>
+<circle cx="188" cy="58" r="2" fill="#7e1204" opacity=".5"/>
+
+<!-- eyes -->
+<ellipse cx="114" cy="126" rx="37" ry="35" fill="#f7efe1" stroke="#a8321a" stroke-width="3"/>
+<circle cx="123" cy="133" r="15.5" fill="#100506"/>
+<circle cx="117.5" cy="127" r="5.4" fill="#ffffff" opacity=".92"/>
+<ellipse cx="186" cy="126" rx="37" ry="35" fill="#f7efe1" stroke="#a8321a" stroke-width="3"/>
+<circle cx="177" cy="133" r="15.5" fill="#100506"/>
+<circle cx="171.5" cy="127" r="5.4" fill="#ffffff" opacity=".92"/>
+
+<!-- mouth -->
+<ellipse cx="150" cy="202" rx="45" ry="49" fill="url(#gMouth)" stroke="#7e1204" stroke-width="3"/>
+<ellipse cx="150" cy="222" rx="30" ry="26" fill="#5a0a08" opacity=".55"/>
+
+<!-- tongue -->
+<g class="tng">
+<path fill="url(#gTng)" stroke="#96210c" stroke-width="2.5" stroke-linejoin="round"
+d="M137 176 C130 214 133 254 150 270 C167 254 170 214 163 176 Z"/>
+<path d="M150 198 L150 258" stroke="#96210c" stroke-width="2" opacity=".55" stroke-linecap="round"/>
+</g>
+
+<!-- front tentacles -->
+<g class="twA">
+<path fill="none" stroke="url(#gTent)" stroke-width="25" stroke-linecap="round"
+d="M106 236 C60 248 36 286 64 298 C83 306 105 295 98 278"/>
+<g fill="#ffb27a" opacity=".85">
+<circle cx="57" cy="263" r="4"/><circle cx="48" cy="277" r="3.6"/>
+<circle cx="52" cy="290" r="3.4"/><circle cx="65" cy="297" r="3.6"/>
+<circle cx="80" cy="298" r="3.4"/><circle cx="93" cy="291" r="3.2"/>
+<circle cx="99" cy="281" r="3"/>
+</g>
+</g>
+<g class="twB">
+<path fill="none" stroke="url(#gTent)" stroke-width="25" stroke-linecap="round"
+d="M194 236 C240 248 264 286 236 298 C217 306 195 295 202 278"/>
+<g fill="#ffb27a" opacity=".85">
+<circle cx="243" cy="263" r="4"/><circle cx="252" cy="277" r="3.6"/>
+<circle cx="248" cy="290" r="3.4"/><circle cx="235" cy="297" r="3.6"/>
+<circle cx="220" cy="298" r="3.4"/><circle cx="207" cy="291" r="3.2"/>
+<circle cx="201" cy="281" r="3"/>
+</g>
+</g>
+</svg>
