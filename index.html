@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>void records</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<canvas id="waves"></canvas>
+
+<div id="shell">
+  <header>
+    <h1>void records</h1>
+    <p>58 tracks &mdash; all unlocked, no key, no chapter, no gate</p>
+  </header>
+
+  <div id="stage">
+    <section id="deck">
+      <div id="turntable">
+        <div id="disc">
+          <div id="label"><span id="labelTitle">void</span></div>
+        </div>
+        <div id="arm"><div id="armHead"></div></div>
+      </div>
+
+      <div id="now">
+        <div id="nowTitle">no record loaded</div>
+        <div id="nowMeta">click a track on the right</div>
+      </div>
+
+      <input id="seek" type="range" min="0" max="1000" value="0">
+      <div id="times"><span id="tCur">0:00</span><span id="tDur">--:--</span></div>
+
+      <div id="controls">
+        <button id="btnPrev" title="previous">&#9198;</button>
+        <button id="btnPlay" title="play / pause">&#9654;</button>
+        <button id="btnNext" title="next">&#9197;</button>
+        <button id="btnShuffle" title="shuffle">&#128256;</button>
+        <button id="btnLoop" title="loop one">&#128257;</button>
+        <label id="volWrap" title="volume">&#128266;<input id="vol" type="range" min="0" max="100" value="70"></label>
+      </div>
+
+      <canvas id="bars"></canvas>
+    </section>
+
+    <section id="listWrap">
+      <input id="filter" type="text" placeholder="filter&hellip;" spellcheck="false">
+      <ol id="list"></ol>
+    </section>
+  </div>
+
+  <footer>school edition offshoot &mdash; objbox lives elsewhere &mdash; ctrl+shift+r if stale</footer>
+</div>
+
+<script src="tracks.js"></script>
+<script src="visualizer.js"></script>
+<script src="player.js"></script>
+</body>
+</html>
