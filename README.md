@@ -5,6 +5,12 @@ a record player for the objbox school edition soundtrack. one repo, one page, no
 ## play
 
 ```
+https://iluxz.github.io/void-records/
+```
+
+mirror (no jekyll, no build, raw from branch):
+
+```
 https://raw.githack.com/iluxz/void-records/main/index.html
 ```
 
