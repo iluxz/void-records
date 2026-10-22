@@ -16,7 +16,7 @@ https://raw.githack.com/iluxz/void-records/main/index.html
 
 ## what it is
 
-- **58 unique tracks** pulled from the objbox bgm registry (aliases searchable in the filter box)
+- **68 tracks** pulled from the objbox bgm registry + every special-cased branch song (employment, downfall, foxy, stanley, moon, box, folk/grotto cues — aliases searchable in the filter box)
 - all unlocked, nothing gated, no chapter, no premium, no key
 - vinyl turntable with tonearm, spectrum bars, wave background that moves with the bass
 - prev / next / shuffle / loop-one / volume / seek / filter
