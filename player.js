@@ -164,7 +164,7 @@ function buildList(filter){
 }
 document.getElementById('filter').addEventListener('input',function(){buildList(this.value)});
 
-var crackleWanted=true;
+var crackleWanted=false;
 var sleepMins=0,sleepTimer=null;
 
 initVisualizer(audio);
