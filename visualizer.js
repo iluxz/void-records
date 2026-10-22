@@ -12,12 +12,70 @@ function initVisualizer(el){
     analyser=audioCtx.createAnalyser();
     analyser.fftSize=256;
     analyser.smoothingTimeConstant=.82;
-    src.connect(analyser);
+    var ok=makeDsp();
+    if(ok){src.connect(pitchNode);pitchNode.connect(toneFilter);toneFilter.connect(analyser)}
+    else{src.connect(analyser)}
     analyser.connect(audioCtx.destination);
     freqData=new Uint8Array(analyser.frequencyBinCount);
     makeCrackle();
   }catch(e){}
 }
+
+var pitchNode=null,toneFilter=null,pitchRatio=1;
+var ring0=null,ring1=null,ringW=0,ringSize=0,pitchPhase=0;
+var P_D0=.012,P_SPAN=.08;
+
+function makeDsp(){
+  try{
+    var sr=audioCtx.sampleRate;
+    ringSize=Math.ceil((P_D0+P_SPAN+.01)*sr)+16;
+    ring0=new Float32Array(ringSize);
+    ring1=new Float32Array(ringSize);
+    pitchNode=audioCtx.createScriptProcessor(4096,2,2);
+    toneFilter=audioCtx.createBiquadFilter();
+    toneFilter.type='lowpass';toneFilter.frequency.value=16000;toneFilter.Q.value=.5;
+    pitchNode.onaudioprocess=function(e){
+      var inb=e.inputBuffer,out=e.outputBuffer;
+      var n=inb.length,sr2=inb.sampleRate;
+      var ch=inb.numberOfChannels;
+      var i0=inb.getChannelData(0);
+      var i1=ch>1?inb.getChannelData(1):i0;
+      var o0=out.getChannelData(0);
+      var o1=out.numberOfChannels>1?out.getChannelData(1):o0;
+      var r=pitchRatio;
+      if(Math.abs(r-1)<.004||!ring0){
+        for(var k=0;k<n;k++){o0[k]=i0[k];o1[k]=i1[k]}
+        return;
+      }
+      var down=r<1;
+      var pStep=Math.abs(1-r)/(P_SPAN*sr2);
+      for(var i=0;i<n;i++){
+        ring0[ringW]=i0[i];ring1[ringW]=i1[i];
+        ringW++;if(ringW>=ringSize)ringW=0;
+        var pA=pitchPhase;
+        pitchPhase+=pStep;if(pitchPhase>=1)pitchPhase-=1;
+        var pB=pA+.5;if(pB>=1)pB-=1;
+        var dA=down?(P_D0+P_SPAN*pA):(P_D0+P_SPAN*(1-pA));
+        var dB=down?(P_D0+P_SPAN*pB):(P_D0+P_SPAN*(1-pB));
+        var wA=.5-.5*Math.cos(6.2831853*pA),wB=1-wA;
+        o0[i]=wA*ringRead(ring0,sr2*dA)+wB*ringRead(ring0,sr2*dB);
+        o1[i]=wA*ringRead(ring1,sr2*dA)+wB*ringRead(ring1,sr2*dB);
+      }
+    };
+    return true;
+  }catch(e){pitchNode=null;return false}
+}
+function ringRead(ring,delaySamples){
+  var pos=ringW-delaySamples;
+  while(pos<0)pos+=ringSize;
+  var i0=Math.floor(pos);
+  var frac=pos-i0;
+  var a=ring[i0%ringSize];
+  var b=ring[(i0+1)%ringSize];
+  return a+(b-a)*frac;
+}
+window.setPitchRatio=function(r){try{pitchRatio=r}catch(e){}};
+window.setTone=function(hz){try{if(toneFilter)toneFilter.frequency.value=hz}catch(e){}};
 
 var crackleGain=null;
 function makeCrackle(){

@@ -38,7 +38,26 @@
         <button id="btnNext" title="next">&#9197;</button>
         <button id="btnShuffle" title="shuffle">&#128256;</button>
         <button id="btnLoop" title="loop one">&#128257;</button>
+        <button id="btnSet" title="music settings">&#9881;</button>
         <label id="volWrap" title="volume">&#128266;<input id="vol" type="range" min="0" max="100" value="70"></label>
+      </div>
+
+      <div id="setPanel">
+        <div class="setRow">
+          <label>speed</label>
+          <input id="setSpeed" type="range" min="0.5" max="2" step="0.01" value="1">
+          <span id="setSpeedV">1.00&times;</span>
+        </div>
+        <div class="setRow">
+          <label>pitch</label>
+          <input id="setPitch" type="range" min="-12" max="12" step="1" value="0">
+          <span id="setPitchV">0 st</span>
+        </div>
+        <div class="setRow">
+          <label>tone</label>
+          <input id="setToneS" type="range" min="400" max="16000" step="100" value="16000">
+          <span id="setToneV">open</span>
+        </div>
       </div>
 
       <canvas id="bars"></canvas>

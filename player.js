@@ -233,3 +233,23 @@ if(qTrack){
     if(qq&&hay.indexOf(qq)>=0){loadTrack(qi,false);break}
   }
 }
+
+var setPanel=document.getElementById('setPanel');
+document.getElementById('btnSet').addEventListener('click',function(){
+  setPanel.classList.toggle('open');
+  this.classList.toggle('on',setPanel.classList.contains('open'));
+});
+document.getElementById('setSpeed').addEventListener('input',function(){
+  audio.playbackRate=parseFloat(this.value);
+  document.getElementById('setSpeedV').textContent=parseFloat(this.value).toFixed(2)+'\u00d7';
+});
+document.getElementById('setPitch').addEventListener('input',function(){
+  var v=parseInt(this.value,10);
+  if(window.setPitchRatio)setPitchRatio(Math.pow(2,v/12));
+  document.getElementById('setPitchV').textContent=(v>0?'+':'')+v+' st';
+});
+document.getElementById('setToneS').addEventListener('input',function(){
+  var hz=parseInt(this.value,10);
+  if(window.setTone)setTone(hz);
+  document.getElementById('setToneV').textContent=hz>=15500?'open':(hz>=1000?(hz/1000).toFixed(1)+'k':hz+'hz');
+});
