@@ -122,7 +122,11 @@ document.getElementById('vol').addEventListener('input',function(){
 seek.addEventListener('input',function(){
   if(audio.duration)audio.currentTime=(this.value/1000)*audio.duration;
 });
-audio.addEventListener('play',function(){setPlayingUI(true);markPlaying();if(window.setCrackleLevel&&crackleWanted)setCrackleLevel(1)});
+audio.addEventListener('play',function(){
+  if(!audioCtx&&audioEl)initVisualizer(audioEl);
+  if(audioCtx&&audioCtx.state==='suspended')audioCtx.resume().catch(function(){});
+  setPlayingUI(true);markPlaying();if(window.setCrackleLevel&&crackleWanted)setCrackleLevel(1);
+});
 audio.addEventListener('pause',function(){setPlayingUI(false);if(window.setCrackleLevel)setCrackleLevel(0)});
 audio.addEventListener('ended',function(){if(!loopOne)nextTrack()});
 audio.addEventListener('timeupdate',function(){
@@ -173,7 +177,7 @@ document.getElementById('filter').addEventListener('input',function(){buildList(
 var crackleWanted=false;
 var sleepMins=0,sleepTimer=null;
 
-initVisualizer(audio);
+audioEl=audio;
 rebuildOrder();
 buildList('');
 
@@ -204,6 +208,8 @@ btnSleep.addEventListener('click',function(){
 document.addEventListener('keydown',function(e){
   var tag=(e.target&&e.target.tagName)||'';
   if(tag==='INPUT'||tag==='TEXTAREA')return;
+  if(!audioCtx&&audioEl)initVisualizer(audioEl);
+  if(audioCtx&&audioCtx.state==='suspended')audioCtx.resume().catch(function(){});
   if(e.code==='Space'){e.preventDefault();playPause()}
   else if(e.code==='ArrowRight'){e.preventDefault();nextTrack()}
   else if(e.code==='ArrowLeft'){e.preventDefault();prevTrack()}
