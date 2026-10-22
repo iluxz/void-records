@@ -81,6 +81,25 @@
 </div>
 <button id="tutSkip" hidden>skip</button>
 
+<div id="osWin" hidden>
+  <div id="osWinBar">
+    <span id="winDots">
+      <i class="dot dRed" id="winClose" title="close"></i>
+      <i class="dot dYel" id="winMin" title="minimize"></i>
+      <i class="dot dGrn" id="winMax" title="maximize"></i>
+    </span>
+    <span id="osWinTitle">void records</span>
+  </div>
+  <div id="osTabs">
+    <button class="osTab on" data-tab="lyrics">lyrics</button>
+    <button class="osTab" data-tab="info">info</button>
+  </div>
+  <div id="osBody">
+    <div class="osPane" id="paneLyrics"></div>
+    <div class="osPane" id="paneInfo" hidden></div>
+  </div>
+</div>
+
 <script src="tracks.js"></script>
 <script src="visualizer.js"></script>
 <script src="player.js"></script>

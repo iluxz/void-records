@@ -155,9 +155,15 @@ function buildList(filter){
     li.innerHTML='<span class="idx">'+(i+1)+'</span>'+
       '<span class="nm"></span>'+
       '<span class="al"></span>'+
+      '<button class="lyBtn" title="lyrics">&#9834;</button>'+
       '<span class="du">--:--</span>';
     li.querySelector('.nm').textContent=tr.n;
     li.querySelector('.al').textContent=tr.a.length?tr.a.join(' '):'';
+    li.querySelector('.lyBtn').addEventListener('click',function(e){
+      if(typeof tutActive!=='undefined'&&tutActive)return;
+      e.stopPropagation();
+      openOsWin(+this.parentNode.dataset.pos,'lyrics');
+    });
     li.addEventListener('click',function(){loadTrack(+this.dataset.pos,true)});
     listEl.appendChild(li);
   }
@@ -374,3 +380,166 @@ document.getElementById('btnTutorial').addEventListener('click',tutStart);
 try{
   if(!localStorage.getItem('tutorialCompleted'))setTimeout(tutStart,700);
 }catch(e){setTimeout(tutStart,700)}
+
+var osWin=document.getElementById('osWin');
+var osPos=-1;
+var lyCache={};
+
+function osShow(){
+  osWin.hidden=false;
+  osWin.classList.remove('out','anim');
+  void osWin.offsetWidth;
+  osWin.classList.add('anim');
+}
+function osHide(){
+  osWin.classList.add('out');
+  setTimeout(function(){osWin.hidden=true;osWin.classList.remove('out','anim')},170);
+}
+document.getElementById('winClose').addEventListener('click',osHide);
+document.getElementById('winMin').addEventListener('click',osHide);
+document.getElementById('winMax').addEventListener('click',function(){
+  osWin.classList.toggle('max');
+});
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape'&&!osWin.hidden&&!tutActive)osHide();
+});
+
+function osTab(name){
+  var tabs=document.querySelectorAll('.osTab');
+  for(var i=0;i<tabs.length;i++)tabs[i].classList.toggle('on',tabs[i].dataset.tab===name);
+  var pL=document.getElementById('paneLyrics');
+  var pI=document.getElementById('paneInfo');
+  pL.hidden=name!=='lyrics';
+  pI.hidden=name!=='info';
+  var vis=name==='lyrics'?pL:pI;
+  vis.classList.remove('tabIn');
+  void vis.offsetWidth;
+  vis.classList.add('tabIn');
+  if(name==='lyrics'&&osPos>=0&&pL.dataset.f!==TRACKS[osPos].f)lyLoad(osPos);
+}
+var osTabBtns=document.querySelectorAll('.osTab');
+for(var oi=0;oi<osTabBtns.length;oi++){
+  (function(b){b.addEventListener('click',function(){osTab(b.dataset.tab)})})(osTabBtns[oi]);
+}
+
+function openOsWin(pos,tab){
+  var tr=TRACKS[pos];
+  if(!tr)return;
+  osPos=pos;
+  document.getElementById('osWinTitle').textContent=tr.n;
+  osShow();
+  osTab(tab||'lyrics');
+}
+
+function lyNorm(s){
+  return String(s||'').toLowerCase().replace(/\[[^\]]*\]/g,'').replace(/[^a-z0-9]/g,'');
+}
+function lyRender(tr,txt,meta){
+  var pane=document.getElementById('paneLyrics');
+  if(pane.dataset.f!==tr.f)return;
+  pane.innerHTML='';
+  if(!txt){
+    var s=document.createElement('div');
+    s.className='lyState';
+    s.textContent='no lyrics in the database for this one.';
+    pane.appendChild(s);
+  }else{
+    var hit=document.createElement('div');
+    hit.className='lyHit';
+    hit.textContent=meta?((meta.artistName?meta.artistName+' - ':'')+(meta.trackName||'')):tr.n;
+    pane.appendChild(hit);
+    var body=document.createElement('div');
+    body.textContent=txt;
+    pane.appendChild(body);
+  }
+  var foot=document.createElement('div');
+  foot.className='lyMeta';
+  foot.textContent='via ';
+  var a=document.createElement('a');
+  a.href='https://lrclib.net';a.target='_blank';a.rel='noopener';
+  a.textContent='lrclib.net';
+  foot.appendChild(a);
+  pane.appendChild(foot);
+}
+function lyLoad(pos){
+  var tr=TRACKS[pos];
+  var pane=document.getElementById('paneLyrics');
+  pane.dataset.f=tr.f;
+  if(lyCache[tr.f]!==undefined){lyRender(tr,lyCache[tr.f],null);return}
+  pane.innerHTML='<div class="lyState">searching lrclib&hellip;</div>';
+  var q=tr.n.replace(/\[[^\]]*\]/g,'').trim();
+  var title=lyNorm(q.split(' - ').pop());
+  fetch('https://lrclib.net/api/search?q='+encodeURIComponent(q))
+  .then(function(r){if(!r.ok)throw 0;return r.json()})
+  .then(function(arr){
+    var best=null,bestScore=-1;
+    for(var i=0;i<(arr||[]).length;i++){
+      var a=arr[i];
+      if(!a.plainLyrics&&!a.instrumental)continue;
+      var hay=lyNorm((a.trackName||'')+' '+(a.artistName||'')+' '+(a.name||''));
+      var score=1;
+      if(a.plainLyrics)score+=2;
+      if(title&&hay.indexOf(title)>=0)score+=3;
+      if(score>bestScore){bestScore=score;best=a}
+    }
+    if(!best){lyCache[tr.f]='';lyRender(tr,'',null);return}
+    var txt=best.instrumental&&!best.plainLyrics?'[instrumental - no lyrics to show]':best.plainLyrics;
+    lyCache[tr.f]=txt;
+    lyRender(tr,txt,best);
+  })
+  .catch(function(){
+    if(pane.dataset.f!==tr.f)return;
+    pane.innerHTML='<div class="lyState">lrclib unreachable - network or filter in the way</div>';
+  });
+}
+function infoRender(pos){
+  var tr=TRACKS[pos];
+  var pane=document.getElementById('paneInfo');
+  pane.innerHTML='';
+  var link=location.origin+location.pathname+'?track='+encodeURIComponent(tr.a[0]||tr.f);
+  var rows=[
+    ['name',tr.n,null],
+    ['file',tr.f,null],
+    ['aliases',tr.a.length?tr.a.join(', '):'-',null],
+    ['shelf',String(pos+1)+' of '+TRACKS.length,null],
+    ['deep link',link,link]
+  ];
+  for(var i=0;i<rows.length;i++){
+    var row=document.createElement('div');
+    row.className='infoRow';
+    var k=document.createElement('div');
+    k.className='infoKey';k.textContent=rows[i][0];
+    var v=document.createElement('div');
+    v.className='infoVal';
+    if(rows[i][2]){
+      var a=document.createElement('a');
+      a.href=rows[i][2];a.textContent=rows[i][1];
+      v.appendChild(a);
+    }else v.textContent=rows[i][1];
+    row.appendChild(k);row.appendChild(v);
+    pane.appendChild(row);
+  }
+}
+
+var osBar=document.getElementById('osWinBar');
+var osDrag=null;
+osBar.addEventListener('pointerdown',function(e){
+  if(e.target&&e.target.closest&&e.target.closest('.dot'))return;
+  if(osWin.classList.contains('max'))return;
+  var r=osWin.getBoundingClientRect();
+  osWin.style.right='auto';
+  osWin.style.left=r.left+'px';
+  osWin.style.top=r.top+'px';
+  osDrag={dx:e.clientX-r.left,dy:e.clientY-r.top};
+  try{osBar.setPointerCapture(e.pointerId)}catch(err){}
+});
+osBar.addEventListener('pointermove',function(e){
+  if(!osDrag)return;
+  var x=e.clientX-osDrag.dx,y=e.clientY-osDrag.dy;
+  x=Math.max(-osWin.offsetWidth+90,Math.min(x,window.innerWidth-90));
+  y=Math.max(0,Math.min(y,window.innerHeight-44));
+  osWin.style.left=x+'px';
+  osWin.style.top=y+'px';
+});
+osBar.addEventListener('pointerup',function(){osDrag=null});
+osBar.addEventListener('pointercancel',function(){osDrag=null});
