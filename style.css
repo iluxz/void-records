@@ -97,20 +97,20 @@ section{
   background:var(--bg);
 }
 #arm{
-  position:absolute;right:46px;top:22px;
-  width:8px;height:150px;
+  position:absolute;right:56px;top:14px;
+  width:7px;height:172px;
   background:linear-gradient(#c9c4d8,#8a8499);
   border-radius:6px;
-  transform:rotate(24deg);
+  transform:rotate(26deg);
   transform-origin:top center;
-  transition:transform .5s ease;
+  transition:transform .7s cubic-bezier(.45,.05,.25,1);
   box-shadow:0 0 8px rgba(0,0,0,.6);
 }
-#disc.playing ~ #arm{transform:rotate(-6deg)}
+#disc.playing ~ #arm{transform:rotate(-51deg)}
 #armHead{
-  position:absolute;bottom:-14px;left:50%;
-  width:26px;height:30px;
-  transform:translateX(-50%) rotate(6deg);
+  position:absolute;bottom:-16px;left:50%;
+  width:24px;height:28px;
+  transform:translateX(-50%) rotate(10deg);
   background:#2b2540;
   border:1px solid var(--line);
   border-radius:3px;
