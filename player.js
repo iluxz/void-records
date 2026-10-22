@@ -60,6 +60,12 @@ function loadTrack(i,autoplay){
     localStorage.setItem('vr_last',JSON.stringify(vrLast));
   }catch(e){}
   msUpdate();
+  if(typeof osWin!=='undefined'&&!osWin.hidden){
+    osPos=i;
+    document.getElementById('osWinTitle').textContent=tr.n;
+    if(!document.getElementById('paneInfo').hidden)infoRender(i);
+    if(!document.getElementById('paneLyrics').hidden)lyLoad(i);
+  }
   nowTitle.textContent=tr.n;
   nowMeta.textContent=(tr.a.length?'aka '+tr.a.join(', ')+' &middot; ':'')+'void records';
   nowMeta.innerHTML=nowMeta.textContent;
@@ -495,6 +501,7 @@ function osTab(name){
   void vis.offsetWidth;
   vis.classList.add('tabIn');
   if(name==='lyrics'&&osPos>=0&&pL.dataset.f!==TRACKS[osPos].f)lyLoad(osPos);
+  if(name==='info'&&osPos>=0)infoRender(osPos);
 }
 var osTabBtns=document.querySelectorAll('.osTab');
 for(var oi=0;oi<osTabBtns.length;oi++){
