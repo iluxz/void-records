@@ -101,12 +101,12 @@ section{
   width:7px;height:172px;
   background:linear-gradient(#c9c4d8,#8a8499);
   border-radius:6px;
-  transform:rotate(26deg);
+  transform:rotate(-35deg);
   transform-origin:top center;
   transition:transform .7s cubic-bezier(.45,.05,.25,1);
   box-shadow:0 0 8px rgba(0,0,0,.6);
 }
-#disc.playing ~ #arm{transform:rotate(-51deg)}
+#disc.playing ~ #arm{transform:rotate(-46deg)}
 #armHead{
   position:absolute;bottom:-16px;left:50%;
   width:24px;height:28px;
