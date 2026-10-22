@@ -56,6 +56,14 @@ var PATCH_LOG=[
 {date:'2026-10-22',type:'feature',title:'this update log',notes:[
 'footer button, this book. entries are typed: patch, feature, update, music pack.',
 'new entries land here every time the site changes.'
+]},
+{date:'2026-10-22',type:'music pack',title:'the big haul: 68 -> 114 tracks',notes:[
+'forty-six new songs on the shelf.',
+'tally hall & miracle musical: &, the mind electric, murders, the bidding.',
+'havexy pack 2: thirteen tracks, tiktok ranters to hentai virus (yes, thats hantavirus, hes just like that).',
+'the entire Bad Things OST - all 22 songs, roblox psychological horror included.',
+'horror skunx: hey its me its verity + the OFFICIAL lord verity. the old lordverity file was a mashup and is now labeled "i miss the players" so nobody confuses them again.',
+"also new: who? hyperbaiter! (havexy), meltdown, terrible things, outcast of the sulphurous seas, i'm talking to you!"
 ]}
 ];
 var TYPE_COLOR={'patch':'#78b4ff','feature':'#64ffa0','update':'#c878ff','music pack':'#ffb43a'};
