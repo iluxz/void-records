@@ -70,7 +70,7 @@
     </section>
   </div>
 
-  <footer><button id="btnTutorial">replay tutorial</button></footer>
+  <footer><button id="btnTutorial">replay tutorial</button><button id="btnLog">update log</button></footer>
 </div>
 
 <div id="tutSpot" hidden></div>
@@ -100,8 +100,29 @@
   </div>
 </div>
 
+<div id="updWin" hidden>
+<div id="updBar">
+<span id="updDots">
+<i class="dot dRed" id="updClose" title="close"></i>
+<i class="dot dYel" id="updMin" title="minimize"></i>
+<i class="dot dGrn" id="updMax" title="maximize"></i>
+</span>
+<span id="updTitle">update log</span>
+</div>
+<div id="updBody">
+<div id="updPageNo"></div>
+<div class="updDeco d1"></div>
+<div id="updEntryTitle"></div>
+<div id="updType"></div>
+<div class="updDeco d2"></div>
+<div id="updNotes"></div>
+<div class="updDeco d3"></div>
+<div id="updNav"><button id="updPrev">&#9664; prev</button><button id="updNext">next &#9654;</button></div>
+</div>
+</div>
 <script src="tracks.js"></script>
 <script src="visualizer.js"></script>
 <script src="player.js"></script>
+<script src="updates.js"></script>
 </body>
 </html>

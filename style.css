@@ -415,3 +415,105 @@ li.emptyNote:hover{background:transparent}
   #stage{grid-template-columns:1fr}
   #listWrap{max-height:50vh}
 }
+
+/* update log book window */
+footer button{margin:0 3px}
+#btnLog{
+  font-family:inherit;font-size:10px;letter-spacing:1px;
+  background:none;border:1px solid #3a3358;color:#6a6290;
+  padding:2px 10px;border-radius:8px;cursor:pointer;
+}
+#btnLog:hover{border-color:var(--purple);color:var(--ink)}
+#updWin{
+  position:fixed;
+  top:64px;right:26px;
+  width:min(430px,calc(100vw - 30px));
+  height:min(580px,calc(100vh - 80px));
+  z-index:71;
+  display:flex;flex-direction:column;
+  background:#100c1e;
+  border:1px solid #3a3358;
+  border-radius:8px;
+  box-shadow:0 18px 50px rgba(0,0,0,.75),0 0 0 1px rgba(139,92,246,.18);
+  overflow:hidden;
+}
+#updWin[hidden]{display:none !important}
+#updWin.anim{animation:winIn .3s cubic-bezier(.2,.9,.3,1.2)}
+#updWin.out{animation:winOut .18s ease-in forwards}
+#updWin.max{
+  top:14px !important;left:14px !important;right:auto !important;
+  width:calc(100vw - 28px) !important;
+  height:calc(100vh - 28px) !important;
+}
+#updBar{
+  display:flex;align-items:center;gap:12px;
+  background:linear-gradient(#1b1533,#151026);
+  border-bottom:1px solid #2a2340;
+  padding:9px 12px;
+  cursor:grab;
+  user-select:none;
+  touch-action:none;
+}
+#updBar:active{cursor:grabbing}
+#updDots{display:flex;gap:7px}
+#updTitle{
+  flex:1;text-align:center;
+  font-size:11px;color:var(--dim);
+  letter-spacing:1.5px;text-transform:lowercase;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  margin-right:40px;
+}
+#updBody{
+  flex:1;min-height:0;
+  display:flex;flex-direction:column;
+  background:#100c1e;
+}
+#updPageNo{
+  color:#6f679a;font-size:10px;
+  letter-spacing:2px;text-transform:uppercase;
+  text-align:center;padding:12px 0 0;
+}
+.updDeco{
+  height:1px;flex-shrink:0;
+  background:linear-gradient(90deg,transparent,#4a4370,transparent);
+  margin:10px auto;
+}
+.updDeco.d1{width:60px}
+.updDeco.d2{width:40px;margin-top:6px}
+.updDeco.d3{width:80px;margin-top:4px}
+#updEntryTitle{
+  color:var(--ink);font-size:19px;font-weight:700;
+  text-align:center;padding:2px 22px 0;
+  letter-spacing:.4px;
+}
+#updType{
+  text-align:center;font-size:11px;
+  letter-spacing:2px;text-transform:lowercase;
+  padding:6px 20px 0;
+}
+#updNotes{
+  flex:1;min-height:0;
+  overflow-y:auto;
+  color:#b8b2d6;font-size:13px;line-height:1.8;
+  white-space:pre-wrap;
+  padding:8px 24px 4px;
+}
+#updNotes::-webkit-scrollbar{width:9px}
+#updNotes::-webkit-scrollbar-track{background:#0c0918}
+#updNotes::-webkit-scrollbar-thumb{background:#2f2750;border-radius:5px}
+#updNav{
+  display:flex;justify-content:space-between;
+  padding:8px 18px 14px;
+  flex-shrink:0;
+}
+#updPrev,#updNext{
+  background:transparent;color:#8f87b8;
+  border:1px solid #3a3358;
+  padding:6px 16px;border-radius:4px;
+  cursor:pointer;font-family:inherit;
+  font-size:11px;letter-spacing:1px;
+  transition:all .12s;
+}
+#updPrev:hover,#updNext:hover{border-color:var(--amber);color:var(--ink)}
+#updNext.close{border-color:#6a4a8a;color:#c878ff}
+#updNext.close:hover{border-color:#c878ff;color:var(--ink)}

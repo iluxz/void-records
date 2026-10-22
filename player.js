@@ -475,6 +475,8 @@ function osShow(){
   osWin.classList.remove('out','anim');
   void osWin.offsetWidth;
   osWin.classList.add('anim');
+  window.__zN=(window.__zN||0)+1;
+  osWin.style.zIndex=String(72+window.__zN);
 }
 function osHide(){
   osWin.classList.add('out');

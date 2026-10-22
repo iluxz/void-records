@@ -1,0 +1,141 @@
+var PATCH_LOG=[
+{date:'2026-10-21',type:'feature',title:'void records goes live',notes:[
+'the cube is retired. void records is now a record player: spinning vinyl deck, tonearm, spectrum bars, waveform background.',
+'seek bar, volume, shuffle, loop, and a filterable track list - click a row to drop the needle.',
+'58 tracks on the shelf to start.',
+'works offline too: open index.html straight from a folder, no server needed.'
+]},
+{date:'2026-10-21',type:'music pack',title:'the shelf hits 68 tracks',notes:[
+'ten more tracks added: employment, science\'s downfall, wake up stanley, moon rotation, bro is in a box, folk theme, something bad x2, grotto x2.',
+'the haydee zone tracks (credits, water, gg ez, ...) keep their old names as aliases, so old links still work.',
+'fixed the "espa ol" typo - now español.'
+]},
+{date:'2026-10-21',type:'patch',title:'the tonearm actually lands on the record',notes:[
+'the arm was pointing at the wrong part of the vinyl.',
+'three geometry fixes later: parked at +35, playing at +46, needle always sitting on the grooves.'
+]},
+{date:'2026-10-21',type:'feature',title:'v2: knobs and shortcuts',notes:[
+'vinyl crackle layer (off by default), sleep timer (15/30/60 min), and drag & drop any local mp3 onto the deck.',
+'keyboard: space = play/pause, arrows = prev/next, S = shuffle, L = loop, C = crackle.',
+'?track=employment style deep links open straight to a song.'
+]},
+{date:'2026-10-21',type:'feature',title:'music settings',notes:[
+'gear panel with three knobs: speed (0.5x-2x), pitch (-12 to +12 semitones), tone (lowpass, for muffled late-night listening).',
+'pitch runs through a granular shifter, so changing it doesn\'t force the speed to change with it.'
+]},
+{date:'2026-10-21',type:'update',title:'polish pass',notes:[
+'favicon: a little vinyl with an amber play triangle.',
+'first-time tutorial with spotlight steps, replayable from the footer.',
+'header trimmed to just the name + track count.',
+'the audio context now starts on your first click instead of page load - no more browser warnings in the console.',
+'lrclib rate limits now say "lrclib is tired, give it a minute" instead of failing weirdly.'
+]},
+{date:'2026-10-21',type:'update',title:'real haydee zone names',notes:[
+'zone tracks renamed to Green Zone, Dark Zone, Yellow Zone, Red Zone, Blue Zone, White Zone and Main Menu.',
+'credits stays credits, old names kept as aliases.'
+]},
+{date:'2026-10-21',type:'feature',title:'lyrics window',notes:[
+'every row in the list has a note button: opens a window with traffic-light controls that you can drag around.',
+'lyrics tab pulls from lrclib (timed lyrics when the song has them), info tab shows the deep link.',
+'the window follows the player - switch tracks while it\'s open and it updates.'
+]},
+{date:'2026-10-21',type:'feature',title:'now playing everywhere + favorites',notes:[
+'the browser tab title shows the current track, and media keys / lock screen controls work.',
+'settings (volume, speed, pitch, tone, crackle) are saved and survive a refresh.',
+'star any track to favorite it. type "favorites" in the filter to see only those.',
+'the info tab now shows the full sheet: artist, track, file, format, size, length, aliases, play count, last played and favorite status.'
+]},
+{date:'2026-10-21',type:'feature',title:'lyrics presets',notes:[
+'some songs get hard-coded lyrics instead of trusting the API.',
+'landscaping by windows96 no longer shows up as a "shordie shordie" song. it\'s instrumental and it says so.'
+]},
+{date:'2026-10-21',type:'patch',title:'housekeeping',notes:[
+'the info tab used to open completely empty on every song - it was never being called. fixed.',
+'removed seven leftover voice blip files from the cube days (1.mp3 - 7.mp3), nobody was using them.'
+]},
+{date:'2026-10-22',type:'feature',title:'this update log',notes:[
+'footer button, this book. entries are typed: patch, feature, update, music pack.',
+'new entries land here every time the site changes.'
+]}
+];
+var TYPE_COLOR={'patch':'#78b4ff','feature':'#64ffa0','update':'#c878ff','music pack':'#ffb43a'};
+(function(){
+  var win=document.getElementById('updWin');
+  if(!win)return;
+  var idx=0;
+  var pageNo=document.getElementById('updPageNo');
+  var titleEl=document.getElementById('updEntryTitle');
+  var typeEl=document.getElementById('updType');
+  var notesEl=document.getElementById('updNotes');
+  var btnPrev=document.getElementById('updPrev');
+  var btnNext=document.getElementById('updNext');
+  function render(){
+    var p=PATCH_LOG[idx];
+    pageNo.textContent='entry '+(idx+1)+' of '+PATCH_LOG.length+'  \u00b7  '+p.date;
+    titleEl.textContent=p.title;
+    typeEl.textContent='['+p.type+']';
+    typeEl.style.color=TYPE_COLOR[p.type]||'#8f87b8';
+    var lines=[];
+    for(var i=0;i<p.notes.length;i++)lines.push('\u2022  '+p.notes[i]);
+    notesEl.textContent=lines.join('\n');
+    notesEl.scrollTop=0;
+    btnPrev.style.visibility=idx>0?'visible':'hidden';
+    if(idx===PATCH_LOG.length-1){
+      btnNext.textContent='close  \u2715';
+      btnNext.classList.add('close');
+    }else{
+      btnNext.textContent='next  \u25b6';
+      btnNext.classList.remove('close');
+    }
+  }
+  function show(){
+    win.hidden=false;
+    win.classList.remove('out','anim');
+    void win.offsetWidth;
+    win.classList.add('anim');
+    window.__zN=(window.__zN||0)+1;
+    win.style.zIndex=String(72+window.__zN);
+    render();
+  }
+  function hide(){
+    win.classList.add('out');
+    setTimeout(function(){win.hidden=true;win.classList.remove('out','anim')},170);
+  }
+  document.getElementById('btnLog').addEventListener('click',show);
+  document.getElementById('updClose').addEventListener('click',hide);
+  document.getElementById('updMin').addEventListener('click',hide);
+  document.getElementById('updMax').addEventListener('click',function(){win.classList.toggle('max')});
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape'&&!win.hidden){
+      if(typeof tutActive!=='undefined'&&tutActive)return;
+      hide();
+      e.stopPropagation();
+    }
+  },true);
+  btnPrev.addEventListener('click',function(){if(idx>0){idx--;render()}});
+  btnNext.addEventListener('click',function(){
+    if(idx<PATCH_LOG.length-1){idx++;render()}else hide();
+  });
+  var bar=document.getElementById('updBar');
+  var dg=null;
+  bar.addEventListener('pointerdown',function(e){
+    if(e.target&&e.target.closest&&e.target.closest('.dot'))return;
+    if(win.classList.contains('max'))return;
+    var r=win.getBoundingClientRect();
+    win.style.right='auto';
+    win.style.left=r.left+'px';
+    win.style.top=r.top+'px';
+    dg={dx:e.clientX-r.left,dy:e.clientY-r.top};
+    try{bar.setPointerCapture(e.pointerId)}catch(err){}
+  });
+  bar.addEventListener('pointermove',function(e){
+    if(!dg)return;
+    var x=e.clientX-dg.dx,y=e.clientY-dg.dy;
+    x=Math.max(-win.offsetWidth+90,Math.min(x,window.innerWidth-90));
+    y=Math.max(0,Math.min(y,window.innerHeight-44));
+    win.style.left=x+'px';
+    win.style.top=y+'px';
+  });
+  bar.addEventListener('pointerup',function(){dg=null});
+  bar.addEventListener('pointercancel',function(){dg=null});
+})();
