@@ -64,6 +64,10 @@ var PATCH_LOG=[
 'the entire Bad Things OST - all 22 songs, roblox psychological horror included.',
 'horror skunx: hey its me its verity + the OFFICIAL lord verity. the old lordverity file was a mashup and is now labeled "i miss the players" so nobody confuses them again.',
 "also new: who? hyperbaiter! (havexy), meltdown, terrible things, outcast of the sulphurous seas, i'm talking to you!"
+]},
+{date:'2026-10-22',type:'patch',title:'credits where they belong',notes:[
+'the nine vexy-era tracks (gypsy verity, folk valley, and all seven disstracks) now say (havexy) in the title - they were his all along.',
+'the lyrics for who? hyperbaiter! are hardcoded now, the full disstrack shows every time without asking lrclib.'
 ]}
 ];
 var TYPE_COLOR={'patch':'#78b4ff','feature':'#64ffa0','update':'#c878ff','music pack':'#ffb43a'};
