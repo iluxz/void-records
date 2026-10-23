@@ -21,7 +21,7 @@ https://raw.githack.com/iluxz/void-records/main/index.html
 - vinyl turntable with tonearm, spectrum bars, wave background that moves with the bass
 - prev / next / shuffle / loop-one / volume / seek / filter
 - smooth fades between records, sleep timer fades out instead of hard-cutting
-- os window with **lyrics** (lrclib), **info**, **stats** (spin counts, top tracks, history) and **credits** tabs
+- os window with **lyrics** (lrclib, karaoke highlight when the song is timed), **info**, **stats** (spin counts, top tracks, history) and **credits** tabs
 - star favorites, spin counts on every row, `recent` filter by last played
 - blobs are fetched whole before playing (githack has no range support — same trick objbox used)
 - installable as a desktop app (manifest + service worker, app shell works offline)

@@ -75,6 +75,11 @@ var PATCH_LOG=[
 'the list now shows a spin count on every played row (×3 next to the duration), and the filter takes "recent" to sort everything by last played.',
 'smooth fades - switching records dips the old one and fades the new one in instead of a hard cut, and the sleep timer fades out over a couple seconds before it pauses.',
 'installable - void records can be added to your desktop as an app now, and the shell works offline once you have visited it once.'
+]},
+{date:'2026-10-22',type:'feature',title:'karaoke mode',notes:[
+'when lrclib has timed lyrics for a song, the lyrics tab now lines up with the music - the current line lights amber and follows along as it plays.',
+'same lrclib search as before, it just prefers the timed version now. songs without timing fall back to the plain text like always.',
+'try it on ruler of everything or the mind electric.'
 ]}
 ];
 var TYPE_COLOR={'patch':'#78b4ff','feature':'#64ffa0','update':'#c878ff','music pack':'#ffb43a'};

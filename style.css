@@ -402,6 +402,12 @@ li.emptyNote:hover{background:transparent}
   border-top:1px solid #2a2340;padding-top:8px;
 }
 .lyState{color:var(--dim);font-style:italic;font-size:12px}
+.lyLine{color:var(--dim);transition:color .18s ease,transform .18s ease;padding:1px 0}
+.lyLine.now{
+  color:var(--amber);
+  text-shadow:0 0 12px rgba(255,180,58,.55);
+  transform:translateX(5px);
+}
 .lyHit{color:var(--cyan);font-size:11px;letter-spacing:1px;margin-bottom:10px}
 .infoRow{
   display:grid;grid-template-columns:78px 1fr;gap:8px;
