@@ -744,6 +744,30 @@ function lyRender(tr,txt,meta,head,preset,synced){
   }
   pane.appendChild(foot);
 }
+function lyParseN(n){
+  var t=String(n||'').replace(/\[[^\]]*\]/g,'').replace(/\s+/g,' ').trim();
+  var artist='';
+  var m=t.match(/^(.*)\s+\(([^()]+)\)$/);
+  if(m){
+    var inner=m[2].trim();
+    var looksArtist=inner.split(' ').length<=4&&
+      /^[a-z0-9 .&'!-]+$/i.test(inner)&&
+      inner.indexOf(' x ')<0&&
+      !/remix|reverb|hour|theme|instrumental|version|slowed|night|edit|mix|mashup|edition|live|acoustic|demo|cover|ost|original/i.test(inner);
+    if(looksArtist){artist=inner;t=m[1].trim()}
+  }
+  if(!artist){
+    var dm=t.match(/^(.{2,45}?)\s+-\s+(.+)$/);
+    if(dm){artist=dm[1].trim();t=dm[2].trim()}
+  }
+  return {title:t,artist:artist};
+}
+var lyFail={},lyBusy='';
+function lyStateMsg(tr,msg){
+  var pane=document.getElementById('paneLyrics');
+  if(pane.dataset.f!==tr.f)return;
+  pane.innerHTML='<div class="lyState">'+msg+'</div>';
+}
 function lyLoad(pos){
   var tr=TRACKS[pos];
   var pane=document.getElementById('paneLyrics');
@@ -751,40 +775,100 @@ function lyLoad(pos){
   var pre=LYR_PRESETS[tr.f];
   if(pre){lyRender(tr,pre.body,null,pre.head,true);return}
   if(lyCache[tr.f]!==undefined){lyRender(tr,lyCache[tr.f].p,null,null,false,lyCache[tr.f].s);return}
+  if(lyBusy===tr.f)return;
+  if(lyFail[tr.f]&&Date.now()-lyFail[tr.f]<20000){
+    lyStateMsg(tr,'lrclib is having a moment - wait a few seconds, then click the note again.');
+    return;
+  }
+  lyBusy=tr.f;
   pane.innerHTML='<div class="lyState">searching lrclib&hellip;</div>';
-  var q=tr.n.replace(/\[[^\]]*\]/g,'').trim();
-  var title=lyNorm(q.split(' - ').pop());
-  fetch('https://lrclib.net/api/search?q='+encodeURIComponent(q))
-  .then(function(r){
-    if(r.status===429)throw{tired:true};
-    if(!r.ok)throw{tired:false};
-    return r.json();
-  })
-  .then(function(arr){
-    var best=null,bestScore=-1;
-    for(var i=0;i<(arr||[]).length;i++){
-      var a=arr[i];
-      if(!a.plainLyrics&&!a.syncedLyrics&&!a.instrumental)continue;
-      var hay=lyNorm((a.trackName||'')+' '+(a.artistName||'')+' '+(a.name||''));
-      var score=1;
-      if(a.plainLyrics)score+=2;
-      if(a.syncedLyrics)score+=2;
-      if(title&&hay.indexOf(title)>=0)score+=3;
-      if(score>bestScore){bestScore=score;best=a}
-    }
-    if(!best){lyCache[tr.f]={p:'',s:null};lyRender(tr,'',null);return}
+  var P=lyParseN(tr.n);
+  var apiGet=(P.artist&&P.title)?('https://lrclib.net/api/get?artist_name='+encodeURIComponent(P.artist)+'&track_name='+encodeURIComponent(P.title)):null;
+
+  function statusErr(r){
+    if(r.status===429||r.status===403||r.status===502||r.status===503||r.status===504)throw{tired:true};
+    throw{http:r.status||0};
+  }
+  function renderHit(best){
+    if(pane.dataset.f!==tr.f){lyBusy='';return}
+    delete lyFail[tr.f];
+    lyBusy='';
     var txt=best.instrumental&&!best.plainLyrics&&!best.syncedLyrics?'[instrumental - no lyrics to show]':(best.plainLyrics||'');
     lyCache[tr.f]={p:txt,s:best.syncedLyrics||null};
     lyRender(tr,txt,best,null,false,lyCache[tr.f].s);
-  })
-  .catch(function(err){
+  }
+  function failState(err){
+    lyBusy='';
+    lyFail[tr.f]=Date.now();
     if(pane.dataset.f!==tr.f)return;
     if(err&&err.tired){
-      pane.innerHTML='<div class="lyState">lrclib is tired - give it a minute, then click the note again.</div>';
+      lyStateMsg(tr,'lrclib is having a moment - wait a few seconds, then click the note again.');
+    }else if(err&&err.http){
+      lyStateMsg(tr,'lrclib said no (http '+err.http+') - try again in a bit.');
     }else{
-      pane.innerHTML='<div class="lyState">lrclib unreachable - network or filter in the way</div>';
+      lyStateMsg(tr,'could not reach lrclib - try again in a bit.');
     }
-  });
+  }
+  function doSearch(){
+    fetch('https://lrclib.net/api/search?q='+encodeURIComponent([P.artist,P.title].filter(Boolean).join(' ')||tr.n))
+    .then(function(r){
+      if(!r.ok)return statusErr(r);
+      return r.json();
+    })
+    .then(function(arr){
+      var best=null,bestScore=-1,rawHit=false;
+      var rawTitle=(P.title||'').trim();
+      var nTitle=lyNorm(P.title);
+      var nArtist=lyNorm(P.artist);
+      for(var i=0;i<(arr||[]).length;i++){
+        var a=arr[i];
+        if(!a.plainLyrics&&!a.syncedLyrics&&!a.instrumental)continue;
+        var rT=(a.trackName||'').trim();
+        var rA=lyNorm(a.artistName||'');
+        var score=1;
+        if(a.plainLyrics)score+=2;
+        if(a.syncedLyrics)score+=2;
+        if(rawTitle){
+          if(rT===rawTitle||rT.replace(/\s*\(.*\)$/,'')===rawTitle){score+=8;rawHit=true}
+          else if(nTitle&&lyNorm(rT)===nTitle){score+=6;rawHit=true}
+          else if(nTitle&&lyNorm(rT).indexOf(nTitle)>=0)score+=3;
+          else if(rawTitle.length<=2)score-=6;
+        }
+        if(nArtist){
+          if(rA===nArtist)score+=6;
+          else if(rA.indexOf(nArtist)>=0)score+=3;
+          else score-=3;
+        }
+        if(score>bestScore){bestScore=score;best=a}
+      }
+      if(!best||(rawTitle&&rawTitle.length<=2&&!rawHit)){
+        lyBusy='';
+        delete lyFail[tr.f];
+        lyCache[tr.f]={p:'',s:null};
+        lyRender(tr,'',null);
+        return;
+      }
+      renderHit(best);
+    })
+    .catch(failState);
+  }
+  if(apiGet){
+    fetch(apiGet)
+    .then(function(r){
+      if(r.ok)return r.json();
+      if(r.status===429||r.status===403||r.status===502||r.status===503||r.status===504)throw{tired:true};
+      throw{miss:true};
+    })
+    .then(function(j){renderHit(j)})
+    .catch(function(err){
+      if(err&&err.miss)return doSearch();
+      if(err&&err.tired)return failState(err);
+      // network failure on get: search gets a second chance
+      doSearch();
+    });
+  }else{
+    doSearch();
+  }
 }
 function fmtSize(b){
   if(!b&&b!==0)return'-';
