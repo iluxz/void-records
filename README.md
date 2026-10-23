@@ -39,4 +39,4 @@ https://raw.githack.com/iluxz/void-records/main/index.html
 
 ## origins
 
-forked out of `objbox-school`, which was stripped from `objbox` itself. the cube is gone — only the music survived. song sources in `songPLSDOWNLOAD.txt`.
+forked out of `objbox-school`, which was stripped from `objbox` itself. no cube chapter in this fork - just the music (the cube itself is still going, this is the side project). song sources in `songPLSDOWNLOAD.txt`.

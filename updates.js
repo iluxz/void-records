@@ -1,6 +1,6 @@
 var PATCH_LOG=[
 {date:'2026-10-21',type:'feature',title:'void records goes live',notes:[
-'the cube is retired. void records is now a record player: spinning vinyl deck, tonearm, spectrum bars, waveform background.',
+'the cube chapter moved out of this repo. void records is now a side project: spinning vinyl deck, tonearm, spectrum bars, waveform background.',
 'seek bar, volume, shuffle, loop, and a filterable track list - click a row to drop the needle.',
 '58 tracks on the shelf to start.',
 'works offline too: open index.html straight from a folder, no server needed.'
