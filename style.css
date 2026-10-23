@@ -438,6 +438,64 @@ li.emptyNote:hover{background:transparent}
 }
 .crSec p{font-size:12px;line-height:1.7;color:var(--ink);padding-left:10px}
 .crSec p a{color:var(--cyan)}
+.awHead{display:flex;align-items:baseline;gap:10px;margin-bottom:8px}
+.awCount{color:var(--amber);font-size:24px;letter-spacing:2px}
+.awPct{color:var(--purple);font-size:14px}
+.awSub{color:var(--dim);font-size:10px;letter-spacing:2px;text-transform:uppercase}
+.awBar{height:7px;background:#1b1530;border:1px solid var(--line);border-radius:4px;overflow:hidden;margin-bottom:12px}
+.awFill{height:100%;background:linear-gradient(90deg,var(--purple),var(--amber));border-radius:4px;transition:width .4s}
+.awChips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.awChip{
+  font-family:inherit;font-size:10px;letter-spacing:1px;
+  background:transparent;color:var(--dim);
+  border:1px solid var(--line);border-radius:10px;
+  padding:4px 10px;cursor:pointer;transition:all .15s;
+}
+.awChip:hover{color:var(--ink);border-color:var(--purple)}
+.awChip.on{background:rgba(139,92,246,.18);color:var(--ink);border-color:var(--purple)}
+.awInstall{
+  font-family:inherit;font-size:11px;letter-spacing:1px;
+  display:block;width:100%;margin-bottom:12px;
+  background:rgba(139,92,246,.14);color:var(--ink);
+  border:1px dashed var(--purple);border-radius:6px;
+  padding:9px 12px;cursor:pointer;transition:all .15s;
+}
+.awInstall:hover{background:rgba(139,92,246,.3)}
+.awInstall:disabled{opacity:.5;cursor:default}
+.awSecRow{
+  display:flex;justify-content:space-between;
+  color:var(--cyan);font-size:10px;letter-spacing:2px;text-transform:uppercase;
+  margin:16px 0 6px;padding-bottom:4px;border-bottom:1px solid var(--line);
+}
+.awSecRow:first-child{margin-top:0}
+.awRow{
+  display:grid;grid-template-columns:1fr;gap:2px;
+  padding:7px 0;border-bottom:1px solid rgba(42,35,64,.5);
+}
+.awRow .awName{font-size:12px;color:var(--dim)}
+.awRow.got .awName{color:var(--amber)}
+.awRow .awDesc{font-size:11px;color:#4a4368}
+.awRow.got .awDesc{color:var(--ink)}
+.awRow .awDesc.hint{font-style:italic;color:var(--dim)}
+#achToasts{position:fixed;top:16px;right:16px;z-index:210;display:flex;flex-direction:column;gap:8px;pointer-events:none}
+.achToast{
+  width:250px;background:#141020;border:1px solid var(--line);
+  border-left:3px solid var(--amber);border-radius:6px;
+  padding:0 12px 10px;
+  box-shadow:0 8px 28px rgba(0,0,0,.55);
+  animation:achIn .3s ease-out;
+  transition:opacity .4s,transform .4s;
+}
+.achToast.out{opacity:0;transform:translateX(24px)}
+.achToastBar{display:flex;align-items:center;gap:7px;padding:7px 0 5px}
+.achToastBar .dot{width:9px;height:9px;border-radius:50%;background:var(--amber);box-shadow:0 0 7px rgba(255,180,58,.7)}
+.achToastLbl{color:var(--dim);font-size:9px;letter-spacing:2px;text-transform:uppercase}
+.achToastN{color:var(--amber);font-size:13px;letter-spacing:1px}
+.achToastD{color:var(--ink);font-size:11px;line-height:1.5;margin-top:3px}
+@keyframes achIn{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:translateX(0)}}
+#skelRun{position:fixed;left:-240px;bottom:11vh;width:210px;height:auto;z-index:65;pointer-events:none;filter:drop-shadow(0 6px 10px rgba(0,0,0,.5))}
+#skelRun.go{animation:skelCross 3.1s linear forwards}
+@keyframes skelCross{from{transform:translateX(0)}to{transform:translateX(calc(100vw + 300px))}}
 
 @media(max-width:940px){
   body{overflow:auto}

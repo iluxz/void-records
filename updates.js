@@ -80,6 +80,12 @@ var PATCH_LOG=[
 'when lrclib has timed lyrics for a song, the lyrics tab now lines up with the music - the current line lights amber and follows along as it plays.',
 'same lrclib search as before, it just prefers the timed version now. songs without timing fall back to the plain text like always.',
 'try it on ruler of everything or the mind electric.'
+]},
+{date:'2026-10-22',type:'feature',title:'achievements! 26 of them',notes:[
+'a new awards tab in the record window (plus an achievements button in the footer) - progress bar, section filters, hints for the locked ones. all brand new, built for void records only.',
+'four sections: the deck (spins, the whole-shelf challenge), the knobs (shuffle, loop, pitch, redline, overdrive, tone, crackle, sleep), the window (tabs, karaoke, this log, install), the shelf (favorites, recent filter, local files, havexy).',
+'one of them is watching for something extremely rare crossing the screen. no hints. it sprints, it vanishes, you either saw it or you did not.',
+'unlocks pop an os-style toast in the corner. everything lives in this browser, same as your stats.'
 ]}
 ];
 var TYPE_COLOR={'patch':'#78b4ff','feature':'#64ffa0','update':'#c878ff','music pack':'#ffb43a'};
@@ -138,7 +144,7 @@ var TYPE_COLOR={'patch':'#78b4ff','feature':'#64ffa0','update':'#c878ff','music 
   },true);
   btnPrev.addEventListener('click',function(){if(idx>0){idx--;render()}});
   btnNext.addEventListener('click',function(){
-    if(idx<PATCH_LOG.length-1){idx++;render()}else hide();
+    if(idx<PATCH_LOG.length-1){idx++;render();if(idx===PATCH_LOG.length-1&&window.vrAch)vrAch('log_end')}else hide();
   });
   var bar=document.getElementById('updBar');
   var dg=null;

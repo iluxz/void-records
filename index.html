@@ -72,7 +72,7 @@
     </section>
   </div>
 
-  <footer><button id="btnTutorial">replay tutorial</button><button id="btnLog">update log</button></footer>
+  <footer><button id="btnTutorial">replay tutorial</button><button id="btnLog">update log</button><button id="btnAch">achievements</button></footer>
 </div>
 
 <div id="tutSpot" hidden></div>
@@ -97,6 +97,7 @@
     <button class="osTab" data-tab="info">info</button>
     <button class="osTab" data-tab="stats">stats</button>
     <button class="osTab" data-tab="credits">credits</button>
+    <button class="osTab" data-tab="awards">awards</button>
   </div>
   <div id="osBody">
     <div class="osPane" id="paneLyrics"></div>
@@ -131,6 +132,7 @@
       </div>
       <div class="lyMeta">every alias you can think of is a deep link - try ?track=employment</div>
     </div>
+    <div class="osPane" id="paneAwards" hidden></div>
   </div>
 </div>
 
@@ -155,8 +157,10 @@
 </div>
 </div>
 <img id="havexyEgg" src="havexy.svg" alt="havexy" hidden>
+<img id="skelRun" src="skeleton.gif" alt="a skeleton runs across the entire screen" hidden>
 <script src="tracks.js"></script>
 <script src="visualizer.js"></script>
+<script src="achievements.js"></script>
 <script src="player.js"></script>
 <script src="updates.js"></script>
 </body>

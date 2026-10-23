@@ -25,6 +25,7 @@ https://raw.githack.com/iluxz/void-records/main/index.html
 - star favorites, spin counts on every row, `recent` filter by last played
 - blobs are fetched whole before playing (githack has no range support — same trick objbox used)
 - installable as a desktop app (manifest + service worker, app shell works offline)
+- **achievements**: 26 of them in the awards tab (deck / knobs / window / shelf) with progress bar, section filters and hints for locked ones — plus something very rare crossing the screen
 
 ## controls
 
