@@ -1,4 +1,10 @@
 var PATCH_LOG=[
+{date:'2026-10-22',type:'patch',title:'lyrics that are actually right',notes:[
+'hyperbaiter now pulls live from lrclib instead of a hardcoded copy.',
+'lyrics search is stricter now: a track only shows lyrics when the title really matches, so homonyms and wrong matches (like "&" showing "Welcome to Tally Hall") no longer slip through.',
+'failed lookups are cached for 20 seconds and the player stops hammering lrclib under load.',
+'lrclib hiccups show an honest message instead of "unreachable".'
+]},
 {date:'2026-10-21',type:'feature',title:'void records goes live',notes:[
 'the cube chapter moved out of this repo. void records is now a side project: spinning vinyl deck, tonearm, spectrum bars, waveform background.',
 'seek bar, volume, shuffle, loop, and a filterable track list - click a row to drop the needle.',

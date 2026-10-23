@@ -595,70 +595,12 @@ var LYR_PRESETS={
   'friday.mp3':{
     head:'Windows96 - Landscaping',
     body:'[instrumental]\n\nfrom the album "Reflections" (2017), track 12.\npure vaporwave - no vocals, nothing to sing along to.\n\n(lrclib thinks you meant "Landscaping" by Shordie.\nlrclib is wrong.)'
-  },
-  'havexy-hyperbaiter.mp3':{
-    head:'Havexy - Who? Hyperbaiter!',
-    body:`[Verse 1]
-You mess with Vexy, what's the deal?
-You think you're so slick but your content's unreal
-Hyperbait king but we all see through
-You just a wannabe, can't compete with the crew
-Your views are inflated but your talent's deflated
-Tryna' ride the trend but you know you're outdated
-You fell off hard, gotta stop the grind
-I will surpass you and leave you falling behind
-
-[Chorus]
-Who diddles children like a violator?
-Yeah, that's right, Hyperbaiter
-Who was the Diddy blud on the calculator?
-Yeah, that's right, Hyperbaiter
-Who is worse than the german dictator?
-Yeah, that's right, Hyperbaiter
-Who fights old ladies in the elevator?
-Yeah, that's right, Hyperbaiter
-
-[Verse 2]
-You scare us when you cook, you make the onion cry
-You dress like shit, why do you even try?
-Remember that BBC friend Nicholas?
-Now he will fill your mouth with his gas
-You're fishing for likes but it's a desperate scheme
-While I'm out here grinding, living the dream
-I forgot to mention that your shoes look vile
-What the hell are those, bro? They look like crocodile (Oooh)
-
-[Chorus]
-Who diddles children like a violator?
-Yeah, that's right, Hyperbaiter
-Who was the Diddy blud on the calculator?
-Yeah, that's right, Hyperbaiter
-Who is worse than the german dictator?
-Yeah, that's right, Hyperbaiter
-Who fights old ladies in the elevator?
-Yeah, that's right, Hyperbaiter
-
-[Verse 3]
-All of your songs must be about goon
-Because that's your life, you pathetic buffoon
-You tried to come at me for stealing your lyrics
-But you're the one who actually makes song mimics
-You're hiding behind screens, fantasizing about ass
-But in real life, you're a virgin who doesn't touch grass
-You think you're famous but you're a one hit wonder
-And in reality, your songs belong in a dumpster (Oooh)
-
-[Chorus]
-Who diddles children like a violator?
-Yeah, that's right, Hyperbaiter
-Who was the Diddy blud on the calculator?
-Yeah, that's right, Hyperbaiter
-Who is worse than the german dictator?
-Yeah, that's right, Hyperbaiter
-Who fights old ladies in the elevator?
-Yeah, that's right, Hyperbaiter`
   }
 };
+var LYR_IDS={
+  'havexy-hyperbaiter.mp3':36014973
+};
+
 
 function parseLRC(txt){
   var out=[],lines=String(txt).split(/\r?\n/);
@@ -782,6 +724,18 @@ function lyLoad(pos){
   }
   lyBusy=tr.f;
   pane.innerHTML='<div class="lyState">searching lrclib&hellip;</div>';
+  var directId=LYR_IDS[tr.f];
+  if(directId){
+    fetch('https://lrclib.net/api/get/'+directId)
+    .then(function(r){
+      if(r.ok)return r.json();
+      if(r.status===429||r.status===403||r.status===502||r.status===503||r.status===504)throw{tired:true};
+      throw{http:r.status||0};
+    })
+    .then(renderHit)
+    .catch(failState);
+    return;
+  }
   var P=lyParseN(tr.n);
   var apiGet=(P.artist&&P.title)?('https://lrclib.net/api/get?artist_name='+encodeURIComponent(P.artist)+'&track_name='+encodeURIComponent(P.title)):null;
 
@@ -841,7 +795,7 @@ function lyLoad(pos){
         }
         if(score>bestScore){bestScore=score;best=a}
       }
-      if(!best||(rawTitle&&rawTitle.length<=2&&!rawHit)){
+      if(!best||(rawTitle&&(rawTitle.length<=2||!rawHit))){
         lyBusy='';
         delete lyFail[tr.f];
         lyCache[tr.f]={p:'',s:null};
