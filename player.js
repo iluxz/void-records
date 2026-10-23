@@ -10,6 +10,17 @@ var loopOne=false;
 var curBlobUrl=null;
 var loadGen=0;
 var durCache={};
+var volBase=.7,fadeInt=null,fadeInNext=false;
+function fadeVol(to,dur,done){
+  if(fadeInt){clearInterval(fadeInt);fadeInt=null}
+  var from=audio.volume,steps=Math.max(2,Math.round(dur/30)),n=0;
+  if(Math.abs(from-to)<.001){audio.volume=to;if(done)done();return}
+  fadeInt=setInterval(function(){
+    n++;
+    audio.volume=Math.max(0,Math.min(1,from+(to-from)*(n/steps)));
+    if(n>=steps){clearInterval(fadeInt);fadeInt=null;if(done)done()}
+  },30);
+}
 var vrFavs=[],vrPlays={},vrLast={},ST={};
 try{vrFavs=JSON.parse(localStorage.getItem('vr_favs')||'[]')||[]}catch(e){}
 try{vrPlays=JSON.parse(localStorage.getItem('vr_plays')||'{}')||{}}catch(e){}
@@ -66,6 +77,9 @@ function loadTrack(i,autoplay){
   pos=i;
   var tr=TRACKS[i];
   havexyEgg(tr.f);
+  fadeInNext=true;
+  if(!audio.paused)fadeVol(0,450);
+  else audio.volume=0;
   try{
     vrPlays[tr.f]=(vrPlays[tr.f]||0)+1;
     vrLast[tr.f]=Date.now();
@@ -78,6 +92,7 @@ function loadTrack(i,autoplay){
     document.getElementById('osWinTitle').textContent=tr.n;
     if(!document.getElementById('paneInfo').hidden)infoRender(i);
     if(!document.getElementById('paneLyrics').hidden)lyLoad(i);
+    if(!document.getElementById('paneStats').hidden)statsRender();
   }
   nowTitle.textContent=tr.n;
   nowMeta.textContent=(tr.a.length?'aka '+tr.a.join(', ')+' &middot; ':'')+'void records';
@@ -174,7 +189,8 @@ btnLoop.addEventListener('click',function(){
   audio.loop=loopOne;
 });
 document.getElementById('vol').addEventListener('input',function(){
-  audio.volume=this.value/100;
+  volBase=this.value/100;
+  if(!fadeInt)audio.volume=volBase;
   saveSetting('volume',parseInt(this.value,10));
 });
 seek.addEventListener('input',function(){
@@ -183,6 +199,7 @@ seek.addEventListener('input',function(){
 audio.addEventListener('play',function(){
   if(!audioCtx&&audioEl)initVisualizer(audioEl);
   if(audioCtx&&audioCtx.state==='suspended')audioCtx.resume().catch(function(){});
+  if(fadeInNext){fadeInNext=false;fadeVol(volBase,600)}
   setPlayingUI(true);markPlaying();if(window.setCrackleLevel&&crackleWanted)setCrackleLevel(1);
 });
 audio.addEventListener('pause',function(){setPlayingUI(false);if(window.setCrackleLevel)setCrackleLevel(0)});
@@ -209,11 +226,20 @@ function buildList(filter){
   var q=(filter||'').toLowerCase().trim();
   var qn=q.replace(/[^a-z0-9]/g,'');
   var favMode=qn==='favorites'||qn==='favs'||qn==='favourites'||qn==='starred';
+  var recMode=qn==='recent'||qn==='recents'||qn==='history'||qn==='lastplayed';
+  var idxs=[];
+  if(recMode){
+    for(var r=0;r<TRACKS.length;r++)if(vrLast[TRACKS[r].f])idxs.push(r);
+    idxs.sort(function(a,b){return vrLast[TRACKS[b].f]-vrLast[TRACKS[a].f]});
+  }else{
+    for(var s=0;s<TRACKS.length;s++)idxs.push(s);
+  }
   listEl.innerHTML='';
-  for(var i=0;i<TRACKS.length;i++){
+  for(var k=0;k<idxs.length;k++){
+    var i=idxs[k];
     var tr=TRACKS[i];
     if(favMode){if(vrFavs.indexOf(tr.f)<0)continue}
-    else{
+    else if(!recMode){
       var hay=(tr.n+' '+tr.a.join(' ')+' '+tr.f).toLowerCase();
       if(q&&hay.indexOf(q)<0)continue;
     }
@@ -225,9 +251,13 @@ function buildList(filter){
       '<span class="al"></span>'+
       '<button class="favBtn'+(vrFavs.indexOf(tr.f)>=0?' on':'')+'" title="favorite">&#9733;</button>'+
       '<button class="lyBtn" title="lyrics">&#9834;</button>'+
+      '<span class="pc"></span>'+
       '<span class="du"></span>';
     li.querySelector('.nm').textContent=tr.n;
     li.querySelector('.al').textContent=tr.a.length?tr.a.join(' '):'';
+    var pcEl=li.querySelector('.pc');
+    var pcN=vrPlays[tr.f]||0;
+    if(pcN)pcEl.textContent='\u00d7'+pcN;
     li.querySelector('.du').textContent=durCache[tr.f]||'--:--';
     li.querySelector('.favBtn').addEventListener('click',function(e){
       e.stopPropagation();
@@ -250,7 +280,7 @@ function buildList(filter){
   if(!listEl.children.length){
     var note=document.createElement('li');
     note.className='emptyNote';
-    note.textContent=favMode?'no favorites yet - star some rows.':'nothing matches.';
+    note.textContent=favMode?'no favorites yet - star some rows.':(recMode?'no spins yet - play something and it shows up here.':'nothing matches.');
     listEl.appendChild(note);
   }
 }
@@ -282,8 +312,8 @@ btnSleep.addEventListener('click',function(){
     if(sleepMins<=0){
       clearInterval(sleepTimer);sleepTimer=null;
       btnSleep.textContent='\u23F1';btnSleep.classList.remove('on');
-      audio.pause();
       nowMeta.textContent='sleep timer ended. goodnight.';
+      fadeVol(0,2500,function(){audio.pause();audio.volume=volBase});
     }else{btnSleep.textContent=sleepMins+'m'}
   },60000);
 });
@@ -352,7 +382,7 @@ document.getElementById('setToneS').addEventListener('input',function(){
   saveSetting('tone',hz);
 });
 
-if(typeof ST.volume==='number'){document.getElementById('vol').value=ST.volume;audio.volume=ST.volume/100}
+if(typeof ST.volume==='number'){document.getElementById('vol').value=ST.volume;volBase=ST.volume/100;audio.volume=volBase}
 if(typeof ST.speed==='number'){audio.playbackRate=ST.speed;document.getElementById('setSpeed').value=ST.speed;document.getElementById('setSpeedV').textContent=ST.speed.toFixed(2)+'\u00d7'}
 if(typeof ST.pitch==='number'){document.getElementById('setPitch').value=ST.pitch;if(window.setPitchRatio)setPitchRatio(Math.pow(2,ST.pitch/12));document.getElementById('setPitchV').textContent=(ST.pitch>0?'+':'')+ST.pitch+' st'}
 if(typeof ST.tone==='number'){document.getElementById('setToneS').value=ST.tone;if(window.setTone)setTone(ST.tone);document.getElementById('setToneV').textContent=ST.tone>=15500?'open':(ST.tone>=1000?(ST.tone/1000).toFixed(1)+'k':ST.tone+'hz')}
@@ -368,7 +398,7 @@ var tutActive=false,tutI=0,tutTimer=null;
 
 var tutSteps=[
   {center:true,btn:'start',title:'void records',
-   text:'68 records, one deck. quick tour - ten clicks, then you are free. you can replay it any time from the footer.'},
+   text:'114 records, one deck. quick tour - ten clicks, then you are free. you can replay it any time from the footer.'},
   {el:'#list li',title:'the shelf',
    text:'every record in the collection. click one and it loads straight onto the deck. the amber row is what is spinning.'},
   {el:'#turntable',title:'the deck',
@@ -384,7 +414,7 @@ var tutSteps=[
   {el:'#btnSet',title:'music settings',
    text:'the gear opens speed (0.5-2x), independent pitch (-12 to +12 semitones) and tone. pitch is real DSP - it does not touch the speed.'},
   {el:'#filter',title:'the filter',
-   text:'type to narrow the shelf. names, aliases and filenames all match - try "employment" or "sm07".'},
+   text:'type to narrow the shelf. names, aliases and filenames all match - try "employment", "sm07", or "recent" to see what you played last.'},
   {center:true,btn:'done',title:"you're free",
    text:'keys: space, arrows, S, L, C. drag any mp3 onto the deck for local files. deep links: ?track=employment. replay from the footer whenever.'}
 ];
@@ -507,16 +537,17 @@ document.addEventListener('keydown',function(e){
 function osTab(name){
   var tabs=document.querySelectorAll('.osTab');
   for(var i=0;i<tabs.length;i++)tabs[i].classList.toggle('on',tabs[i].dataset.tab===name);
-  var pL=document.getElementById('paneLyrics');
-  var pI=document.getElementById('paneInfo');
-  pL.hidden=name!=='lyrics';
-  pI.hidden=name!=='info';
-  var vis=name==='lyrics'?pL:pI;
+  var paneId='pane'+name.charAt(0).toUpperCase()+name.slice(1);
+  var panes=document.querySelectorAll('.osPane');
+  for(var p=0;p<panes.length;p++)panes[p].hidden=panes[p].id!==paneId;
+  var vis=document.getElementById(paneId);
+  if(!vis)return;
   vis.classList.remove('tabIn');
   void vis.offsetWidth;
   vis.classList.add('tabIn');
-  if(name==='lyrics'&&osPos>=0&&pL.dataset.f!==TRACKS[osPos].f)lyLoad(osPos);
+  if(name==='lyrics'&&osPos>=0&&vis.dataset.f!==TRACKS[osPos].f)lyLoad(osPos);
   if(name==='info'&&osPos>=0)infoRender(osPos);
+  if(name==='stats')statsRender();
 }
 var osTabBtns=document.querySelectorAll('.osTab');
 for(var oi=0;oi<osTabBtns.length;oi++){
@@ -735,6 +766,79 @@ function infoRender(pos){
   fileSize(tr.f,function(s){if(sizeEl&&sizeEl.isConnected)sizeEl.textContent=s||'-'});
 }
 
+function ago(ts){
+  var s=(Date.now()-ts)/1000;
+  if(s<60)return'just now';
+  if(s<3600)return Math.floor(s/60)+' min ago';
+  if(s<86400)return Math.floor(s/3600)+' hr ago';
+  if(s<2592000)return Math.floor(s/86400)+' d ago';
+  return new Date(ts).toLocaleDateString();
+}
+function statsRender(){
+  var pane=document.getElementById('paneStats');
+  pane.innerHTML='';
+  var total=0,touched=0,max=0;
+  var spun=[],recent=[];
+  for(var i=0;i<TRACKS.length;i++){
+    var f=TRACKS[i].f,c=vrPlays[f]||0;
+    total+=c;
+    if(c>0){touched++;spun.push({n:TRACKS[i].n,c:c});if(c>max)max=c}
+    if(vrLast[f])recent.push({n:TRACKS[i].n,last:vrLast[f]});
+  }
+  spun.sort(function(a,b){return b.c-a.c});
+  recent.sort(function(a,b){return b.last-a.last});
+  function block(title){
+    var h=document.createElement('div');
+    h.className='stHead';h.textContent=title;
+    pane.appendChild(h);
+  }
+  function infoRow(k,v){
+    var row=document.createElement('div');
+    row.className='infoRow';
+    var kd=document.createElement('div');kd.className='infoKey';kd.textContent=k;
+    var vd=document.createElement('div');vd.className='infoVal';vd.textContent=v;
+    row.appendChild(kd);row.appendChild(vd);
+    pane.appendChild(row);
+    return vd;
+  }
+  block('listening stats');
+  infoRow('total spins',String(total));
+  infoRow('tracks spun',touched+' of '+TRACKS.length);
+  infoRow('favorites',String(vrFavs.length));
+  infoRow('top track',spun.length?spun[0].n+' \u00d7'+spun[0].c:'-');
+  block('most spun');
+  if(!spun.length){
+    var e=document.createElement('div');
+    e.className='stEmpty';e.textContent='nothing played yet - drop the needle and the numbers show up here.';
+    pane.appendChild(e);
+  }else{
+    for(var i=0;i<Math.min(10,spun.length);i++){
+      var line=document.createElement('div');
+      line.className='stRow';
+      var nm=document.createElement('span');nm.className='stNm';nm.textContent=spun[i].n;
+      var bar=document.createElement('span');bar.className='stBarWrap';
+      var fill=document.createElement('span');fill.className='stBar';
+      fill.style.width=Math.max(4,Math.round(spun[i].c/max*100))+'%';
+      bar.appendChild(fill);
+      var ct=document.createElement('span');ct.className='stCt';ct.textContent='\u00d7'+spun[i].c;
+      line.appendChild(nm);line.appendChild(bar);line.appendChild(ct);
+      pane.appendChild(line);
+    }
+  }
+  block('recently spun');
+  if(!recent.length){
+    var e2=document.createElement('div');
+    e2.className='stEmpty';e2.textContent='no history yet.';
+    pane.appendChild(e2);
+  }else{
+    for(var j=0;j<Math.min(6,recent.length);j++)infoRow(ago(recent[j].last),recent[j].n);
+  }
+  var foot=document.createElement('div');
+  foot.className='lyMeta';
+  foot.textContent='numbers live in this browser only - localStorage, never uploaded.';
+  pane.appendChild(foot);
+}
+
 var osBar=document.getElementById('osWinBar');
 var osDrag=null;
 osBar.addEventListener('pointerdown',function(e){
@@ -757,3 +861,7 @@ osBar.addEventListener('pointermove',function(e){
 });
 osBar.addEventListener('pointerup',function(){osDrag=null});
 osBar.addEventListener('pointercancel',function(){osDrag=null});
+
+if('serviceWorker'in navigator&&/^https?:$/.test(location.protocol)){
+  window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){})});
+}

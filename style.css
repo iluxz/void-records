@@ -194,6 +194,8 @@ section{
 #list li.playing .nm{color:var(--amber);text-shadow:0 0 10px rgba(255,180,58,.5)}
 #list li.playing .idx::before{content:"\25B8 ";color:var(--amber)}
 #list li .al{color:var(--dim);font-size:10px;flex-shrink:0}
+#list li .pc{color:var(--dim);font-size:10px;flex-shrink:0;opacity:.75}
+#list li .pc:empty{display:none}
 
 footer{
   margin-top:12px;
@@ -401,14 +403,35 @@ li.emptyNote:hover{background:transparent}
 }
 .lyState{color:var(--dim);font-style:italic;font-size:12px}
 .lyHit{color:var(--cyan);font-size:11px;letter-spacing:1px;margin-bottom:10px}
-#paneInfo .infoRow{
+.infoRow{
   display:grid;grid-template-columns:78px 1fr;gap:8px;
   font-size:12px;padding:7px 0;
   border-bottom:1px solid rgba(42,35,64,.5);
 }
-#paneInfo .infoKey{color:var(--dim);text-transform:uppercase;font-size:10px;letter-spacing:1px}
-#paneInfo .infoVal{color:var(--ink);word-break:break-all}
+.infoKey{color:var(--dim);text-transform:uppercase;font-size:10px;letter-spacing:1px}
+.infoVal{color:var(--ink);word-break:break-all}
 #paneInfo .infoVal a{color:var(--cyan)}
+.stHead{
+  color:var(--amber);font-size:11px;letter-spacing:2px;text-transform:uppercase;
+  margin:20px 0 8px;padding-bottom:5px;border-bottom:1px solid var(--line);
+}
+.stHead:first-child{margin-top:0}
+.stRow{
+  display:grid;grid-template-columns:1fr 110px 38px;gap:10px;align-items:center;
+  font-size:12px;padding:5px 0;
+}
+.stNm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.stBarWrap{height:6px;background:#1b1530;border-radius:3px;overflow:hidden}
+.stBar{display:block;height:100%;background:linear-gradient(90deg,var(--purple),var(--amber));border-radius:3px}
+.stCt{color:var(--dim);font-size:11px;text-align:right}
+.stEmpty{color:var(--dim);font-style:italic;font-size:12px;padding:6px 0}
+.crSec{margin-bottom:16px}
+.crSec h4{
+  color:var(--cyan);font-size:11px;letter-spacing:2px;text-transform:uppercase;
+  margin-bottom:7px;padding-bottom:4px;border-bottom:1px solid var(--line);
+}
+.crSec p{font-size:12px;line-height:1.7;color:var(--ink);padding-left:10px}
+.crSec p a{color:var(--cyan)}
 
 @media(max-width:940px){
   body{overflow:auto}

@@ -1,0 +1,13 @@
+{
+  "name": "void records",
+  "short_name": "void records",
+  "description": "a record player for the void records collection - 114 tracks, one deck.",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "background_color": "#0a0812",
+  "theme_color": "#0a0812",
+  "icons": [
+    { "src": "favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

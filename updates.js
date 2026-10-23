@@ -68,6 +68,13 @@ var PATCH_LOG=[
 {date:'2026-10-22',type:'patch',title:'credits where they belong',notes:[
 'the nine vexy-era tracks (gypsy verity, folk valley, and all seven disstracks) now say (havexy) in the title - they were his all along.',
 'the lyrics for who? hyperbaiter! are hardcoded now, the full disstrack shows every time without asking lrclib.'
+]},
+{date:'2026-10-22',type:'feature',title:'five new rooms',notes:[
+'stats tab - total spins, top 10 tracks with bars, and recently spun history, all read straight from this browser (never uploaded).',
+'credits tab - who made what, the mirror links, and a shoutout to xul and men.',
+'the list now shows a spin count on every played row (×3 next to the duration), and the filter takes "recent" to sort everything by last played.',
+'smooth fades - switching records dips the old one and fades the new one in instead of a hard cut, and the sleep timer fades out over a couple seconds before it pauses.',
+'installable - void records can be added to your desktop as an app now, and the shell works offline once you have visited it once.'
 ]}
 ];
 var TYPE_COLOR={'patch':'#78b4ff','feature':'#64ffa0','update':'#c878ff','music pack':'#ffb43a'};
