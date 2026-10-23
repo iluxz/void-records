@@ -1,4 +1,4 @@
-var CACHE='vr-shell-v2';
+var CACHE='vr-shell-v3';
 var SHELL=[
   './',
   'index.html',
@@ -10,7 +10,7 @@ var SHELL=[
   'achievements.js',
   'favicon.svg',
   'havexy.svg',
-  'skeleton.gif',
+  'skeleton.png',
   'manifest.json'
 ];
 

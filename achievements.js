@@ -172,8 +172,8 @@ function awardsRender(){
       row.className='awRow'+(has?' got':'');
       var nm=document.createElement('div');nm.className='awName';
       nm.textContent=(has?'\u2713 ':'\u25cb ')+d.n;
-      var ds=document.createElement('div');ds.className='awDesc'+(has?'':' hint');
-      ds.textContent=has?d.d:(d.h||d.d);
+      var ds=document.createElement('div');ds.className='awDesc';
+      ds.textContent=d.d;
       row.appendChild(nm);row.appendChild(ds);
       list.appendChild(row);
     }
