@@ -16,6 +16,8 @@ body{
   font-family:"Lucida Console",Monaco,monospace;
   overflow:hidden;
 }
+.bgVideo{position:fixed;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;opacity:0;transition:opacity .5s;pointer-events:none;background:#000}
+.bgVideo.on{opacity:.5}
 #waves{position:fixed;inset:0;z-index:0}
 #shell{
   position:relative;z-index:1;

@@ -13,6 +13,7 @@
 <canvas id="waves"></canvas>
 
 <div id="shell">
+  <video id="bgVideo" class="bgVideo" muted playsinline loop preload="none"></video>
   <header>
     <h1>void records</h1>
     <p>114 tracks</p>
@@ -60,6 +61,11 @@
           <label>tone</label>
           <input id="setToneS" type="range" min="400" max="16000" step="100" value="16000">
           <span id="setToneV">open</span>
+        </div>
+        <div class="setRow setToggle">
+          <label>video bg</label>
+          <input id="setVideoBg" type="checkbox">
+          <span id="setVideoBgV">off</span>
         </div>
       </div>
 
