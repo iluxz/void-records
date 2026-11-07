@@ -114,14 +114,17 @@ function loadTrack(i,autoplay){
       var mime=ext==='mp3'?'audio/mpeg':ext==='wav'?'audio/wav':ext==='ogg'?'audio/ogg':ext==='webm'?'audio/webm':'';
       curBlobUrl=URL.createObjectURL(mime?new Blob([b],{type:mime}):b);
       audio.src=curBlobUrl;
+      vrVideoBgSet(tr,curBlobUrl);
       if(autoplay!==false)tryPlay();
     }).catch(function(){
       if(gen!==loadGen)return;
       audio.src=tr.f;
+      vrVideoBgSet(tr,tr.f);
       if(autoplay!==false)tryPlay();
     });
   }catch(e){
     audio.src=tr.f;
+    vrVideoBgSet(tr,tr.f);
     if(autoplay!==false)tryPlay();
   }
   markPlaying();
@@ -423,12 +426,33 @@ document.getElementById('setToneS').addEventListener('change',function(){
   saveSetting('tone',hz);
   if(hz<=900&&!toneDarkFired&&typeof vrAch==='function'){toneDarkFired=true;vrAch('tone_dark');}
 });
+var setVideoBgEl=document.getElementById('setVideoBg');
+if(setVideoBgEl)setVideoBgEl.addEventListener('change',function(){
+  var on=!!this.checked;
+  saveSetting('videoBg',on);
+  var v=document.getElementById('setVideoBgV');
+  if(v)v.textContent=on?'on':'off';
+  if(typeof vrVideoBgApply==='function')vrVideoBgApply();
+});
+function vrVideoBgSet(tr, src){
+  var vid=document.getElementById('bgVideo');
+  if(!vid||!tr)return;
+  var on=!!ST.videoBg && /\.webm$/i.test(tr.f);
+  if(!on){try{vid.pause()}catch(e){};vid.classList.remove('on');vid.hidden=true;try{vid.removeAttribute('src');vid.load()}catch(e){};return}
+  vid.hidden=false;
+  if(src)vid.src=src;
+  else vid.src=tr.f;
+  try{vid.play()}catch(e){}
+  vid.classList.add('on');
+}
+function vrVideoBgApply(){ if(pos>=0&&pos<TRACKS.length) vrVideoBgSet(TRACKS[pos], curBlobUrl||TRACKS[pos].f) }
 
 if(typeof ST.volume==='number'){document.getElementById('vol').value=ST.volume;volBase=ST.volume/100;audio.volume=volBase}
 if(typeof ST.speed==='number'){audio.playbackRate=ST.speed;document.getElementById('setSpeed').value=ST.speed;document.getElementById('setSpeedV').textContent=ST.speed.toFixed(2)+'\u00d7'}
 if(typeof ST.pitch==='number'){document.getElementById('setPitch').value=ST.pitch;if(window.setPitchRatio)setPitchRatio(Math.pow(2,ST.pitch/12));document.getElementById('setPitchV').textContent=(ST.pitch>0?'+':'')+ST.pitch+' st'}
 if(typeof ST.tone==='number'){document.getElementById('setToneS').value=ST.tone;if(window.setTone)setTone(ST.tone);document.getElementById('setToneV').textContent=fmtTone(ST.tone)}
 if('crackle' in ST){crackleWanted=!!ST.crackle;btnCrackle.classList.toggle('on',crackleWanted)}
+if('videoBg' in ST){document.getElementById('setVideoBg').checked=!!ST.videoBg;document.getElementById('setVideoBgV').textContent=ST.videoBg?'on':'off'}
 
 var THEMES=['default','halloween','ocean','forest','sunset'];
 var btnHalloween=document.getElementById('btnHalloween');

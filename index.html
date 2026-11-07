@@ -13,6 +13,7 @@
 <canvas id="waves"></canvas>
 
 <div id="shell">
+  <video id="bgVideo" class="bgVideo" muted playsinline loop preload="none"></video>
   <header>
     <h1>void records</h1>
     <p>114 tracks</p>
@@ -70,6 +71,11 @@
             <option value="forest">forest</option>
             <option value="sunset">sunset</option>
           </select>
+        </div>
+        <div class="setRow setToggle">
+          <label>video bg</label>
+          <input id="setVideoBg" type="checkbox">
+          <span id="setVideoBgV">off</span>
         </div>
       </div>
 
