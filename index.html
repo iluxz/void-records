@@ -61,18 +61,36 @@
           <input id="setToneS" type="range" min="400" max="16000" step="100" value="16000">
           <span id="setToneV">open</span>
         </div>
+        <div class="setRow">
+          <label>theme</label>
+          <select id="themePick">
+            <option value="default">void</option>
+            <option value="halloween">halloween</option>
+            <option value="ocean">ocean</option>
+            <option value="forest">forest</option>
+            <option value="sunset">sunset</option>
+          </select>
+        </div>
       </div>
 
       <canvas id="bars"></canvas>
     </section>
 
     <section id="listWrap">
+      <div id="moods">
+        <button data-mood="all">all</button>
+        <button data-mood="chill">chill</button>
+        <button data-mood="hype">hype</button>
+        <button data-mood="weird">weird</button>
+        <button data-mood="sleep">sleep</button>
+        <button data-mood="sad">sad</button>
+      </div>
       <input id="filter" type="text" placeholder="filter&hellip;" spellcheck="false">
       <ol id="list"></ol>
     </section>
   </div>
 
-  <footer><button id="btnTutorial">replay tutorial</button><button id="btnLog">update log</button><button id="btnAch">achievements</button></footer>
+  <footer><button id="btnTutorial">replay tutorial</button><button id="btnLog">update log</button><button id="btnAch">achievements</button><button id="btnHalloween">🎃 halloween</button></footer>
 </div>
 
 <div id="tutSpot" hidden></div>
@@ -158,10 +176,11 @@
 </div>
 <img id="havexyEgg" src="havexy.svg" alt="havexy" hidden>
 <img id="skelRun" src="skeleton.png" alt="a skeleton runs across the entire screen" hidden>
+<img id="skelPet" src="skeleton.png" alt="a tiny skeleton vibing in the corner" title="he is vibing">
 <script src="tracks.js"></script>
 <script src="visualizer.js"></script>
 <script src="achievements.js"></script>
-<script src="player.js"></script>
+<script src="player.js?v=3"></script>
 <script src="updates.js"></script>
 </body>
 </html>

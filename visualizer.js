@@ -1,24 +1,34 @@
-var audioEl=null;
+window.audioEl=null;
 var audioCtx=null,analyser=null,freqData=null;
 
 function initVisualizer(el){
   if(audioCtx)return;
-  if(location.protocol==='file:')return;
   try{
-    audioEl=el;
+    window.audioEl=el;
     audioCtx=new(window.AudioContext||window.webkitAudioContext)();
     if(audioCtx.state==='suspended')audioCtx.resume().catch(function(){});
     var src=audioCtx.createMediaElementSource(el);
     analyser=audioCtx.createAnalyser();
     analyser.fftSize=256;
     analyser.smoothingTimeConstant=.82;
-    var ok=makeDsp();
-    if(ok){src.connect(pitchNode);pitchNode.connect(toneFilter);toneFilter.connect(analyser)}
-    else{src.connect(analyser)}
+
+    // tone filter is created first so it exists even if the pitch shifter fails
+    toneFilter=audioCtx.createBiquadFilter();
+    toneFilter.type='lowpass';
+    toneFilter.frequency.value=toneHz;
+    toneFilter.Q.value=.5;
+
+    makeDsp();
+    src.connect(toneFilter);
+    toneFilter.connect(analyser);
     analyser.connect(audioCtx.destination);
     freqData=new Uint8Array(analyser.frequencyBinCount);
     makeCrackle();
-  }catch(e){}
+    console.log('VR audio graph ready', audioCtx.state, 'tone', toneHz);
+  }catch(e){
+    console.error('VR initVisualizer failed:', e && e.message ? e.message : e);
+    audioCtx=null;
+  }
 }
 
 var pitchNode=null,toneFilter=null,pitchRatio=1;
@@ -32,8 +42,6 @@ function makeDsp(){
     ring0=new Float32Array(ringSize);
     ring1=new Float32Array(ringSize);
     pitchNode=audioCtx.createScriptProcessor(4096,2,2);
-    toneFilter=audioCtx.createBiquadFilter();
-    toneFilter.type='lowpass';toneFilter.frequency.value=toneHz;toneFilter.Q.value=.5;
     pitchNode.onaudioprocess=function(e){
       var inb=e.inputBuffer,out=e.outputBuffer;
       var n=inb.length,sr2=inb.sampleRate;
@@ -76,7 +84,14 @@ function ringRead(ring,delaySamples){
 }
 window.setPitchRatio=function(r){try{pitchRatio=r}catch(e){}};
 var toneHz=16000;
-window.setTone=function(hz){try{toneHz=hz;if(toneFilter)toneFilter.frequency.value=hz}catch(e){}};
+window.setTone=function(hz){
+  try{
+    var n=parseFloat(hz);
+    if(!isFinite(n)||n<=0)return;
+    toneHz=n;
+    if(toneFilter&&toneFilter.frequency)toneFilter.frequency.value=n;
+  }catch(e){}
+};
 
 var crackleGain=null;
 function makeCrackle(){
@@ -104,7 +119,7 @@ function makeCrackle(){
 window.setCrackleLevel=function(v){try{if(crackleGain)crackleGain.gain.value=v}catch(e){}};
 document.addEventListener('click',function(){
   if(audioCtx&&audioCtx.state==='suspended')audioCtx.resume().catch(function(){});
-  else if(!audioCtx&&audioEl)initVisualizer(audioEl);
+  else if(!audioCtx&&window.audioEl)initVisualizer(window.audioEl);
 });
 
 function audioBands(){
@@ -188,9 +203,28 @@ function drawBars(){
   }
 }
 
+var skelPet=document.getElementById('skelPet');
+var skelPetBeat=0;
+function updateSkelPet(){
+  if(!skelPet||!freqData)return;
+  var sum=0;for(var i=0;i<freqData.length;i++)sum+=freqData[i];
+  var avg=sum/freqData.length;
+  var beat=avg>45;
+  if(beat&&Date.now()-skelPetBeat>180){
+    skelPet.classList.add('bop');
+    skelPetBeat=Date.now();
+  }else if(!beat||Date.now()-skelPetBeat>280){
+    skelPet.classList.remove('bop');
+  }
+}
+if(skelPet)skelPet.addEventListener('click',function(){
+  if(typeof skelNow==='function')skelNow();
+});
+
 function visualLoop(){
   drawWaves();
   drawBars();
+  updateSkelPet();
   requestAnimationFrame(visualLoop);
 }
 requestAnimationFrame(visualLoop);

@@ -8,6 +8,46 @@
   --cyan:#5ee6ff;
   --line:#2a2340;
 }
+body[data-theme="halloween"]{
+  --bg:#0d0508;
+  --panel:#1f0d12;
+  --ink:#ffe8d6;
+  --dim:#a66a4b;
+  --amber:#ff7b00;
+  --purple:#7b1fa2;
+  --cyan:#39ff14;
+  --line:#4a1e24;
+}
+body[data-theme="ocean"]{
+  --bg:#030c14;
+  --panel:#0a1a2a;
+  --ink:#d6f0ff;
+  --dim:#5a8aaa;
+  --amber:#00d4ff;
+  --purple:#0066ff;
+  --cyan:#00ffcc;
+  --line:#13334d;
+}
+body[data-theme="forest"]{
+  --bg:#050f08;
+  --panel:#0f1f12;
+  --ink:#e0ffdd;
+  --dim:#5a8a5a;
+  --amber:#9eff00;
+  --purple:#228b22;
+  --cyan:#7fffd4;
+  --line:#1a3a1f;
+}
+body[data-theme="sunset"]{
+  --bg:#150810;
+  --panel:#28121c;
+  --ink:#ffe4f0;
+  --dim:#b06a86;
+  --amber:#ff5e78;
+  --purple:#ff2a6d;
+  --cyan:#ffcc00;
+  --line:#4a1e30;
+}
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
 body{
@@ -96,6 +136,11 @@ section{
   transform:translate(-50%,-50%);
   background:var(--bg);
 }
+body[data-theme="halloween"] #label{
+  background:radial-gradient(circle,#ff7b00 0%,#8b2500 78%);
+  border-color:rgba(57,255,20,.5);
+}
+body[data-theme="halloween"] #labelTitle{color:#1a0500}
 #arm{
   position:absolute;right:56px;top:14px;
   width:7px;height:172px;
@@ -209,6 +254,19 @@ footer button{
   margin:0 3px;
 }
 #btnTutorial:hover{border-color:var(--amber);color:var(--amber)}
+
+#moods{display:flex;gap:6px;flex-wrap:wrap;padding:10px 12px 0;border-bottom:1px solid var(--line)}
+#moods button{
+  font-family:inherit;font-size:10px;letter-spacing:1px;text-transform:lowercase;
+  background:none;border:1px solid var(--line);color:var(--dim);
+  padding:3px 10px;border-radius:10px;cursor:pointer;transition:all .12s;
+}
+#moods button:hover{border-color:var(--cyan);color:var(--cyan)}
+#moods button.on{background:var(--amber);color:#120d22;border-color:var(--amber);font-weight:bold}
+#themePick{
+  font-family:inherit;font-size:11px;background:var(--panel);color:var(--ink);
+  border:1px solid var(--line);border-radius:4px;padding:3px 8px;cursor:pointer;
+}
 
 /* ── tutorial spotlight ── */
 #tutSpot{
@@ -497,6 +555,13 @@ li.emptyNote:hover{background:transparent}
 #skelRun{position:fixed;left:-260px;bottom:8vh;width:320px;height:auto;z-index:65;pointer-events:none;filter:drop-shadow(0 6px 10px rgba(0,0,0,.5))}
 #skelRun.go{animation:skelCross 3.1s linear forwards}
 @keyframes skelCross{from{transform:translateX(0)}to{transform:translateX(calc(100vw + 300px))}}
+#skelPet{
+  position:fixed;right:14px;bottom:14px;width:54px;height:auto;z-index:60;
+  pointer-events:auto;cursor:pointer;filter:drop-shadow(0 4px 8px rgba(0,0,0,.5));
+  transform-origin:bottom center;transition:transform .08s;
+}
+#skelPet.bop{animation:skelBop .32s ease-in-out infinite alternate}
+@keyframes skelBop{from{transform:scaleY(1) rotate(-3deg)}to{transform:scaleY(1.12) rotate(3deg)}}
 
 @media(max-width:940px){
   body{overflow:auto}
