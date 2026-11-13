@@ -19,7 +19,12 @@ function initVisualizer(el){
     toneFilter.Q.value=.5;
 
     makeDsp();
-    src.connect(toneFilter);
+    if(pitchNode){
+      src.connect(pitchNode);
+      pitchNode.connect(toneFilter);
+    } else {
+      src.connect(toneFilter);
+    }
     toneFilter.connect(analyser);
     analyser.connect(audioCtx.destination);
     freqData=new Uint8Array(analyser.frequencyBinCount);
