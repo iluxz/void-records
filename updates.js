@@ -1,4 +1,9 @@
 var PATCH_LOG=[
+{date:'2026-11-21',type:'music pack',title:'music pack 4.5: the flavor foley vocal shelf',notes:[
+'14 new records - 360 to 374. the full BUTCHER VANITY / rawdog / weathergirl / WARD ROMANCE / Water the Roses / Queen of Venus / ELECTRIC WEEKEND ZONE / Static / Spoken For / Human / CONNECT:COMMUNE / Ego Renegade Boy / streetcat / Clover playlist.',
+'full video webm with video backgrounds, 720p capped just like pack 4.',
+'search "m45" or "pack 4.5" for the whole batch, "flavor foley" for the vocal synth shelf.'
+]},
 {date:'2026-10-22',type:'patch',title:'lyrics that are actually right',notes:[
 'hyperbaiter now pulls live from lrclib instead of a hardcoded copy.',
 'lyrics search is stricter now: a track only shows lyrics when the title really matches, so homonyms and wrong matches (like "&" showing "Welcome to Tally Hall") no longer slip through.',

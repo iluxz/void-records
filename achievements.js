@@ -3,7 +3,7 @@ var ACH_VR=[
 {id:'first_spin',h:'drop the needle. any needle.',n:'first spin',d:'load a track onto the deck. the record is live.',c:function(){return vrTotPlays()>=1}},
 {id:'spins_10',h:'ten of them.',n:'needle in a groove',d:'10 spins across the whole shelf.',c:function(){return vrTotPlays()>=10}},
 {id:'spins_100',h:'a hundred now.',n:'hundred club',d:'100 spins. the shelf knows your name.',c:function(){return vrTotPlays()>=100}},
-{id:'shelf_all',h:'every single one. all 360.',n:'the whole shelf',d:'play every track in the collection at least once.',c:function(){return vrTouched()>=TRACKS.length}},
+{id:'shelf_all',h:'every single one. all 374.',n:'the whole shelf',d:'play every track in the collection at least once.',c:function(){return vrTouched()>=TRACKS.length}},
 {id:'deep_link',h:'someone sent you a link.',n:'link in bio',d:'arrive through a ?track= deep link.',c:false},
 {sec:'THE KNOBS'},
 {id:'shuffle_on',h:'let the deck decide.',n:'shuffle soul',d:'turn shuffle on and let the deck pick for you.',c:false},
