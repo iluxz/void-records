@@ -1,6 +1,6 @@
 # void records
 
-a record player for the objbox school edition soundtrack. one repo, one page, no cube.
+a record player for a very deep shelf - 417 records, from objbox cues to the full geometry dash OST. one repo, one page, no cube.
 
 ## play
 
@@ -16,7 +16,7 @@ https://raw.githack.com/iluxz/void-records/main/index.html
 
 ## what it is
 
-- **400 tracks** pulled from the objbox bgm registry + every special-cased branch song (employment, downfall, foxy, stanley, moon, box, folk/grotto cues - aliases searchable in the filter box), plus the tally hall/miracle musical batch, havexy pack 2, the full Bad Things OST (22 songs), horror skunx, dm dokuro, axie, the full Geometry Dash soundtrack and the meme packs (music pack 3 + 3.5, baldi whistle funk, it's me it's stupidity, verity remixes and more)
+- **417 tracks** pulled from the objbox bgm registry + every special-cased branch song (employment, downfall, foxy, stanley, moon, box, folk/grotto cues - aliases searchable in the filter box), plus the tally hall/miracle musical batch, havexy pack 2, the full Bad Things OST (22 songs), horror skunx, dm dokuro, axie, the full Geometry Dash soundtrack and the meme packs (music pack 3 + 3.5, baldi whistle funk, it's me it's stupidity, verity remixes and more)
 - all unlocked, nothing gated, no chapter, no premium, no key
 - vinyl turntable with tonearm, spectrum bars, wave background that moves with the bass
 - prev / next / shuffle / loop-one / volume / seek / filter
