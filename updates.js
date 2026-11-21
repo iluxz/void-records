@@ -1,4 +1,8 @@
 var PATCH_LOG=[
+{date:'2026-11-21',type:'music pack',title:'music pack 6: the 400th record',notes:[
+'5 new records - 395 to 400. two cattle auctioneer retrowave rap gods, yooh - destroy (agitato), glee co x leave me alone (x mix), and chinese rap.',
+'full video webm with video backgrounds, searchable under \"m6\" or \"music pack 6\".'
+]},
 {date:'2026-11-21',type:'visual',title:'i miss the quiet gets a video',notes:[
 'lord x - i miss the quiet now uses the official hq video from churgney gurgney as its background.',
 '243s exact match to the word-synced lyrics, so karaoke timing still lines up.'
