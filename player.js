@@ -212,15 +212,19 @@ document.getElementById('vol').addEventListener('change',function(){
   if(this.value>=100&&!volRedlineFired&&typeof vrAch==='function'){volRedlineFired=true;vrAch('redline');}
 });
 seek.addEventListener('input',function(){
-  if(audio.duration)audio.currentTime=(this.value/1000)*audio.duration;
+  if(audio.duration){
+    audio.currentTime=(this.value/1000)*audio.duration;
+    bgVideoSync(true);
+  }
 });
 audio.addEventListener('play',function(){
   if(!audioCtx&&window.audioEl)initVisualizer(window.audioEl);
   if(audioCtx&&audioCtx.state==='suspended')audioCtx.resume().catch(function(){});
   if(fadeInNext){fadeInNext=false;fadeVol(volBase,600)}
   setPlayingUI(true);markPlaying();if(window.setCrackleLevel&&crackleWanted)setCrackleLevel(1);
+  bgVideoSync(true);
 });
-audio.addEventListener('pause',function(){setPlayingUI(false);if(window.setCrackleLevel)setCrackleLevel(0)});
+audio.addEventListener('pause',function(){setPlayingUI(false);if(window.setCrackleLevel)setCrackleLevel(0);bgVideoSync()});
 audio.addEventListener('ended',function(){if(!loopOne)nextTrack()});
 audio.addEventListener('timeupdate',function(){
   tCur.textContent=fmt(audio.currentTime);
@@ -228,6 +232,7 @@ audio.addEventListener('timeupdate',function(){
     tDur.textContent=fmt(audio.duration);
     seek.value=Math.round((audio.currentTime/audio.duration)*1000);
   }
+  bgVideoSync();
   lyTick();
 });
 audio.addEventListener('loadedmetadata',function(){
@@ -395,6 +400,7 @@ document.getElementById('setSpeed').addEventListener('input',function(){
   audio.playbackRate=v;
   document.getElementById('setSpeedV').textContent=v.toFixed(2)+'\u00d7';
   saveSetting('speed',v);
+  bgVideoSync();
 });
 document.getElementById('setSpeed').addEventListener('change',function(){
   var v=parseFloat(this.value);
@@ -434,16 +440,38 @@ if(setVideoBgEl)setVideoBgEl.addEventListener('change',function(){
   if(v)v.textContent=on?'on':'off';
   if(typeof vrVideoBgApply==='function')vrVideoBgApply();
 });
+// keep the video locked to the audio clock. toggling the bg off only hides/pauses it,
+// so re-enabling resumes from the song position instead of restarting from zero.
+function bgVideoSync(force){
+  var vid=document.getElementById('bgVideo');
+  if(!vid||vid.hidden||!audio||!isFinite(audio.currentTime)||audio.currentTime<0)return;
+  var t=audio.currentTime;
+  if(isFinite(vid.duration)&&vid.duration>0)t=Math.min(t,Math.max(0,vid.duration-0.05));
+  if(force||!isFinite(vid.currentTime)||Math.abs(vid.currentTime-t)>0.35){
+    try{vid.currentTime=t}catch(e){}
+  }
+  vid.playbackRate=audio.playbackRate||1;
+  if(audio.paused){if(!vid.paused)try{vid.pause()}catch(e){}}
+  else if(vid.paused){var p=vid.play();if(p&&p.catch)p.catch(function(){})}
+}
 function vrVideoBgSet(tr, src){
   var vid=document.getElementById('bgVideo');
   if(!vid||!tr)return;
   var on=!!ST.videoBg && /\.(webm|mp4)$/i.test(tr.f);
-  if(!on){try{vid.pause()}catch(e){};vid.classList.remove('on');vid.hidden=true;try{vid.removeAttribute('src');vid.load()}catch(e){};return}
+  if(!on){
+    try{vid.pause()}catch(e){}
+    vid.classList.remove('on');
+    vid.hidden=true;
+    return;
+  }
+  var next=src||tr.f;
+  if(vid.getAttribute('src')!==next){
+    vid.src=next;
+    try{vid.load()}catch(e){}
+  }
   vid.hidden=false;
-  if(src)vid.src=src;
-  else vid.src=tr.f;
-  try{vid.play()}catch(e){}
   vid.classList.add('on');
+  bgVideoSync(true);
 }
 function vrVideoBgApply(){ if(pos>=0&&pos<TRACKS.length) vrVideoBgSet(TRACKS[pos], curBlobUrl||TRACKS[pos].f) }
 
