@@ -18,7 +18,7 @@
   <header>
     <div class="brand">
       <span class="brandMark" aria-hidden="true"></span>
-      <span class="brandText"><h1>void records</h1><p>415 tracks &middot; offline shelf</p></span>
+      <span class="brandText"><h1>void records</h1><p>417 tracks &middot; offline shelf</p></span>
     </div>
     <div class="headMeta"><span class="headChip">no ads</span><span class="headChip">no accounts</span><span class="headChip">no tracking</span></div>
   </header>
@@ -39,7 +39,7 @@
       </div>
 
       <input id="seek" type="range" min="0" max="1000" value="0">
-      <div id="times"><span id="tCur">0:00</span><span id="chips"><button id="btnCrackle" class="chip" title="vinyl crackle (c)">&#8779;</button><button id="btnSleep" class="chip" title="sleep timer: off / 15 / 30 / 60">&#9201;</button></span><span id="tDur">--:--</span></div>
+      <div id="times"><span id="tCur">0:00</span><span id="chips"><button id="btnCrackle" class="chip" title="vinyl crackle (c)">&#8779;</button><button id="btnSleep" class="chip" title="sleep timer: off / 15 / 30 / 60">&#9201;</button><button id="btnSfx" class="chip" title="ui sounds (m)">&#128266;</button></span><span id="tDur">--:--</span></div>
 
       <div id="controls">
         <button id="btnPrev" title="previous">&#9198;</button>
@@ -47,7 +47,7 @@
         <button id="btnNext" title="next">&#9197;</button>
         <button id="btnShuffle" title="shuffle">&#128256;</button>
         <button id="btnLoop" title="loop one">&#128257;</button>
-        <button id="btnSet" title="music settings">&#9881;</button>
+        <button id="btnSet" data-sfx="click" title="music settings">&#9881;</button>
         <label id="volWrap" title="volume">&#128266;<input id="vol" type="range" min="0" max="100" value="70"></label>
       </div>
 
@@ -90,12 +90,12 @@
     <section id="listWrap">
       <div class="paneHead"><span class="paneTag">02 / shelf</span><span class="paneHint">click a record to load it</span></div>
       <div id="moods">
-        <button data-mood="all">all</button>
-        <button data-mood="chill">chill</button>
-        <button data-mood="hype">hype</button>
-        <button data-mood="weird">weird</button>
-        <button data-mood="sleep">sleep</button>
-        <button data-mood="sad">sad</button>
+        <button data-sfx="click" data-mood="all">all</button>
+        <button data-sfx="click" data-mood="chill">chill</button>
+        <button data-sfx="click" data-mood="hype">hype</button>
+        <button data-sfx="click" data-mood="weird">weird</button>
+        <button data-sfx="click" data-mood="sleep">sleep</button>
+        <button data-sfx="click" data-mood="sad">sad</button>
       </div>
       <input id="filter" type="text" placeholder="filter&hellip;" spellcheck="false">
       <ol id="list"></ol>
@@ -104,7 +104,7 @@
 
   <footer>
     <span class="footLabel">void records &middot; a deck for the objbox soundtrack</span>
-    <span class="footBtns"><button id="btnTutorial">replay tutorial</button><button id="btnLog">update log</button><button id="btnAch">achievements</button><button id="btnHalloween">🎃 halloween</button><button id="btnConfetti" title="drop confetti">🎉 415</button></span>
+    <span class="footBtns"><button id="btnTutorial" data-sfx="click">replay tutorial</button><button id="btnLog" data-sfx="click">update log</button><button id="btnAch" data-sfx="click">achievements</button><button id="btnHalloween" data-sfx="click">🎃 halloween</button><button id="btnConfetti" data-sfx="confetti" title="drop confetti">🎉 417</button></span>
   </footer>
 </div>
 
@@ -195,7 +195,7 @@
 <script src="tracks.js"></script>
 <script src="visualizer.js"></script>
 <script src="achievements.js"></script>
-<script src="player.js?v=9"></script>
+<script src="player.js?v=10"></script>
 <script src="updates.js"></script>
 </body>
 </html>

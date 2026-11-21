@@ -171,9 +171,10 @@ try{
 
 function playPause(){
   if(pos<0){loadTrack(order[0]!==undefined?order[0]:0,true);return}
-  if(audio.paused)tryPlay();else audio.pause();
+  if(audio.paused){if(window.vrSfx)vrSfx('play');tryPlay()}else{if(window.vrSfx)vrSfx('pause');audio.pause()}
 }
 function nextTrack(){
+  if(window.vrSfx)vrSfx('next');
   if(pos<0)return loadTrack(0,true);
   var at=order.indexOf(pos);
   if(at<order.length-1)loadTrack(order[at+1],true);
@@ -181,6 +182,7 @@ function nextTrack(){
   else loadTrack(order[0],true);
 }
 function prevTrack(){
+  if(window.vrSfx)vrSfx('prev');
   if(pos<0)return loadTrack(0,true);
   if(audio.currentTime>3){audio.currentTime=0;return}
   var at=order.indexOf(pos);
@@ -191,12 +193,14 @@ document.getElementById('btnPlay').addEventListener('click',playPause);
 document.getElementById('btnNext').addEventListener('click',nextTrack);
 document.getElementById('btnPrev').addEventListener('click',prevTrack);
 btnShuffle.addEventListener('click',function(){
+  if(window.vrSfx)vrSfx('shuffle');
   shuffle=!shuffle;
   btnShuffle.classList.toggle('on',shuffle);
   rebuildOrder(pos>=0?pos:undefined);
   if(shuffle&&typeof vrAch==='function')vrAch('shuffle_on');
 });
 btnLoop.addEventListener('click',function(){
+  if(window.vrSfx)vrSfx('loop');
   loopOne=!loopOne;
   btnLoop.classList.toggle('on',loopOne);
   audio.loop=loopOne;
@@ -302,7 +306,7 @@ function buildList(filter){
       e.stopPropagation();
       openOsWin(+this.parentNode.dataset.pos,'lyrics');
     });
-    li.addEventListener('click',function(){loadTrack(+this.dataset.pos,true)});
+    li.addEventListener('click',function(){if(window.vrSfx)vrSfx('needle');loadTrack(+this.dataset.pos,true)});
     listEl.appendChild(li);
   }
   if(!listEl.children.length){
@@ -547,7 +551,7 @@ var tutActive=false,tutI=0,tutTimer=null;
 
 var tutSteps=[
   {center:true,btn:'start',title:'void records',
-   text:'415 records, one deck. quick tour - ten clicks, then you are free. you can replay it any time from the footer.'},
+   text:'417 records, one deck. quick tour - ten clicks, then you are free. you can replay it any time from the footer.'},
   {el:'#list li',title:'the shelf',
    text:'every record in the collection. click one and it loads straight onto the deck. the amber row is what is spinning.'},
   {el:'#turntable',title:'the deck',
@@ -1315,9 +1319,81 @@ if('serviceWorker'in navigator&&/^https?:$/.test(location.protocol)){
   window.addEventListener('resize',function(){if(raf)size()});
   var btn=document.getElementById('btnConfetti');
   if(btn)btn.addEventListener('click',window.vrConfetti);
-  if(typeof TRACKS!=='undefined'&&TRACKS.length>=415){
+  if(typeof TRACKS!=='undefined'&&TRACKS.length>=417){
     var seen=false;
-    try{seen=!!sessionStorage.getItem('vrConfetti415');sessionStorage.setItem('vrConfetti415','1')}catch(e){}
+    try{seen=!!sessionStorage.getItem('vrConfetti417');sessionStorage.setItem('vrConfetti417','1')}catch(e){}
     if(!seen)setTimeout(window.vrConfetti,900);
   }
+})();
+
+// UI sound effects - tiny Web Audio blips, no files, no network. toggle with the speaker chip or M.
+(function(){
+  var ctx=null,enabled=true;
+  try{enabled=localStorage.getItem('vr_sfx')!=='off'}catch(e){}
+  function ac(){
+    if(!ctx){
+      var C=window.AudioContext||window.webkitAudioContext;
+      if(!C)return null;
+      try{ctx=new C()}catch(e){return null}
+    }
+    if(ctx.state==='suspended'&&ctx.resume)ctx.resume().catch(function(){});
+    return ctx;
+  }
+  function tone(f,d,type,vol,delay){
+    var c=ac();if(!c)return;
+    var t=c.currentTime+(delay||0);
+    var o=c.createOscillator(),g=c.createGain();
+    o.type=type||'triangle';o.frequency.setValueAtTime(f,t);
+    g.gain.setValueAtTime(0.0001,t);
+    g.gain.linearRampToValueAtTime(vol||0.05,t+0.008);
+    g.gain.exponentialRampToValueAtTime(0.0001,t+d);
+    o.connect(g);g.connect(c.destination);o.start(t);o.stop(t+d+0.02);
+  }
+  function hiss(d,vol){
+    var c=ac();if(!c)return;
+    var n=Math.floor(c.sampleRate*d),buf=c.createBuffer(1,n,c.sampleRate),dat=buf.getChannelData(0);
+    for(var i=0;i<n;i++)dat[i]=(Math.random()*2-1)*(1-i/n);
+    var s=c.createBufferSource(),g=c.createGain(),f=c.createBiquadFilter();
+    s.buffer=buf;f.type='lowpass';f.frequency.value=1800;
+    g.gain.value=vol||0.03;
+    s.connect(f);f.connect(g);g.connect(c.destination);s.start();
+  }
+  window.vrSfx=function(kind){
+    if(!enabled)return;
+    try{
+      if(kind==='play'){tone(220,0.09,'sine',0.05);tone(440,0.12,'triangle',0.045,0.03)}
+      else if(kind==='pause'){tone(330,0.08,'sine',0.045);tone(180,0.12,'triangle',0.04,0.03)}
+      else if(kind==='needle'){hiss(0.16,0.03);tone(120,0.18,'sine',0.05)}
+      else if(kind==='next'){tone(440,0.06,'triangle',0.05);tone(660,0.08,'triangle',0.045,0.06)}
+      else if(kind==='prev'){tone(660,0.06,'triangle',0.05);tone(440,0.08,'triangle',0.045,0.06)}
+      else if(kind==='shuffle'){tone(523,0.05,'square',0.03);tone(659,0.05,'square',0.03,0.05);tone(784,0.07,'square',0.03,0.1)}
+      else if(kind==='loop'){tone(784,0.05,'triangle',0.045);tone(523,0.09,'triangle',0.045,0.05)}
+      else if(kind==='confetti'){tone(523,0.06,'triangle',0.045);tone(659,0.06,'triangle',0.045,0.06);tone(784,0.06,'triangle',0.045,0.12);tone(1047,0.13,'triangle',0.045,0.18)}
+      else tone(520,0.045,'triangle',0.035);
+    }catch(e){}
+  };
+  function paint(){
+    var b=document.getElementById('btnSfx');
+    if(!b)return;
+    b.textContent=enabled?'🔊':'🔇';
+    b.classList.toggle('off',!enabled);
+    b.title=enabled?'ui sounds on (m)':'ui sounds off (m)';
+  }
+  window.vrSfxToggle=function(){
+    window.vrSfx('toggle');
+    enabled=!enabled;
+    try{localStorage.setItem('vr_sfx',enabled?'on':'off')}catch(e){}
+    paint();
+  };
+  document.addEventListener('click',function(e){
+    var b=e.target&&e.target.closest?e.target.closest('[data-sfx]'):null;
+    if(b)window.vrSfx(b.getAttribute('data-sfx'));
+  });
+  document.addEventListener('keydown',function(e){
+    var tag=(e.target&&e.target.tagName)||'';
+    if((e.key==='m'||e.key==='M')&&tag!=='INPUT'&&tag!=='TEXTAREA'&&tag!=='SELECT')window.vrSfxToggle();
+  });
+  var sfxBtn=document.getElementById('btnSfx');
+  if(sfxBtn)sfxBtn.addEventListener('click',window.vrSfxToggle);
+  paint();
 })();

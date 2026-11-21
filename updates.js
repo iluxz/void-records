@@ -1,4 +1,12 @@
 var PATCH_LOG=[
+{date:'2026-11-21',type:'feature',title:'ui sound effects',notes:[
+'the deck now has little synthesized clicks, needle drops and blips - play, skip, shuffle, loop, confetti and shelf loads all have their own sound. no audio files, no downloads.',
+'speaker chip next to the crackle and sleep timers toggles them, or hit M. the setting sticks across visits.'
+]},
+{date:'2026-11-21',type:'music pack',title:'music pack 8: two more records',notes:[
+'2 new records - 415 to 417. guy vibing to markiplier full outro song and jump for me (jumper x cry for me rmx).',
+'both 720p webm with video backgrounds, count and cache bumped so browsers pick up the new shelf.'
+]},
 {date:'2026-11-21',type:'fix',title:'shelf systems synced to 415',notes:[
 'the whole-shelf achievement hint now says 415 instead of 400. the confetti milestone button and one-per-session trigger moved to 415 too, with a fresh session key so it fires again for the new shelf.',
 'service worker cache bumped to vr-shell-v21 so every browser picks up the corrected achievement, player and shelf files.'

@@ -235,6 +235,7 @@ body[data-theme="halloween"] #labelTitle{color:#1a0500}
 }
 .chip:hover{border-color:var(--cyan);color:var(--cyan)}
 .chip.on{background:var(--purple);color:#fff;border-color:var(--purple);box-shadow:0 0 10px rgba(139,92,246,.5)}
+.chip.off{opacity:.45}
 #turntable.drop{outline:2px dashed var(--amber);outline-offset:-8px}
 #turntable.drop #disc{filter:brightness(1.3)}
 #controls{display:flex;align-items:center;gap:7px}

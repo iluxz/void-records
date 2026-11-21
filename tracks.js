@@ -13,4 +13,6 @@ const TRACKS=[{"f":"drone2lp.wav","n":"void drone","a":["void","drone"]},{"f":"t
 {"f":"m7-U2dcCzDOPFQ.webm","n":"split emote - forsaken ost","a":["m7","pack 7","music pack 7","forsaken","split","emote"]},
 {"f":"m7-J1ZW9JxXkgI.webm","n":"split emote - forsaken ost [old]","a":["m7","pack 7","music pack 7","forsaken","split","emote","old"]},
 {"f":"m7--yRYXdDUitU.webm","n":"forsaken ost - split (emote) [alt]","a":["m7","pack 7","music pack 7","forsaken","split","emote","alt"]},
-{"f":"m7-J7Xzgcu6vVk.webm","n":"cry for me - ironmouse","a":["m7","pack 7","music pack 7","ironmouse","vtuber"]}]
+{"f":"m7-J7Xzgcu6vVk.webm","n":"cry for me - ironmouse","a":["m7","pack 7","music pack 7","ironmouse","vtuber"]},
+{"f":"m8-jICYOdQCEXM.webm","n":"guy vibing to markiplier (full outro song)","a":["m8","pack 8","music pack 8","markiplier","outro","vibing"]},
+{"f":"m8-VMIQ8CezW1E.webm","n":"jump for me (jumper x cry for me rmx)","a":["m8","pack 8","music pack 8","geometry dash","jumper","cry for me","rmx"]}]
