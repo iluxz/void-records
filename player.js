@@ -792,7 +792,7 @@ var LYR_IDS={
   'm4-5VsyzvvbXLQ.webm':37262336,
   'm45-0-pbkPm8oAg.webm':10586817,
   'm45-0VKY7Moy4so.webm':28780317,
-  'sinister-02.mp3':17202052,
+  'sinister-02.webm':17202052,
   'sinister-03.mp3':26401682,
   'm5-dUcbL_z0cxc.webm':37642307,
   'm5-ri1SiiTeUis.webm':26401682,

@@ -1,4 +1,8 @@
 var PATCH_LOG=[
+{date:'2026-11-21',type:'visual',title:'i miss the quiet gets a video',notes:[
+'lord x - i miss the quiet now uses the official hq video from churgney gurgney as its background.',
+'243s exact match to the word-synced lyrics, so karaoke timing still lines up.'
+]},
 {date:'2026-11-21',type:'music pack',title:'music pack 5: weird youtube shelf',notes:[
 '16 new records - 380 to 395. ultrakill piano, lord peterson, war without drumming, the verity x aura farmer mashup, abu yahya, portal radio, you must answer, exasperation day jingle, no mercy in brazil, a320 asmr, supraland credits, stanley elevator bossa, bread, twerknation28, my salsa, and void star.',
 'full video webm with video backgrounds, searchable under "m5" or "pack 5".',
