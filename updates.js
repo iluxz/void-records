@@ -1,4 +1,8 @@
 var PATCH_LOG=[
+{date:'2026-11-21',type:'music pack',title:'five more pack 4.5 singles',notes:[
+'379 tracks now. mark roberity - verity dih, kingsammelot - jazzy juice, kingsammelot - muga million, overcooked - sus squad disstrack, and if asian parents made a rap song.',
+'full video webm with video backgrounds, searchable under "m45" or "pack 4.5".'
+]},
 {date:'2026-11-21',type:'music pack',title:'music pack 4.5: the flavor foley vocal shelf',notes:[
 '14 new records - 360 to 374. the full BUTCHER VANITY / rawdog / weathergirl / WARD ROMANCE / Water the Roses / Queen of Venus / ELECTRIC WEEKEND ZONE / Static / Spoken For / Human / CONNECT:COMMUNE / Ego Renegade Boy / streetcat / Clover playlist.',
 'full video webm with video backgrounds, 720p capped just like pack 4.',
