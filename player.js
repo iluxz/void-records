@@ -158,6 +158,7 @@ function havexyEgg(f){
 function loadTrack(i,autoplay){
   if(i<0||i>=TRACKS.length)return;
   pos=i;
+  if(typeof vrRadioStop==='function')vrRadioStop();
   externalMode=false;localQueue=[];
   cleanRun=false;cleanDead=false;cleanStarted=false;cleanFile=TRACKS[i].f;
   var tr=TRACKS[i];
@@ -251,7 +252,7 @@ try{
 }catch(e){}
 
 function playPause(){
-  if(pos<0){loadTrack(order[0]!==undefined?order[0]:0,true);return}
+  if(pos<0&&!(typeof vrRadioOn==='function'&&vrRadioOn())){loadTrack(order[0]!==undefined?order[0]:0,true);return}
   if(audio.paused){if(window.vrSfx)vrSfx('play');tryPlay()}else{if(window.vrSfx)vrSfx('pause');audio.pause()}
 }
 function nextTrack(){
@@ -315,6 +316,7 @@ audio.addEventListener('pause',function(){setPlayingUI(false);if(window.setCrack
 // a resolved stream can expire or be refused after it was handed to the player.
 // surface that instead of leaving a stale "playing" message on screen.
 audio.addEventListener('error',function(){
+  if(typeof vrRadioError==='function'&&vrRadioError())return;
   if(typeof externalMode!=='undefined'&&externalMode&&audio.getAttribute('src')){
     showSrcMsg('playback failed - the stream may have expired or been refused. try loading the link again.','err');
   }
@@ -322,6 +324,7 @@ audio.addEventListener('error',function(){
 audio.addEventListener('ended',function(){
   cleanMark();
   if(typeof externalMode!=='undefined'&&externalMode){
+    if(typeof vrRadioNext==='function'&&vrRadioNext())return;
     if(localQueue.length){loadLocalFile(localQueue.shift());return}
     setPlayingUI(false);
     showSrcMsg('finished - outside the collection','ok');
@@ -521,6 +524,7 @@ function playExternal(src,opts){
 }
 function isVideoName(n){return /\.(webm|mp4|m4v|ogv|mov)$/i.test(n||'')}
 function loadLocalFile(f){
+  if(typeof vrRadioStop==='function')vrRadioStop();
   if(!f)return false;
   var okType=/^(audio|video)\//.test(f.type)||/\.(mp3|wav|ogg|oga|m4a|aac|flac|webm|mp4|m4v|ogv)$/i.test(f.name||'');
   if(!okType){
@@ -544,6 +548,7 @@ function loadLocalFile(f){
 var YT_RE=/(?:youtube\.com\/(?:watch\?(?:.*&)?v=|shorts\/|embed\/|live\/)|youtu\.be\/|music\.youtube\.com\/(?:watch\?(?:.*&)?v=))([a-zA-Z0-9_-]{11})/i;
 function parseYouTube(raw){var m=String(raw||'').match(YT_RE);return m?m[1]:null}
 function loadYouTube(){
+  if(typeof vrRadioStop==='function')vrRadioStop();
   var raw=(document.getElementById('srcInput')||{}).value||'';
   raw=raw.trim();
   if(!raw){showSrcMsg('paste a youtube link first','err');return}

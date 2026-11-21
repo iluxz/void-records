@@ -800,3 +800,98 @@ li.emptyNote:hover{background:transparent}
   82%{opacity:1;transform:translateX(-50%) scale(1) rotate(0deg)}
   100%{opacity:0;transform:translateX(-50%) scale(.88) translateY(16px)}
 }
+
+/* ── discovery queue + sandbox radio ── */
+#btnDisc,#btnRadio{
+  font-family:inherit;font-size:10px;letter-spacing:1px;
+  background:none;border:1px solid #3a3358;color:#6a6290;
+  padding:2px 10px;border-radius:8px;cursor:pointer;
+}
+#btnDisc:hover{border-color:var(--purple);color:var(--ink,#e9e3ff)}
+#btnRadio:hover{border-color:var(--cyan);color:var(--cyan)}
+#btnRadio.on{border-color:var(--cyan);color:var(--cyan);background:#102b2a}
+#discWin{
+  position:fixed;top:64px;right:26px;
+  width:min(520px,calc(100vw - 30px));
+  height:min(620px,calc(100vh - 80px));
+  z-index:72;display:flex;flex-direction:column;
+  background:#100c1e;border:1px solid var(--edge);border-radius:10px;
+  box-shadow:0 18px 50px rgba(0,0,0,.75),0 0 0 1px var(--glow,rgba(139,92,246,.18));
+  overflow:hidden;
+}
+#discWin[hidden]{display:none !important}
+#discWin.anim{animation:winIn .3s cubic-bezier(.2,.9,.3,1.2)}
+#discWin.out{animation:winOut .18s ease-in forwards}
+#discWin::before{
+  content:"";position:absolute;top:0;left:0;right:0;height:2px;z-index:2;
+  background:linear-gradient(90deg,var(--purple),var(--amber),var(--cyan));
+}
+#discBar{
+  display:flex;align-items:center;gap:12px;
+  background:linear-gradient(#1b1533,#151026);
+  border-bottom:1px solid #2a2340;
+  padding:9px 12px;user-select:none;
+}
+#discDots{display:flex;gap:7px}
+#discTitle{
+  flex:1;text-align:center;font-size:11px;color:var(--dim);
+  letter-spacing:1.5px;text-transform:lowercase;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-right:40px;
+}
+#discBody{flex:1;min-height:0;display:flex;flex-direction:column;background:#100c1e}
+#discTabs{display:flex;gap:4px;padding:8px 10px 0}
+.discTab{
+  font:inherit;font-size:10px;letter-spacing:1px;
+  background:none;border:1px solid #3a3358;color:#6a6290;
+  padding:7px 14px;border-radius:6px;cursor:pointer;
+}
+.discTab.on{border-color:var(--cyan);color:var(--cyan);background:#102b2a}
+#discSource{
+  font-size:10px;color:var(--dim);padding:7px 12px 2px;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+#discPaneScan,#discPaneApproved{flex:1;min-height:0;display:flex;flex-direction:column;padding:0 10px}
+#discPaneScan[hidden],#discPaneApproved[hidden]{display:none}
+#discRow{display:flex;gap:6px;margin:6px 0}
+#discUrl{
+  flex:1;min-width:0;font:inherit;font-size:11px;
+  background:#0a0813;border:1px solid #3b2f5e;border-radius:4px;
+  color:inherit;padding:7px 8px;outline:none;
+}
+#discUrl:focus{border-color:var(--purple)}
+#discScan,.discBtn,#discRadioBtn,#discClear{
+  font:inherit;font-size:10px;letter-spacing:.5px;
+  background:#1a1430;border:1px solid #3b2f5e;border-radius:4px;
+  color:inherit;padding:6px 10px;cursor:pointer;
+}
+#discScan:hover,.discBtn:hover,#discRadioBtn:hover,#discClear:hover{border-color:var(--purple);background:#241a42}
+#discMsg{min-height:16px;font-size:10px;color:var(--dim);padding:2px 2px 4px}
+#discMsg.err{color:#ff7b72}
+#discMsg.ok{color:var(--cyan)}
+#discMsg.wait{color:var(--amber)}
+#discCount{
+  font-size:10px;letter-spacing:1px;color:var(--dim);text-transform:uppercase;
+  padding:4px 2px;border-bottom:1px solid #2a2340;
+}
+#discList,#discApprovedList{
+  flex:1;min-height:0;overflow:auto;
+  padding:6px 0;display:flex;flex-direction:column;gap:3px;
+}
+.discRow{display:flex;align-items:center;gap:8px;padding:6px;border:1px solid transparent;border-radius:4px}
+.discRow:hover{border-color:#3b2f5e;background:#17112b}
+.discRow.on{border-color:var(--cyan);background:#102b2a}
+.discMain{flex:1;min-width:0}
+.discTitle{font-size:11px;color:var(--ink,#e9e3ff);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.discMeta{font-size:9px;color:var(--dim);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.discActs{display:flex;gap:4px;flex-shrink:0}
+.discBtn{padding:4px 7px;font-size:9px}
+.discBtn:disabled{opacity:.4;cursor:default}
+.discBtn.danger:hover{border-color:#ff6b8b;color:#ff6b8b}
+.discEmpty{font-size:10px;color:var(--dim);padding:14px 6px;line-height:1.6}
+#discFoot{border-top:1px solid #2a2340;padding:8px 12px 10px}
+#discRadioHint{font-size:9px;color:var(--dim);line-height:1.5}
+#discFootBtns{display:flex;gap:6px;margin-top:8px}
+#discRadioBtn.on{border-color:var(--cyan);color:var(--cyan);background:#102b2a}
+@media(max-width:640px){
+  #discWin{top:10px;right:10px;width:calc(100vw - 20px);height:calc(100vh - 20px)}
+}

@@ -7,7 +7,7 @@
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <meta name="theme-color" content="#0a0812">
 <link rel="manifest" href="manifest.json">
-<link rel="stylesheet" href="style.css?v=5">
+<link rel="stylesheet" href="style.css?v=6">
 </head>
 <body>
 <canvas id="waves"></canvas>
@@ -165,7 +165,7 @@
 
   <footer>
     <span class="footLabel">void records &middot; 418 records, one deck</span>
-    <span class="footBtns"><button id="btnTutorial" data-sfx="click">replay tutorial</button><button id="btnLog" data-sfx="click">update log</button><button id="btnAch" data-sfx="click">achievements</button><button id="btnHalloween" data-sfx="click">🎃 halloween</button><button id="btnConfetti" data-sfx="confetti" title="drop confetti">🎉 417</button></span>
+    <span class="footBtns"><button id="btnTutorial" data-sfx="click">replay tutorial</button><button id="btnDisc" data-sfx="click">discover</button><button id="btnRadio" data-sfx="click">radio: off</button><button id="btnLog" data-sfx="click">update log</button><button id="btnAch" data-sfx="click">achievements</button><button id="btnHalloween" data-sfx="click">🎃 halloween</button><button id="btnConfetti" data-sfx="confetti" title="drop confetti">🎉 417</button></span>
   </footer>
 </div>
 
@@ -250,13 +250,40 @@
 <div id="updNav"><button id="updPrev">&#9664; prev</button><button id="updNext">next &#9654;</button></div>
 </div>
 </div>
+<div id="discWin" hidden>
+<div id="discBar">
+<span id="discDots"><i class="dot dRed" id="discClose" title="close"></i><i class="dot dYel" title="metadata only"></i><i class="dot dGrn" title="non-canon"></i></span>
+<span id="discTitle">discovery queue</span>
+</div>
+<div id="discBody">
+  <div id="discTabs">
+    <button class="discTab on" data-disc-tab="scan">scan</button>
+    <button class="discTab" data-disc-tab="kept">kept pool</button>
+  </div>
+  <div id="discSource"></div>
+  <div id="discPaneScan">
+    <div id="discRow"><input id="discUrl" type="text" spellcheck="false" autocomplete="off" placeholder="youtube playlist, ytsearch5:void ambient, or one video link..."><button id="discScan" data-sfx="click">scan</button></div>
+    <div id="discMsg" role="status" aria-live="polite"></div>
+    <div id="discCount"></div>
+    <div id="discList"></div>
+  </div>
+  <div id="discPaneApproved" hidden>
+    <div id="discApprovedList"></div>
+  </div>
+  <div id="discFoot">
+    <div id="discRadioHint"></div>
+    <div id="discFootBtns"><button id="discRadioBtn" data-sfx="click">start radio</button><button id="discClear" data-sfx="click">clear queue</button></div>
+  </div>
+</div>
+</div>
 <img id="havexyEgg" src="havexy.svg" alt="havexy" hidden>
 <img id="skelRun" src="skeleton.png" alt="a skeleton runs across the entire screen" hidden>
 <img id="skelPet" src="skeleton.png" alt="a tiny skeleton vibing in the corner" title="he is vibing">
 <script src="tracks.js"></script>
 <script src="visualizer.js?v=2"></script>
 <script src="achievements.js?v=5"></script>
-<script src="player.js?v=15"></script>
+<script src="player.js?v=16"></script>
+<script src="discover.js?v=2"></script>
 <script src="updates.js"></script>
 </body>
 </html>

@@ -1,4 +1,14 @@
 var PATCH_LOG=[
+{date:'2026-11-21',type:'feature',title:'the discovery queue',notes:[
+'new discover button in the footer. scan a youtube playlist, a ytsearch: query, or a single video link and get a metadata-only list of candidates - titles, channels, durations. no audio is downloaded, nothing joins the shelf.',
+'preview anything right from the list. keep the ones you like and they collect in a separate kept pool that never touches the 418 and never counts toward the right way.',
+'spotify and apple music playlists get a plain answer: no direct extractor, use a youtube playlist or a ytsearch: query instead.'
+]},
+{date:'2026-11-21',type:'feature',title:'sandbox radio',notes:[
+'new radio switch in the footer. it shuffles your kept pool (or the last scan if you kept nothing), resolves each record on demand and plays forever. video bg follows along when the source has one.',
+'this is deliberately non-canon: infinite playback, zero achievements, zero vr_clean, zero shelf stats. failed streams get skipped and the station retunes itself instead of dying.',
+'both features reuse the opt-in local server. turn the server switch on in settings first; from an https page you need an https tunnel url.'
+]},
 {date:'2026-11-21',type:'feature',title:'outside the shelf',notes:[
 'drop files anywhere on the deck: mp3, wav, ogg, m4a, webm and mp4 all load now. drop a bunch and they queue up and play through in order. video files turn the 92% video bg on automatically.',
 'new source box under the deck: paste a youtube link and the local void records server resolves it to a playable stream, with the video bg synced to the audio clock. short youtu.be and shorts links work too, and you can drag a link straight onto the turntable.',
