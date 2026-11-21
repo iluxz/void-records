@@ -59,6 +59,7 @@ body{
 .bgVideo{position:fixed;top:50%;left:50%;width:92%;height:92%;transform:translate(-50%,-50%);object-fit:contain;z-index:0;opacity:0;transition:opacity .5s;pointer-events:none;background:#000;border-radius:8px}
 .bgVideo.on{opacity:.45}
 #waves{position:fixed;inset:0;z-index:0}
+#confetti{position:fixed;inset:0;z-index:220;pointer-events:none}
 #shell{
   position:relative;z-index:1;
   height:100%;
@@ -256,6 +257,7 @@ footer button{
   margin:0 3px;
 }
 #btnTutorial:hover{border-color:var(--amber);color:var(--amber)}
+#btnConfetti:hover{border-color:#ff5c8a;color:#ff5c8a}
 
 #moods{display:flex;gap:6px;flex-wrap:wrap;padding:10px 12px 0;border-bottom:1px solid var(--line)}
 #moods button{

@@ -1,4 +1,8 @@
 var PATCH_LOG=[
+{date:'2026-11-21',type:'feature',title:'400 track confetti',notes:[
+'confetti drops from the sky once per session now that the shelf hit 400. the 🎉 400 button in the footer re-triggers it whenever you want.',
+'also confirmed the repo already had .nojekyll, so GitHub Pages was already skipping the useless Jekyll build - my earlier file check missed hidden files.'
+]},
 {date:'2026-11-21',type:'music pack',title:'music pack 6: the 400th record',notes:[
 '5 new records - 395 to 400. two cattle auctioneer retrowave rap gods, yooh - destroy (agitato), glee co x leave me alone (x mix), and chinese rap.',
 'full video webm with video backgrounds, searchable under \"m6\" or \"music pack 6\".'
