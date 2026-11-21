@@ -4,7 +4,7 @@ var ACH_VR=[
 {id:'spins_10',h:'ten of them.',n:'needle in a groove',d:'10 spins across the whole shelf.',c:function(){return vrTotPlays()>=10}},
 {id:'spins_100',h:'a hundred now.',n:'hundred club',d:'100 spins. the shelf knows your name.',c:function(){return vrTotPlays()>=100}},
 {id:'shelf_all',h:'every single one. all 418.',n:'the whole shelf',d:'play every track in the collection at least once.',c:function(){return vrTouched()>=TRACKS.length}},
-{id:'clean_shelf',h:'no shortcuts. all 418.',n:'the long way round',d:'hear every record start to finish - no skipping, no seeking, normal speed, and stay on the tab the whole time.',c:function(){return vrCleanCount()>=TRACKS.length}},
+{id:'clean_shelf',h:'the correct way. all 418.',n:'the right way',d:'hear every record start to finish - no skipping, no seeking, normal speed, and stay on the tab the whole time. the site, used exactly as it was intended. lux demanded this achievement.',c:function(){return vrCleanCount()>=TRACKS.length}},
 {id:'deep_link',h:'someone sent you a link.',n:'link in bio',d:'arrive through a ?track= deep link.',c:false},
 {sec:'THE KNOBS'},
 {id:'shuffle_on',h:'let the deck decide.',n:'shuffle soul',d:'turn shuffle on and let the deck pick for you.',c:false},

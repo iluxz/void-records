@@ -1,6 +1,7 @@
 var PATCH_LOG=[
-{date:'2026-11-21',type:'achievement',title:'the long way round',notes:[
+{date:'2026-11-21',type:'achievement',title:'the right way',notes:[
 'new achievement: hear all 418 records start to finish with no skipping, no seeking, playback at 1x, and your face on the tab the entire time.',
+'called "the right way" because this is the site used exactly as it was meant to be. lux demanded this achievement.',
 'each song keeps its own clean-listen flag in vr_clean. touch the seek bar, change speed, toggle loop, switch tabs or lose window focus and that run is dead - reload the record to try again. pausing is allowed.',
 'clean listens show up in stats and in each record\'s info tab so you can see how far along you are.'
 ]},
