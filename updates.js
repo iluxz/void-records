@@ -1,6 +1,6 @@
 var PATCH_LOG=[
 {date:'2026-11-21',type:'feature',title:'the local server bridge',notes:[
-'new opt-in switch in the gear panel: point the deck at a local void-records server and stream records from it instead of straight off disk. off by default, everything still works with zero network.',
+'new opt-in switch in the gear panel: point the deck at a local void records server and stream records from it instead of straight off disk. off by default, everything still works with zero network.',
 'when linked, clean listens, achievements, settings and favourites are pushed to the server and merged back on load - local progress is never erased. any other project using the server sees the same list.',
 'lyrics stay offline-only. the server reads a prebuilt dump file and never makes a live LRCLIB call.'
 ]},
@@ -39,7 +39,7 @@ var PATCH_LOG=[
 ]},
 {date:'2026-11-21',type:'ui',title:'deck and shelf rework',notes:[
 'void records got a proper ui pass - numbered deck and shelf panes, a brand/status strip, rounder controls, a real footer bar and cleaner window chrome.',
-'same dark monospace void-records identity, same turntable and 92% video bg - no glass or aero reskin. every button, shortcut and tutorial step still works.'
+'same dark monospace void records identity, same turntable and 92% video bg - no glass or aero reskin. every button, shortcut and tutorial step still works.'
 ]},
 {date:'2026-11-21',type:'lyrics',title:'its me its verity preset lyrics',notes:[
 '"hey its me its verity (horror skunx)" now opens straight to its word-synced LRCLIB lyrics (track 37357262) - no searching, no API guessing.'

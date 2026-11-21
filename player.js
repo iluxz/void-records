@@ -38,7 +38,7 @@ var vrClean={},cleanRun=false,cleanFile='',cleanDead=false,cleanStarted=false;
 try{vrClean=JSON.parse(localStorage.getItem('vr_clean')||'{}')||{}}catch(e){}
 function cleanSave(){try{localStorage.setItem('vr_clean',JSON.stringify(vrClean))}catch(e){}}
 
-// opt-in bridge to the local void-records server. everything above this line
+// opt-in bridge to the local void records server. everything above this line
 // stays fully offline when the switch is off (the default).
 var SERVER_CLIENT='void-records',serverPushTimer=null;
 function serverBase(){return (ST.serverUrl||'http://127.0.0.1:8787').replace(/\/+$/,'')}
@@ -794,7 +794,7 @@ var tutSteps=[
   {el:'#chips',title:'odds and ends',
    text:'the wavy chip is vinyl crackle - needle hiss and pops over the music (C). the clock is a sleep timer: 15 / 30 / 60 minutes, then it pauses the deck and lets you go.'},
   {el:'#btnSet',title:'music settings',
-   text:'the gear opens speed, independent pitch, tone, bass/treble, space (reverb) and wow. pitch is real DSP - it does not touch the speed. presets do the whole stack in one click. server is an opt-in bridge to a local void-records server for shared audio and state.'},
+   text:'the gear opens speed, independent pitch, tone, bass/treble, space (reverb) and wow. pitch is real DSP - it does not touch the speed. presets do the whole stack in one click. server is an opt-in bridge to a local void records server for shared audio and state.'},
   {el:'#filter',title:'the filter',
    text:'type to narrow the shelf. names, aliases and filenames all match - try "employment", "sm07", or "recent" to see what you played last.'},
   {center:true,btn:'done',title:"you're free",
