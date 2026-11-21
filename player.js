@@ -37,6 +37,70 @@ function saveSetting(k,v){ST[k]=v;try{localStorage.setItem('vr_settings',JSON.st
 var vrClean={},cleanRun=false,cleanFile='',cleanDead=false,cleanStarted=false;
 try{vrClean=JSON.parse(localStorage.getItem('vr_clean')||'{}')||{}}catch(e){}
 function cleanSave(){try{localStorage.setItem('vr_clean',JSON.stringify(vrClean))}catch(e){}}
+
+// opt-in bridge to the local void-records server. everything above this line
+// stays fully offline when the switch is off (the default).
+var SERVER_CLIENT='void-records',serverPushTimer=null;
+function serverBase(){return (ST.serverUrl||'http://127.0.0.1:8787').replace(/\/+$/,'')}
+function serverOn(){return !!ST.server}
+function serverPush(){
+  if(!serverOn())return;
+  if(serverPushTimer)clearTimeout(serverPushTimer);
+  serverPushTimer=setTimeout(function(){serverPushTimer=null;serverPushNow()},900);
+}
+function serverPushNow(){
+  if(!serverOn())return;
+  var payload={};
+  try{
+    payload.vr_clean=JSON.parse(localStorage.getItem('vr_clean')||'{}');
+    payload.vr_ach=JSON.parse(localStorage.getItem('vr_ach')||'[]');
+    payload.vr_settings=JSON.parse(localStorage.getItem('vr_settings')||'{}');
+    payload.vr_sfx=localStorage.getItem('vr_sfx')||'on';
+    payload.vr_favs=JSON.parse(localStorage.getItem('vr_favs')||'[]');
+  }catch(e){}
+  fetch(serverBase()+'/api/v1/state/'+SERVER_CLIENT,{
+    method:'PATCH',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify(payload),keepalive:true
+  }).catch(function(){});
+}
+function serverPull(done){
+  if(!serverOn()){if(done)done(false);return}
+  fetch(serverBase()+'/api/v1/state/'+SERVER_CLIENT).then(function(r){return r.json()}).then(function(j){
+    var s=j.state||{},changed=false,mergedClean=null;
+    try{
+      var lc=JSON.parse(localStorage.getItem('vr_clean')||'{}')||{},rc=s.vr_clean||{};
+      for(var f in rc)if(rc[f]&&!lc[f]){lc[f]=true;changed=true}
+      if(changed){localStorage.setItem('vr_clean',JSON.stringify(lc));mergedClean=lc}
+      var la=JSON.parse(localStorage.getItem('vr_ach')||'[]')||[],ra=s.vr_ach||[];
+      var extra=ra.filter(function(id){return la.indexOf(id)<0});
+      if(extra.length){localStorage.setItem('vr_ach',JSON.stringify(la.concat(extra)));changed=true}
+    }catch(e){}
+    if(mergedClean)vrClean=mergedClean;
+    if(changed&&typeof osWin!=='undefined'&&!osWin.hidden){
+      if(pos>=0&&!document.getElementById('paneInfo').hidden)infoRender(pos);
+      if(!document.getElementById('paneStats').hidden)statsRender();
+    }
+    if(done)done(changed);
+  }).catch(function(){if(done)done(false)});
+}
+function serverPing(){
+  var el=document.getElementById('setServerV');
+  if(!el)return;
+  if(!serverOn()){el.textContent='off';return}
+  el.textContent='linking…';
+  fetch(serverBase()+'/health').then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(j){
+    el.textContent='linked '+j.tracks;
+    serverPull(function(changed){if(changed&&typeof vrAchRefresh==='function')vrAchRefresh()});
+  }).catch(function(){el.textContent='no link'});
+}
+var _saveSetting=saveSetting;
+saveSetting=function(k,v){_saveSetting(k,v);serverPush()};
+var _cleanSave=cleanSave;
+cleanSave=function(){_cleanSave();serverPush()};
+if(typeof vrAchSave==='function'){
+  var _vrAchSave=vrAchSave;
+  vrAchSave=function(s){_vrAchSave(s);serverPush()};
+}
 function cleanBreak(){if(cleanRun||cleanFile){cleanRun=false;cleanDead=true}}
 function cleanFocused(){try{return document.visibilityState==='visible'&&document.hasFocus()}catch(e){return true}}
 function cleanMark(){
@@ -121,8 +185,9 @@ function loadTrack(i,autoplay){
   nowMeta.innerHTML=nowMeta.textContent;
   labelTitle.textContent=tr.n;
   var gen=++loadGen;
+  var srcUrl=serverOn()?serverBase()+'/audio/'+encodeURIComponent(tr.f):tr.f;
   try{
-    fetch(tr.f).then(function(r){if(!r.ok)throw 0;return r.blob()}).then(function(b){
+    fetch(srcUrl).then(function(r){if(!r.ok)throw 0;return r.blob()}).then(function(b){
       if(gen!==loadGen)return;
       if(curBlobUrl){try{URL.revokeObjectURL(curBlobUrl)}catch(e){}}
       var ext=(tr.f.split('.').pop()||'').toLowerCase();
@@ -560,6 +625,30 @@ if(setVideoBgEl)setVideoBgEl.addEventListener('change',function(){
   if(v)v.textContent=on?'on':'off';
   if(typeof vrVideoBgApply==='function')vrVideoBgApply();
 });
+var setServerEl=document.getElementById('setServer');
+var setServerUrlEl=document.getElementById('setServerUrl');
+var setServerUrlRow=document.getElementById('setServerUrlRow');
+if(setServerUrlEl){
+  setServerUrlEl.value=ST.serverUrl||'http://127.0.0.1:8787';
+  setServerUrlEl.addEventListener('change',function(){
+    saveSetting('serverUrl',this.value.trim()||'http://127.0.0.1:8787');
+    this.value=ST.serverUrl;
+    if(serverOn())serverPing();
+  });
+}
+if(setServerUrlRow)setServerUrlRow.classList.toggle('on',serverOn());
+if(setServerEl){
+  setServerEl.checked=serverOn();
+  setServerEl.addEventListener('change',function(){
+    var on=!!this.checked;
+    saveSetting('server',on);
+    if(setServerUrlRow)setServerUrlRow.classList.toggle('on',on);
+    if(on){serverPing();serverPushNow()}
+    else{var v=document.getElementById('setServerV');if(v)v.textContent='off'}
+  });
+}
+if(serverOn())serverPing();
+window.addEventListener('beforeunload',function(){if(serverOn())serverPushNow()});
 // keep the video locked to the audio clock. toggling the bg off only hides/pauses it,
 // so re-enabling resumes from the song position instead of restarting from zero.
 function bgVideoSync(force){
@@ -705,7 +794,7 @@ var tutSteps=[
   {el:'#chips',title:'odds and ends',
    text:'the wavy chip is vinyl crackle - needle hiss and pops over the music (C). the clock is a sleep timer: 15 / 30 / 60 minutes, then it pauses the deck and lets you go.'},
   {el:'#btnSet',title:'music settings',
-   text:'the gear opens speed, independent pitch, tone, bass/treble, space (reverb) and wow. pitch is real DSP - it does not touch the speed. presets do the whole stack in one click.'},
+   text:'the gear opens speed, independent pitch, tone, bass/treble, space (reverb) and wow. pitch is real DSP - it does not touch the speed. presets do the whole stack in one click. server is an opt-in bridge to a local void-records server for shared audio and state.'},
   {el:'#filter',title:'the filter',
    text:'type to narrow the shelf. names, aliases and filenames all match - try "employment", "sm07", or "recent" to see what you played last.'},
   {center:true,btn:'done',title:"you're free",

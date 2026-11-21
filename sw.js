@@ -1,13 +1,13 @@
-var CACHE='vr-shell-v26';
+var CACHE='vr-shell-v27';
 var SHELL=[
   './',
   'index.html',
   'style.css?v=4',
-  'player.js?v=13',
+  'player.js?v=14',
   'visualizer.js?v=2',
   'tracks.js',
   'updates.js',
-  'achievements.js?v=3',
+  'achievements.js?v=4',
   'favicon.svg',
   'havexy.svg',
   'skeleton.png',

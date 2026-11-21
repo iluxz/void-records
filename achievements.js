@@ -184,7 +184,7 @@ function awardsRender(){
 
   var foot=document.createElement('div');
   foot.className='lyMeta';
-  foot.textContent='earned in this browser only - localStorage, never uploaded.';
+  foot.textContent=(typeof ST!=='undefined'&&ST.server)?'syncing with your local void-records server when linked - otherwise this browser only.':'earned in this browser only - flick the server switch in settings to sync.';
   pane.appendChild(foot);
 }
 

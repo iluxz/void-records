@@ -273,6 +273,12 @@ body[data-theme="halloween"] #labelTitle{color:#1a0500}
 .setRow input::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;border-radius:50%;background:var(--purple);cursor:pointer;box-shadow:0 0 8px rgba(139,92,246,.6)}
 .setRow input::-moz-range-thumb{width:12px;height:12px;border:none;border-radius:50%;background:var(--purple);cursor:pointer}
 .setRow select{font-family:inherit;font-size:11px;background:#1c1633;color:var(--amber);border:1px solid var(--line);border-radius:4px;padding:3px 5px;cursor:pointer}
+.setRow input[type=checkbox]{width:14px;height:14px;background:#1c1633;border:1px solid var(--line);border-radius:3px;cursor:pointer}
+.setRow input[type=checkbox]:checked{background:var(--purple);border-color:var(--purple)}
+.setRow input[type=text]{height:22px;background:#0d0a18;color:var(--amber);border:1px solid var(--line);border-radius:4px;padding:2px 6px;font-family:inherit;font-size:11px;outline:none;cursor:text}
+.setRow input[type=text]:focus{border-color:var(--purple)}
+#setServerUrlRow{display:none}
+#setServerUrlRow.on{display:grid}
 .setPresets .presetBtns{display:flex;flex-wrap:wrap;gap:5px;justify-content:flex-end;text-align:right}
 .setPresets button{font-family:inherit;font-size:10px;background:#1c1633;color:var(--dim);border:1px solid var(--line);padding:3px 7px;border-radius:9px;cursor:pointer}
 .setPresets button:hover{border-color:var(--purple);color:var(--amber)}

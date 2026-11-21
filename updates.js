@@ -1,4 +1,9 @@
 var PATCH_LOG=[
+{date:'2026-11-21',type:'feature',title:'the local server bridge',notes:[
+'new opt-in switch in the gear panel: point the deck at a local void-records server and stream records from it instead of straight off disk. off by default, everything still works with zero network.',
+'when linked, clean listens, achievements, settings and favourites are pushed to the server and merged back on load - local progress is never erased. any other project using the server sees the same list.',
+'lyrics stay offline-only. the server reads a prebuilt dump file and never makes a live LRCLIB call.'
+]},
 {date:'2026-11-21',type:'achievement',title:'the right way',notes:[
 'new achievement: hear all 418 records start to finish with no skipping, no seeking, playback at 1x, and your face on the tab the entire time.',
 'called "the right way" because this is the site used exactly as it was meant to be. lux demanded this achievement.',
