@@ -661,7 +661,7 @@ try{
 var osWin=document.getElementById('osWin');
 var osPos=-1;
 var lyCache={};
-var lyLines=[],lyLineEls=[],lyNow=-1;
+var lyLines=[],lyLineEls=[],lyNow=-1,lyWordEls=[],lyWordNow=-1;
 
 function osShow(){
   osWin.hidden=false;
@@ -810,6 +810,47 @@ function parseLRC(txt){
   out.sort(function(a,b){return a.t-b.t});
   return out;
 }
+// lrclib's word-synced "lyricsfile" is yaml-ish: line - text/start_ms/end_ms,
+// then a words: list with per-word text + start_ms. no yaml parser needed.
+function unquoteYaml(s){
+  s=String(s==null?'':s).trim();
+  if(s.length>1&&((s[0]==="'"&&s[s.length-1]==="'")||(s[0]==='"'&&s[s.length-1]==='"'))){
+    return s.slice(1,-1).replace(/''/g,"'");
+  }
+  return s;
+}
+function parseWordLyrics(txt){
+  if(!txt)return [];
+  var raw=String(txt).split(/\r?\n/),lines=[],cur=null,inWords=false;
+  for(var i=0;i<raw.length;i++){
+    var line=raw[i];
+    var m=line.match(/^- text:\s*(.*)$/);
+    if(m){
+      if(cur)lines.push(cur);
+      cur={t:0,e:0,x:unquoteYaml(m[1]),words:[]};
+      inWords=false;
+      continue;
+    }
+    if(!cur)continue;
+    var sm=line.match(/^  start_ms:\s*(\d+)/);
+    if(sm&&!inWords){cur.t=parseInt(sm[1],10)/1000;continue}
+    var em=line.match(/^  end_ms:\s*(\d+)/);
+    if(em&&!inWords){cur.e=parseInt(em[1],10)/1000;continue}
+    if(/^  words:\s*$/.test(line)){inWords=true;continue}
+    var wm=line.match(/^  - text:\s*(.*)$/);
+    if(wm&&inWords){cur.words.push({t:0,e:0,x:unquoteYaml(wm[1])});continue}
+    var ws=line.match(/^    start_ms:\s*(\d+)/);
+    if(ws&&inWords&&cur.words.length){cur.words[cur.words.length-1].t=parseInt(ws[1],10)/1000;continue}
+  }
+  if(cur)lines.push(cur);
+  for(var l=0;l<lines.length;l++){
+    var ls=lines[l];
+    for(var w=0;w<ls.words.length;w++){
+      ls.words[w].e=(w+1<ls.words.length)?ls.words[w+1].t:ls.e;
+    }
+  }
+  return lines.filter(function(l){return l.words.length&&isFinite(l.t)});
+}
 function lyTick(){
   if(!lyLines.length)return;
   var pane=document.getElementById('paneLyrics');
@@ -819,21 +860,38 @@ function lyTick(){
   for(var i=0;i<lyLines.length;i++){
     if(lyLines[i].t<=t)idx=i;else break;
   }
-  if(idx===lyNow)return;
-  if(lyNow>=0&&lyLineEls[lyNow])lyLineEls[lyNow].classList.remove('now');
-  lyNow=idx;
-  if(idx>=0&&lyLineEls[idx]){
-    lyLineEls[idx].classList.add('now');
-    try{pane.scrollTop=lyLineEls[idx].offsetTop-pane.clientHeight/2+lyLineEls[idx].offsetHeight/2}catch(e){}
-    if(typeof vrAch==='function')vrAch('karaoke_watch');
+  if(idx!==lyNow){
+    if(lyNow>=0&&lyLineEls[lyNow])lyLineEls[lyNow].classList.remove('now');
+    lyNow=idx;
+    lyWordNow=-1;
+    if(idx>=0&&lyLineEls[idx]){
+      lyLineEls[idx].classList.add('now');
+      try{pane.scrollTop=lyLineEls[idx].offsetTop-pane.clientHeight/2+lyLineEls[idx].offsetHeight/2}catch(e){}
+      if(typeof vrAch==='function')vrAch('karaoke_watch');
+    }
+  }
+  // word-level karaoke: advance the highlighted word inside the current line.
+  var wi=-1;
+  if(idx>=0&&lyLines[idx].words){
+    var ws=lyLines[idx].words;
+    for(var j=0;j<ws.length;j++){
+      if(ws[j].t<=t)wi=j;else break;
+    }
+  }
+  if(wi!==lyWordNow){
+    var arr=idx>=0?lyWordEls[idx]:null;
+    if(arr&&lyWordNow>=0&&arr[lyWordNow])arr[lyWordNow].classList.remove('now');
+    lyWordNow=wi;
+    if(arr&&wi>=0&&arr[wi])arr[wi].classList.add('now');
   }
 }
-function lyRender(tr,txt,meta,head,preset,synced){
+function lyRender(tr,txt,meta,head,preset,synced,words){
   var pane=document.getElementById('paneLyrics');
   if(pane.dataset.f!==tr.f)return;
-  lyLines=[];lyLineEls=[];lyNow=-1;
+  lyLines=[];lyLineEls=[];lyWordEls=[];lyNow=-1;lyWordNow=-1;
   pane.innerHTML='';
-  var lines=synced?parseLRC(synced):[];
+  var wordLines=parseWordLyrics(words);
+  var lines=wordLines.length?wordLines:(synced?parseLRC(synced):[]);
   if(!txt&&!lines.length){
     var s=document.createElement('div');
     s.className='lyState';
@@ -848,7 +906,20 @@ function lyRender(tr,txt,meta,head,preset,synced){
       for(var i=0;i<lines.length;i++){
         var d=document.createElement('div');
         d.className='lyLine';
-        d.textContent=lines[i].x||'\u00a0';
+        if(lines[i].words&&lines[i].words.length){
+          var spans=[];
+          for(var k=0;k<lines[i].words.length;k++){
+            var sp=document.createElement('span');
+            sp.className='lyWord';
+            sp.textContent=lines[i].words[k].x||'\u00a0';
+            d.appendChild(sp);
+            spans.push(sp);
+          }
+          lyWordEls.push(spans);
+        }else{
+          d.textContent=lines[i].x||'\u00a0';
+          lyWordEls.push(null);
+        }
         pane.appendChild(d);
         lyLineEls.push(d);
       }
@@ -865,7 +936,7 @@ function lyRender(tr,txt,meta,head,preset,synced){
   if(preset){
     foot.textContent='void records preset';
   }else if(lines.length){
-    foot.textContent='synced lyrics via ';
+    foot.textContent=(wordLines.length?'word-synced lyrics via ':'synced lyrics via ');
     var a=document.createElement('a');
     a.href='https://lrclib.net';a.target='_blank';a.rel='noopener';
     a.textContent='lrclib.net';
@@ -909,7 +980,7 @@ function lyLoad(pos){
   pane.dataset.f=tr.f;
   var pre=LYR_PRESETS[tr.f];
   if(pre){lyRender(tr,pre.body,null,pre.head,true);return}
-  if(lyCache[tr.f]!==undefined){lyRender(tr,lyCache[tr.f].p,null,null,false,lyCache[tr.f].s);return}
+  if(lyCache[tr.f]!==undefined){lyRender(tr,lyCache[tr.f].p,null,null,false,lyCache[tr.f].s,lyCache[tr.f].w);return}
   if(lyBusy===tr.f)return;
   if(lyFail[tr.f]&&Date.now()-lyFail[tr.f]<20000){
     lyStateMsg(tr,'lrclib is having a moment - wait a few seconds, then click the note again.');
@@ -941,8 +1012,8 @@ function lyLoad(pos){
     delete lyFail[tr.f];
     lyBusy='';
     var txt=best.instrumental&&!best.plainLyrics&&!best.syncedLyrics?'[instrumental - no lyrics to show]':(best.plainLyrics||'');
-    lyCache[tr.f]={p:txt,s:best.syncedLyrics||null};
-    lyRender(tr,txt,best,null,false,lyCache[tr.f].s);
+    lyCache[tr.f]={p:txt,s:best.syncedLyrics||null,w:best.lyricsfile||null};
+    lyRender(tr,txt,best,null,false,lyCache[tr.f].s,lyCache[tr.f].w);
   }
   function failState(err){
     lyBusy='';

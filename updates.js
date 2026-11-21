@@ -1,4 +1,9 @@
 var PATCH_LOG=[
+{date:'2026-11-21',type:'feature',title:'word-synced karaoke',notes:[
+'lyrics now use lrclib\'s word-level timing when it exists, so individual words light up instead of whole lines.',
+'falls back to normal line sync for tracks without word timing, and to plain text if there are no synced lyrics at all.',
+'jazzy juice and muga million were the first ones to get the upgraded treatment.'
+]},
 {date:'2026-11-21',type:'music pack',title:'five more pack 4.5 singles',notes:[
 '379 tracks now. mark roberity - verity dih, kingsammelot - jazzy juice, kingsammelot - muga million, overcooked - sus squad disstrack, and if asian parents made a rap song.',
 'full video webm with video backgrounds, searchable under "m45" or "pack 4.5".'
