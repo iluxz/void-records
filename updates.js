@@ -92,6 +92,13 @@ var PATCH_LOG=[
 'four sections: the deck (spins, the whole-shelf challenge), the knobs (shuffle, loop, pitch, redline, overdrive, tone, crackle, sleep), the window (tabs, karaoke, this log, install), the shelf (favorites, recent filter, local files, havexy).',
 'one of them is watching for something extremely rare crossing the screen. no hints. it sprints, it vanishes, you either saw it or you did not.',
 'unlocks pop an os-style toast in the corner. everything lives in this browser, same as your stats.'
+]},
+{date:'2026-11-21',type:'music pack',title:'music pack 2: geometry dash + the meme shelf',notes:[
+'thirty new records on the shelf - 201 to 231.',
+'full geometry dash soundtrack: stereo madness through dash, all 23 levels in order.',
+'meme singles: baldi whistle funk, it\'s me it\'s stupidity, the full verity meme remix, spooky scary skeletons, hit the road dude, world\'s smallest violin and peppa pig.',
+'every track is searchable by alias, so "gd", "geometry dash" and "meme remix" all find their sections.',
+'also fixed the stale 114 track count in the tutorial and the all-tracks achievement.'
 ]}
 ];
 var TYPE_COLOR={'patch':'#78b4ff','feature':'#64ffa0','update':'#c878ff','music pack':'#ffb43a'};
