@@ -93,7 +93,16 @@ var PATCH_LOG=[
 'one of them is watching for something extremely rare crossing the screen. no hints. it sprints, it vanishes, you either saw it or you did not.',
 'unlocks pop an os-style toast in the corner. everything lives in this browser, same as your stats.'
 ]},
-{date:'2026-11-21',type:'music pack',title:'music pack 2: geometry dash + the meme shelf',notes:[
+{date:'2026-10-22',type:'music pack',title:'slime rancher soundtrack added',notes:[
+'fifty-two more records on the shelf - songs 115 to 166.',
+'the full slime rancher soundtrack: dry reef, moss blanket, indigo quarry, ancient ruins, glass desert, nimble valley, the wilds, viktor\'s workshop, mochi\'s manor, ogden\'s retreat, the ranch, the slime sea and the slimeulation.',
+'late night, relaxed and night variants for the main zones, the radio tracks, and both ravenous rainbows.'
+]},
+{date:'2026-10-22',type:'music pack',title:'grim fandango soundtrack added',notes:[
+'thirty-one more records on the shelf - songs 171 to 201.',
+'the full grim fandango soundtrack: brennis, ledge peckers, domino\'s office, companeros, casino calavera, swanky maximino, smooth hector, she sailed away, gamboling glottis, blue casket bop, rubacava, temple gate, 9th heaven and nuevo marrow.',
+'search "gf" or "grim fandango" to find the whole pack.'
+]},{date:'2026-11-21',type:'music pack',title:'music pack 2: geometry dash + the meme shelf',notes:[
 'thirty new records on the shelf - 201 to 231.',
 'full geometry dash soundtrack: stereo madness through dash, all 23 levels in order.',
 'meme singles: baldi whistle funk, it\'s me it\'s stupidity, the full verity meme remix, spooky scary skeletons, hit the road dude, world\'s smallest violin and peppa pig.',
@@ -106,7 +115,10 @@ var PATCH_LOG=[
 'twelve new records on the shelf - 231 to 243.','full video webm again, so they play behind the shelf when video backgrounds are on.','a mix of ytpmv mashups, slowed edits and song parodies: looping the circus, sad caseoh, it\'s like i\'m not even here, unhappy, sussy baka noot noot, oh ryan, do me a favor, bang bang bang, huss funk, whole server against you, too late already died, and the ubuntu parody.','search "m3" or "meme remix" to find the whole pack.'
 ]},
 {date:'2026-11-21',type:'music pack',title:'music pack 3.5: the other whole-server cuts',notes:[
-'five more records - 243 to 248.','the unalt and old cuts of the whole-server song, plus CÓSMICO ultra slowed, no signal (jersey club mix) and with friends (extended).','all full video webm again, so they work with video backgrounds.','search "m3.5" or "m35" for just this batch, or "m3" for the whole 3.x family.'
+'nine records total - 243 to 252.','the unalt and old cuts of the whole-server song, CÓSMICO ultra slowed, no signal (jersey club mix), with friends (extended), flower in a hurricane, and three cory in the house tracks (boss fight extended, final showdown, vs cory).','eight full video webm, plus the 65-minute cory boss theme as mp3 because its source is just a still image.','search "m3.5" or "m35" for just this batch, or "m3" for the whole 3.x family.'
+]},
+{date:'2026-11-21',type:'music pack',title:'music pack 4: the entire ultrakill ost and the pizza place shelf',notes:[
+'107 new records - 252 to 359.','the full work at a pizza place OST (14), the full ULTRAKILL soundtrack playlist (81), and 12 singles: slander audio final boss, the jersey strategy, locked in ammonia, teto begs for nitro, trust the showman x2, skies forever gray, obey your master, the red hot chili peppers bit, meet your lord, learn your lesson, and the extended cut of if you see me use ubuntu.','everything is full video webm with video backgrounds, except the 65-minute cory boss theme from pack 3.5 which is mp3 now.','search "m4" or "pack 4" for this whole batch, "ultrakill" for the OST, or "wapp" for the pizza place tracks.','also added synced preset lyrics for "nope your too late i already died" via lrclib id 36118285, since the normal search could not find it.'
 ]}
 ];
 var TYPE_COLOR={'patch':'#78b4ff','feature':'#64ffa0','update':'#c878ff','music pack':'#ffb43a'};

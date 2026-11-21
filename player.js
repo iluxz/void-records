@@ -547,7 +547,7 @@ var tutActive=false,tutI=0,tutTimer=null;
 
 var tutSteps=[
   {center:true,btn:'start',title:'void records',
-   text:'248 records, one deck. quick tour - ten clicks, then you are free. you can replay it any time from the footer.'},
+   text:'359 records, one deck. quick tour - ten clicks, then you are free. you can replay it any time from the footer.'},
   {el:'#list li',title:'the shelf',
    text:'every record in the collection. click one and it loads straight onto the deck. the amber row is what is spinning.'},
   {el:'#turntable',title:'the deck',
@@ -786,7 +786,10 @@ var LYR_PRESETS={
   }
 };
 var LYR_IDS={
-  'havexy-hyperbaiter.mp3':36014973
+  'havexy-hyperbaiter.mp3':36014973,
+  'm3-too_late_already_died.webm':36118285,
+  'm3-if_you_see_me_use_ubuntu.webm':36896646,
+  'm4-5VsyzvvbXLQ.webm':37262336
 };
 
 
