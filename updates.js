@@ -1,4 +1,9 @@
 var PATCH_LOG=[
+{date:'2026-11-21',type:'feature',title:'outside the shelf',notes:[
+'drop files anywhere on the deck: mp3, wav, ogg, m4a, webm and mp4 all load now. drop a bunch and they queue up and play through in order. video files turn the 92% video bg on automatically.',
+'new source box under the deck: paste a youtube link and the local void records server resolves it to a playable stream, with the video bg synced to the audio clock. short youtu.be and shorts links work too, and you can drag a link straight onto the turntable.',
+'if a link is not a youtube url, the server is off, or the stream fails or expires, you get a plain-English error instead of a silent dead player. anything loaded this way stays outside the 418 and can never count toward the right way.'
+]},
 {date:'2026-11-21',type:'feature',title:'the local server bridge',notes:[
 'new opt-in switch in the gear panel: point the deck at a local void records server and stream records from it instead of straight off disk. off by default, everything still works with zero network.',
 'when linked, clean listens, achievements, settings and favourites are pushed to the server and merged back on load - local progress is never erased. any other project using the server sees the same list.',

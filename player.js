@@ -158,6 +158,7 @@ function havexyEgg(f){
 function loadTrack(i,autoplay){
   if(i<0||i>=TRACKS.length)return;
   pos=i;
+  externalMode=false;localQueue=[];
   cleanRun=false;cleanDead=false;cleanStarted=false;cleanFile=TRACKS[i].f;
   var tr=TRACKS[i];
   havexyEgg(tr.f);
@@ -311,7 +312,23 @@ audio.addEventListener('play',function(){
   bgVideoSync(true);
 });
 audio.addEventListener('pause',function(){setPlayingUI(false);if(window.setCrackleLevel)setCrackleLevel(0);bgVideoSync()});
-audio.addEventListener('ended',function(){cleanMark();if(!loopOne)nextTrack()});
+// a resolved stream can expire or be refused after it was handed to the player.
+// surface that instead of leaving a stale "playing" message on screen.
+audio.addEventListener('error',function(){
+  if(typeof externalMode!=='undefined'&&externalMode&&audio.getAttribute('src')){
+    showSrcMsg('playback failed - the stream may have expired or been refused. try loading the link again.','err');
+  }
+});
+audio.addEventListener('ended',function(){
+  cleanMark();
+  if(typeof externalMode!=='undefined'&&externalMode){
+    if(localQueue.length){loadLocalFile(localQueue.shift());return}
+    setPlayingUI(false);
+    showSrcMsg('finished - outside the collection','ok');
+    return;
+  }
+  if(!loopOne)nextTrack()
+});
 // a clean listen can only begin from the top of a freshly loaded record, at 1x,
 // with the tab actually in front. anything that breaks that state is permanent.
 audio.addEventListener('playing',function(){
@@ -459,25 +476,132 @@ document.addEventListener('keydown',function(e){
   else if(e.key==='c'||e.key==='C'){btnCrackle.click()}
 });
 
+// --- external sources -------------------------------------------------------
+// dropped files and pasted youtube links live outside the 418-track shelf, so
+// they can never count toward "the right way". blob urls get revoked on replace.
+var externalMode=false,externalVideoSrc=null,localQueue=[],externalBlob=null;
+function showSrcMsg(text,kind){
+  var el=document.getElementById('srcMsg');
+  if(!el)return;
+  el.textContent=text||'';
+  el.className=kind||'';
+}
+function clearExternalVideo(){
+  var vid=document.getElementById('bgVideo');
+  if(!vid)return;
+  try{vid.pause()}catch(e){}
+  vid.hidden=true;vid.classList.remove('on');
+  vid.removeAttribute('src');
+  externalVideoSrc=null;
+}
+function setExternalVideo(src){
+  var vid=document.getElementById('bgVideo');
+  if(!vid||!src)return;
+  externalVideoSrc=src;
+  if(vid.getAttribute('src')!==src){vid.src=src;try{vid.load()}catch(e){}}
+  vid.hidden=false;vid.classList.add('on');
+  bgVideoSync(true);
+}
+function playExternal(src,opts){
+  opts=opts||{};
+  cleanBreak();cleanFile='';cleanStarted=false;
+  pos=-1;externalMode=true;
+  markPlaying();
+  ++loadGen;
+  if(externalBlob){try{URL.revokeObjectURL(externalBlob)}catch(e){}externalBlob=null}
+  if(src.indexOf('blob:')===0)externalBlob=src;
+  if(opts.video)setExternalVideo(src);else clearExternalVideo();
+  audio.src=src;
+  nowTitle.textContent=opts.title||'external source';
+  nowMeta.textContent=opts.meta||'outside the collection';
+  labelTitle.textContent=(opts.title||'external').slice(0,18);
+  document.title='\u25b6 '+(opts.title||'external source')+' \u00b7 void records';
+  tDur.textContent='--:--';
+  if(opts.autoplay!==false)tryPlay();
+}
+function isVideoName(n){return /\.(webm|mp4|m4v|ogv|mov)$/i.test(n||'')}
+function loadLocalFile(f){
+  if(!f)return false;
+  var okType=/^(audio|video)\//.test(f.type)||/\.(mp3|wav|ogg|oga|m4a|aac|flac|webm|mp4|m4v|ogv)$/i.test(f.name||'');
+  if(!okType){
+    showSrcMsg('unsupported file: '+(f.name||'unknown')+' - try mp3, wav, ogg, m4a, webm or mp4','err');
+    return false;
+  }
+  var video=isVideoName(f.name)||/^video\//.test(f.type);
+  var blob=URL.createObjectURL(f);
+  playExternal(blob,{
+    title:(f.name||'local file').replace(/\.[^.]+$/,''),
+    meta:'local file - not in the collection'+(video?' - video bg on':''),
+    video:video
+  });
+  showSrcMsg('loaded '+f.name+(localQueue.length?' + '+localQueue.length+' queued':''),'ok');
+  if(typeof vrAch==='function')vrAch('local_file');
+  return true;
+}
+
+// youtube links resolve through the opt-in local server: the browser cannot do
+// this itself (cors + signed streams), so a missing server is a real error.
+var YT_RE=/(?:youtube\.com\/(?:watch\?(?:.*&)?v=|shorts\/|embed\/|live\/)|youtu\.be\/|music\.youtube\.com\/(?:watch\?(?:.*&)?v=))([a-zA-Z0-9_-]{11})/i;
+function parseYouTube(raw){var m=String(raw||'').match(YT_RE);return m?m[1]:null}
+function loadYouTube(){
+  var raw=(document.getElementById('srcInput')||{}).value||'';
+  raw=raw.trim();
+  if(!raw){showSrcMsg('paste a youtube link first','err');return}
+  var id=parseYouTube(raw);
+  if(!id){showSrcMsg('that is not a youtube link - try a youtube.com/watch, shorts or youtu.be url','err');return}
+  if(!serverOn()){
+    showSrcMsg('youtube needs the local void records server - turn it on in settings (use an https tunnel url if this page is https)','err');
+    return;
+  }
+  var btn=document.getElementById('srcLoad');
+  if(btn)btn.disabled=true;
+  showSrcMsg('resolving '+id+' ...','wait');
+  var gen=++loadGen;
+  fetch(serverBase()+'/api/v1/resolve?url='+encodeURIComponent(raw)).then(function(r){
+    return r.json().catch(function(){return {}}).then(function(j){return {status:r.status,j:j}});
+  }).then(function(res){
+    if(btn)btn.disabled=false;
+    if(gen!==loadGen)return;
+    var j=res.j||{};
+    if(res.status!==200||!j.url){
+      showSrcMsg('cannot play this video: '+(j.error||('server returned '+res.status)),'err');
+      return;
+    }
+    playExternal(j.url,{
+      title:j.title||('youtube '+id),
+      meta:(j.channel?j.channel+' - ':'')+'youtube - not in the collection',
+      video:true
+    });
+    showSrcMsg('playing '+id+(j.expires?' - stream link is temporary':''),'ok');
+  }).catch(function(err){
+    if(btn)btn.disabled=false;
+    if(gen!==loadGen)return;
+    showSrcMsg('cannot reach the void records server: '+((err&&err.message)||'unknown error'),'err');
+  });
+}
+var srcLoadBtn=document.getElementById('srcLoad');
+if(srcLoadBtn)srcLoadBtn.addEventListener('click',loadYouTube);
+var srcInputEl=document.getElementById('srcInput');
+if(srcInputEl)srcInputEl.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();loadYouTube()}});
+
 var turntable=document.getElementById('turntable');
 document.addEventListener('dragover',function(e){e.preventDefault();turntable.classList.add('drop')});
 document.addEventListener('dragleave',function(e){if(!e.relatedTarget)turntable.classList.remove('drop')});
 document.addEventListener('drop',function(e){
   e.preventDefault();
   turntable.classList.remove('drop');
-  var f=e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files[0];
-  if(!f)return;
-  if(!/^audio\//.test(f.type)&&!/\.(mp3|wav|ogg|webm|m4a|mp4)$/i.test(f.name))return;
-  cleanBreak();cleanFile='';
-  pos=-1;
-  markPlaying();
-  audio.src=URL.createObjectURL(f);
-  nowTitle.textContent=f.name;
-  nowMeta.textContent='local file - not in the collection';
-  labelTitle.textContent=f.name;
-  tDur.textContent='--:--';
-  if(typeof vrAch==='function')vrAch('local_file');
-  tryPlay();
+  var dt=e.dataTransfer;
+  var files=dt&&dt.files?Array.prototype.slice.call(dt.files):[];
+  if(files.length){
+    localQueue=files.slice(1);
+    loadLocalFile(files[0]);
+    return;
+  }
+  var dropped=dt&&(dt.getData('text/uri-list')||dt.getData('text/plain'));
+  if(dropped&&/^https?:\/\//i.test(dropped.trim())){
+    if(srcInputEl)srcInputEl.value=dropped.trim();
+    loadYouTube();
+  }
 });
 
 var qTrack=new URLSearchParams(location.search).get('track');

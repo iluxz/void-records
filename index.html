@@ -7,7 +7,7 @@
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <meta name="theme-color" content="#0a0812">
 <link rel="manifest" href="manifest.json">
-<link rel="stylesheet" href="style.css?v=4">
+<link rel="stylesheet" href="style.css?v=5">
 </head>
 <body>
 <canvas id="waves"></canvas>
@@ -25,7 +25,7 @@
 
   <div id="stage">
     <section id="deck">
-      <div class="paneHead"><span class="paneTag">01 / deck</span><span class="paneHint">drop an mp3 anywhere to load it</span></div>
+      <div class="paneHead"><span class="paneTag">01 / deck</span><span class="paneHint">drop files or paste a youtube link</span></div>
       <div id="turntable">
         <div id="disc">
           <div id="label"><span id="labelTitle">void</span></div>
@@ -37,6 +37,13 @@
         <div id="nowTitle">no record loaded</div>
         <div id="nowMeta">click a track on the right</div>
       </div>
+
+      <div id="srcRow">
+        <span class="srcTag">src</span>
+        <input id="srcInput" type="text" spellcheck="false" autocomplete="off" placeholder="youtube link or drop a file...">
+        <button id="srcLoad" data-sfx="click">load</button>
+      </div>
+      <div id="srcMsg" role="status" aria-live="polite"></div>
 
       <input id="seek" type="range" min="0" max="1000" value="0">
       <div id="times"><span id="tCur">0:00</span><span id="chips"><button id="btnCrackle" class="chip" title="vinyl crackle (c)">&#8779;</button><button id="btnSleep" class="chip" title="sleep timer: off / 15 / 30 / 60">&#9201;</button><button id="btnSfx" class="chip" title="ui sounds (m)">&#128266;</button></span><span id="tDur">--:--</span></div>
@@ -249,7 +256,7 @@
 <script src="tracks.js"></script>
 <script src="visualizer.js?v=2"></script>
 <script src="achievements.js?v=5"></script>
-<script src="player.js?v=14"></script>
+<script src="player.js?v=15"></script>
 <script src="updates.js"></script>
 </body>
 </html>
