@@ -789,7 +789,9 @@ var LYR_IDS={
   'havexy-hyperbaiter.mp3':36014973,
   'm3-too_late_already_died.webm':36118285,
   'm3-if_you_see_me_use_ubuntu.webm':36896646,
-  'm4-5VsyzvvbXLQ.webm':37262336
+  'm4-5VsyzvvbXLQ.webm':37262336,
+  'm45-0-pbkPm8oAg.webm':10586817,
+  'm45-0VKY7Moy4so.webm':28780317
 };
 
 
