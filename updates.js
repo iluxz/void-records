@@ -1,4 +1,12 @@
 var PATCH_LOG=[
+{date:'2026-11-21',type:'music pack',title:'music pack 7: fifteen more records',notes:[
+'15 new records - 400 to 415. veeronica typebeat, android in the bios, toxic gossip train, jump in the caac, dont come back thriller man, gurkey turkey, rambunctious emote lyrics, trendhopper vee skating theme, hey its me obesity, teapot palace guitar, die of death settings theme, three split emote variants (including the alt) and cry for me.',
+'all 720p webm with video backgrounds. multiple forsaken emote cuts, one very cursed turkey video and one ironmouse song.'
+]},
+{date:'2026-11-21',type:'ui',title:'deck and shelf rework',notes:[
+'void records got a proper ui pass - numbered deck and shelf panes, a brand/status strip, rounder controls, a real footer bar and cleaner window chrome.',
+'same dark monospace void-records identity, same turntable and 92% video bg - no glass or aero reskin. every button, shortcut and tutorial step still works.'
+]},
 {date:'2026-11-21',type:'lyrics',title:'its me its verity preset lyrics',notes:[
 '"hey its me its verity (horror skunx)" now opens straight to its word-synced LRCLIB lyrics (track 37357262) - no searching, no API guessing.'
 ]},

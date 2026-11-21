@@ -7,7 +7,7 @@
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <meta name="theme-color" content="#0a0812">
 <link rel="manifest" href="manifest.json">
-<link rel="stylesheet" href="style.css?v=3">
+<link rel="stylesheet" href="style.css?v=4">
 </head>
 <body>
 <canvas id="waves"></canvas>
@@ -16,12 +16,16 @@
 <div id="shell">
   <video id="bgVideo" class="bgVideo" muted playsinline loop preload="none"></video>
   <header>
-    <h1>void records</h1>
-    <p>400 tracks</p>
+    <div class="brand">
+      <span class="brandMark" aria-hidden="true"></span>
+      <span class="brandText"><h1>void records</h1><p>415 tracks &middot; offline shelf</p></span>
+    </div>
+    <div class="headMeta"><span class="headChip">no ads</span><span class="headChip">no accounts</span><span class="headChip">no tracking</span></div>
   </header>
 
   <div id="stage">
     <section id="deck">
+      <div class="paneHead"><span class="paneTag">01 / deck</span><span class="paneHint">drop an mp3 anywhere to load it</span></div>
       <div id="turntable">
         <div id="disc">
           <div id="label"><span id="labelTitle">void</span></div>
@@ -84,6 +88,7 @@
     </section>
 
     <section id="listWrap">
+      <div class="paneHead"><span class="paneTag">02 / shelf</span><span class="paneHint">click a record to load it</span></div>
       <div id="moods">
         <button data-mood="all">all</button>
         <button data-mood="chill">chill</button>
@@ -97,7 +102,10 @@
     </section>
   </div>
 
-  <footer><button id="btnTutorial">replay tutorial</button><button id="btnLog">update log</button><button id="btnAch">achievements</button><button id="btnHalloween">🎃 halloween</button><button id="btnConfetti" title="drop confetti">🎉 400</button></footer>
+  <footer>
+    <span class="footLabel">void records &middot; a deck for the objbox soundtrack</span>
+    <span class="footBtns"><button id="btnTutorial">replay tutorial</button><button id="btnLog">update log</button><button id="btnAch">achievements</button><button id="btnHalloween">🎃 halloween</button><button id="btnConfetti" title="drop confetti">🎉 400</button></span>
+  </footer>
 </div>
 
 <div id="tutSpot" hidden></div>
@@ -187,7 +195,7 @@
 <script src="tracks.js"></script>
 <script src="visualizer.js"></script>
 <script src="achievements.js"></script>
-<script src="player.js?v=7"></script>
+<script src="player.js?v=8"></script>
 <script src="updates.js"></script>
 </body>
 </html>
