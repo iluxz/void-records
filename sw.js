@@ -1,9 +1,9 @@
-var CACHE='vr-shell-v13';
+var CACHE='vr-shell-v14';
 var SHELL=[
   './',
   'index.html',
   'style.css?v=2',
-  'player.js?v=4',
+  'player.js?v=5',
   'visualizer.js',
   'tracks.js',
   'updates.js',

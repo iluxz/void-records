@@ -547,7 +547,7 @@ var tutActive=false,tutI=0,tutTimer=null;
 
 var tutSteps=[
   {center:true,btn:'start',title:'void records',
-   text:'379 records, one deck. quick tour - ten clicks, then you are free. you can replay it any time from the footer.'},
+   text:'395 records, one deck. quick tour - ten clicks, then you are free. you can replay it any time from the footer.'},
   {el:'#list li',title:'the shelf',
    text:'every record in the collection. click one and it loads straight onto the deck. the amber row is what is spinning.'},
   {el:'#turntable',title:'the deck',
@@ -791,7 +791,12 @@ var LYR_IDS={
   'm3-if_you_see_me_use_ubuntu.webm':36896646,
   'm4-5VsyzvvbXLQ.webm':37262336,
   'm45-0-pbkPm8oAg.webm':10586817,
-  'm45-0VKY7Moy4so.webm':28780317
+  'm45-0VKY7Moy4so.webm':28780317,
+  'sinister-02.mp3':17202052,
+  'sinister-03.mp3':26401682,
+  'm5-dUcbL_z0cxc.webm':37642307,
+  'm5-ri1SiiTeUis.webm':26401682,
+  'm5-J1DAmmROUX8.webm':10479079
 };
 
 

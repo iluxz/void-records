@@ -1,4 +1,9 @@
 var PATCH_LOG=[
+{date:'2026-11-21',type:'music pack',title:'music pack 5: weird youtube shelf',notes:[
+'16 new records - 380 to 395. ultrakill piano, lord peterson, war without drumming, the verity x aura farmer mashup, abu yahya, portal radio, you must answer, exasperation day jingle, no mercy in brazil, a320 asmr, supraland credits, stanley elevator bossa, bread, twerknation28, my salsa, and void star.',
+'full video webm with video backgrounds, searchable under "m5" or "pack 5".',
+'preset lyrics added for i miss the quiet (lord x), you must answer, it\'s me it\'s verity, and bread.'
+]},
 {date:'2026-11-21',type:'feature',title:'word-synced karaoke',notes:[
 'lyrics now use lrclib\'s word-level timing when it exists, so individual words light up instead of whole lines.',
 'falls back to normal line sync for tracks without word timing, and to plain text if there are no synced lyrics at all.',
