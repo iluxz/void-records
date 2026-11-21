@@ -436,6 +436,90 @@ document.getElementById('setToneS').addEventListener('change',function(){
   saveSetting('tone',hz);
   if(hz<=900&&!toneDarkFired&&typeof vrAch==='function'){toneDarkFired=true;vrAch('tone_dark');}
 });
+function fmtDb(v){return (v>0?'+':'')+v+' db';}
+function fmtVerb(p){return p===0?'dry':(p>=100?'wash':p+'%');}
+function fmtWow(p){return p===0?'off':p+'%';}
+function wowHz(r){return .2+(r/100)*1.8;}
+function markPreset(name){
+  var bs=document.querySelectorAll('.setPresets button');
+  for(var i=0;i<bs.length;i++)bs[i].classList.toggle('on',bs[i].getAttribute('data-eq')===name);
+}
+var setBassEl=document.getElementById('setBass');
+setBassEl.addEventListener('input',function(){
+  var v=parseInt(this.value,10);
+  if(window.setBass)setBass(v);
+  document.getElementById('setBassV').textContent=fmtDb(v);
+  saveSetting('bass',v);markPreset(null);
+});
+var setTrebleEl=document.getElementById('setTreble');
+setTrebleEl.addEventListener('input',function(){
+  var v=parseInt(this.value,10);
+  if(window.setTreble)setTreble(v);
+  document.getElementById('setTrebleV').textContent=fmtDb(v);
+  saveSetting('treble',v);markPreset(null);
+});
+var setVerbEl=document.getElementById('setVerb');
+setVerbEl.addEventListener('input',function(){
+  var v=parseInt(this.value,10);
+  if(window.setVerb)setVerb(v/100,parseFloat(document.getElementById('setVerbSize').value));
+  document.getElementById('setVerbV').textContent=fmtVerb(v);
+  saveSetting('verb',v);markPreset(null);
+});
+var setVerbSizeEl=document.getElementById('setVerbSize');
+setVerbSizeEl.addEventListener('change',function(){
+  var v=parseFloat(this.value);
+  if(window.setVerb)setVerb(parseInt(setVerbEl.value,10)/100,v);
+  saveSetting('verbSize',v);markPreset(null);
+});
+var setWowEl=document.getElementById('setWow');
+setWowEl.addEventListener('input',function(){
+  var v=parseInt(this.value,10);
+  if(window.setWow)setWow(v/100,parseInt(document.getElementById('setWowRate').value,10));
+  document.getElementById('setWowV').textContent=fmtWow(v);
+  saveSetting('wow',v);markPreset(null);
+});
+var setWowRateEl=document.getElementById('setWowRate');
+setWowRateEl.addEventListener('input',function(){
+  var v=parseInt(this.value,10);
+  if(window.setWow)setWow(parseInt(setWowEl.value,10)/100,v);
+  document.getElementById('setWowRateV').textContent=wowHz(v).toFixed(1)+' hz';
+  saveSetting('wowRate',v);markPreset(null);
+});
+var EQ_PRESETS={
+  flat:{bass:0,treble:0,tone:16000,verb:0,verbSize:1.4,wow:0,wowRate:40},
+  night:{bass:-2,treble:-8,tone:3800,verb:0,verbSize:.6,wow:0,wowRate:40},
+  radio:{bass:3,treble:4,tone:6800,verb:12,verbSize:.6,wow:8,wowRate:55},
+  void:{bass:6,treble:-4,tone:9000,verb:65,verbSize:2.6,wow:14,wowRate:25},
+  warped:{bass:2,treble:2,tone:16000,verb:20,verbSize:1.4,wow:70,wowRate:70}
+};
+function applyPreset(name){
+  var p=EQ_PRESETS[name];if(!p)return;
+  document.getElementById('setBass').value=p.bass;
+  document.getElementById('setTreble').value=p.treble;
+  document.getElementById('setToneS').value=p.tone;
+  setVerbEl.value=p.verb;
+  setVerbSizeEl.value=String(p.verbSize);
+  setWowEl.value=p.wow;
+  setWowRateEl.value=p.wowRate;
+  if(window.setBass)setBass(p.bass);
+  if(window.setTreble)setTreble(p.treble);
+  if(window.setTone)setTone(p.tone);
+  if(window.setVerb)setVerb(p.verb/100,p.verbSize);
+  if(window.setWow)setWow(p.wow/100,p.wowRate);
+  document.getElementById('setBassV').textContent=fmtDb(p.bass);
+  document.getElementById('setTrebleV').textContent=fmtDb(p.treble);
+  document.getElementById('setToneV').textContent=fmtTone(p.tone);
+  document.getElementById('setVerbV').textContent=fmtVerb(p.verb);
+  document.getElementById('setWowV').textContent=fmtWow(p.wow);
+  document.getElementById('setWowRateV').textContent=wowHz(p.wowRate).toFixed(1)+' hz';
+  ['bass','treble','tone','verb','verbSize','wow','wowRate'].forEach(function(k){saveSetting(k,p[k])});
+  markPreset(name);
+  if(window.vrSfx)vrSfx('toggle');
+}
+var presetBtns=document.querySelectorAll('.setPresets button');
+for(var pi=0;pi<presetBtns.length;pi++){
+  presetBtns[pi].addEventListener('click',function(){applyPreset(this.getAttribute('data-eq'))});
+}
 var setVideoBgEl=document.getElementById('setVideoBg');
 if(setVideoBgEl)setVideoBgEl.addEventListener('change',function(){
   var on=!!this.checked;
@@ -483,6 +567,30 @@ if(typeof ST.volume==='number'){document.getElementById('vol').value=ST.volume;v
 if(typeof ST.speed==='number'){audio.playbackRate=ST.speed;document.getElementById('setSpeed').value=ST.speed;document.getElementById('setSpeedV').textContent=ST.speed.toFixed(2)+'\u00d7'}
 if(typeof ST.pitch==='number'){document.getElementById('setPitch').value=ST.pitch;if(window.setPitchRatio)setPitchRatio(Math.pow(2,ST.pitch/12));document.getElementById('setPitchV').textContent=(ST.pitch>0?'+':'')+ST.pitch+' st'}
 if(typeof ST.tone==='number'){document.getElementById('setToneS').value=ST.tone;if(window.setTone)setTone(ST.tone);document.getElementById('setToneV').textContent=fmtTone(ST.tone)}
+if(typeof ST.bass==='number'){document.getElementById('setBass').value=ST.bass;if(window.setBass)setBass(ST.bass);document.getElementById('setBassV').textContent=fmtDb(ST.bass)}
+if(typeof ST.treble==='number'){document.getElementById('setTreble').value=ST.treble;if(window.setTreble)setTreble(ST.treble);document.getElementById('setTrebleV').textContent=fmtDb(ST.treble)}
+if(typeof ST.verb==='number'){
+  var savedVerbSize=typeof ST.verbSize==='number'?ST.verbSize:1.4;
+  setVerbEl.value=ST.verb;setVerbSizeEl.value=String(savedVerbSize);
+  if(window.setVerb)setVerb(ST.verb/100,savedVerbSize);
+  document.getElementById('setVerbV').textContent=fmtVerb(ST.verb);
+}
+if(typeof ST.wow==='number'){
+  var savedWowRate=typeof ST.wowRate==='number'?ST.wowRate:40;
+  setWowEl.value=ST.wow;setWowRateEl.value=savedWowRate;
+  if(window.setWow)setWow(ST.wow/100,savedWowRate);
+  document.getElementById('setWowV').textContent=fmtWow(ST.wow);
+  document.getElementById('setWowRateV').textContent=wowHz(savedWowRate).toFixed(1)+' hz';
+}
+(function detectPreset(){
+  var keys=['bass','treble','tone','verb','wow'];
+  for(var n in EQ_PRESETS){
+    var p=EQ_PRESETS[n],ok=true;
+    for(var i=0;i<keys.length;i++)if(ST[keys[i]]!==p[keys[i]]){ok=false;break}
+    if(ok){markPreset(n);return}
+  }
+  markPreset(null);
+})();
 if('crackle' in ST){crackleWanted=!!ST.crackle;btnCrackle.classList.toggle('on',crackleWanted)}
 if('videoBg' in ST){document.getElementById('setVideoBg').checked=!!ST.videoBg;document.getElementById('setVideoBgV').textContent=ST.videoBg?'on':'off'}
 
@@ -565,7 +673,7 @@ var tutSteps=[
   {el:'#chips',title:'odds and ends',
    text:'the wavy chip is vinyl crackle - needle hiss and pops over the music (C). the clock is a sleep timer: 15 / 30 / 60 minutes, then it pauses the deck and lets you go.'},
   {el:'#btnSet',title:'music settings',
-   text:'the gear opens speed (0.5-2x), independent pitch (-12 to +12 semitones) and tone. pitch is real DSP - it does not touch the speed.'},
+   text:'the gear opens speed, independent pitch, tone, bass/treble, space (reverb) and wow. pitch is real DSP - it does not touch the speed. presets do the whole stack in one click.'},
   {el:'#filter',title:'the filter',
    text:'type to narrow the shelf. names, aliases and filenames all match - try "employment", "sm07", or "recent" to see what you played last.'},
   {center:true,btn:'done',title:"you're free",

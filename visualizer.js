@@ -12,20 +12,42 @@ function initVisualizer(el){
     analyser.fftSize=256;
     analyser.smoothingTimeConstant=.82;
 
-    // tone filter is created first so it exists even if the pitch shifter fails
+    // filters are built before the DSP so the chain exists even if the shifter fails
+    bassFilter=audioCtx.createBiquadFilter();
+    bassFilter.type='lowshelf';
+    bassFilter.frequency.value=200;
+    bassFilter.gain.value=bassDb;
+
+    trebleFilter=audioCtx.createBiquadFilter();
+    trebleFilter.type='highshelf';
+    trebleFilter.frequency.value=3000;
+    trebleFilter.gain.value=trebleDb;
+
     toneFilter=audioCtx.createBiquadFilter();
     toneFilter.type='lowpass';
     toneFilter.frequency.value=toneHz;
     toneFilter.Q.value=.5;
 
+    dryGain=audioCtx.createGain();
+    wetGain=audioCtx.createGain();
+    convolver=audioCtx.createConvolver();
+    makeVerb();
+    applyVerb();
+
     makeDsp();
     if(pitchNode){
       src.connect(pitchNode);
-      pitchNode.connect(toneFilter);
+      pitchNode.connect(bassFilter);
     } else {
-      src.connect(toneFilter);
+      src.connect(bassFilter);
     }
-    toneFilter.connect(analyser);
+    bassFilter.connect(trebleFilter);
+    trebleFilter.connect(toneFilter);
+    toneFilter.connect(dryGain);
+    dryGain.connect(analyser);
+    toneFilter.connect(convolver);
+    convolver.connect(wetGain);
+    wetGain.connect(analyser);
     analyser.connect(audioCtx.destination);
     freqData=new Uint8Array(analyser.frequencyBinCount);
     makeCrackle();
@@ -37,6 +59,9 @@ function initVisualizer(el){
 }
 
 var pitchNode=null,toneFilter=null,pitchRatio=1;
+var bassFilter=null,trebleFilter=null,convolver=null,dryGain=null,wetGain=null;
+var bassDb=0,trebleDb=0,verbWet=0,verbSize=1.4;
+var wowDepth=0,wowRate=40,wowPhase=0,flutterPhase=0;
 var ring0=null,ring1=null,ringW=0,ringSize=0,pitchPhase=0;
 var P_D0=.012,P_SPAN=.08;
 
@@ -56,23 +81,31 @@ function makeDsp(){
       var o0=out.getChannelData(0);
       var o1=out.numberOfChannels>1?out.getChannelData(1):o0;
       var r=pitchRatio;
-      if(Math.abs(r-1)<.004||!ring0){
+      if((Math.abs(r-1)<.004&&wowDepth<=0)||!ring0){
         for(var k=0;k<n;k++){o0[k]=i0[k];o1[k]=i1[k]}
         return;
       }
       var down=r<1;
       var pStep=Math.abs(1-r)/(P_SPAN*sr2);
+      // wow is a slow wobble in the read delay, flutter a faster quieter one.
+      // delay derivative sets the pitch shift, so amplitude is scaled by 1/frequency.
+      var wf=.2+(wowRate/100)*1.8;
+      var wowAmp=wowDepth*.035/(6.2831853*wf)*sr2;
+      var flutAmp=wowDepth*.010/(6.2831853*6.5)*sr2;
       for(var i=0;i<n;i++){
         ring0[ringW]=i0[i];ring1[ringW]=i1[i];
         ringW++;if(ringW>=ringSize)ringW=0;
+        var wob=wowAmp*Math.sin(wowPhase*6.2831853)+flutAmp*Math.sin(flutterPhase*6.2831853);
+        wowPhase+=wf/sr2;if(wowPhase>=1)wowPhase-=1;
+        flutterPhase+=6.5/sr2;if(flutterPhase>=1)flutterPhase-=1;
         var pA=pitchPhase;
         pitchPhase+=pStep;if(pitchPhase>=1)pitchPhase-=1;
         var pB=pA+.5;if(pB>=1)pB-=1;
         var dA=down?(P_D0+P_SPAN*pA):(P_D0+P_SPAN*(1-pA));
         var dB=down?(P_D0+P_SPAN*pB):(P_D0+P_SPAN*(1-pB));
         var wA=.5-.5*Math.cos(6.2831853*pA),wB=1-wA;
-        o0[i]=wA*ringRead(ring0,sr2*dA)+wB*ringRead(ring0,sr2*dB);
-        o1[i]=wA*ringRead(ring1,sr2*dA)+wB*ringRead(ring1,sr2*dB);
+        o0[i]=wA*ringRead(ring0,sr2*dA+wob)+wB*ringRead(ring0,sr2*dB+wob);
+        o1[i]=wA*ringRead(ring1,sr2*dA+wob)+wB*ringRead(ring1,sr2*dB+wob);
       }
     };
     return true;
@@ -95,6 +128,64 @@ window.setTone=function(hz){
     if(!isFinite(n)||n<=0)return;
     toneHz=n;
     if(toneFilter&&toneFilter.frequency)toneFilter.frequency.value=n;
+  }catch(e){}
+};
+
+// reverb impulse is generated in memory - no file, no network. exponential
+// noise tail plus a few early reflections; size is the decay in seconds.
+function makeVerb(){
+  try{
+    if(!audioCtx||!convolver)return;
+    var len=Math.max(1,Math.floor(audioCtx.sampleRate*verbSize));
+    var buf=audioCtx.createBuffer(2,len,audioCtx.sampleRate);
+    for(var ch=0;ch<2;ch++){
+      var d=buf.getChannelData(ch);
+      for(var i=0;i<len;i++){
+        var t=i/len;
+        d[i]=(Math.random()*2-1)*Math.pow(1-t,2.7);
+      }
+      var taps=[.009,.017,.029,.043];
+      for(var k=0;k<taps.length;k++){
+        var idx=Math.floor(taps[k]*audioCtx.sampleRate)+(ch?41:0);
+        if(idx<len)d[idx]+=(k%2?-1:1)*.45;
+      }
+    }
+    convolver.buffer=buf;
+  }catch(e){}
+}
+function applyVerb(){
+  try{
+    var a=verbWet*Math.PI/2;
+    if(dryGain)dryGain.gain.value=Math.cos(a);
+    if(wetGain)wetGain.gain.value=Math.sin(a);
+  }catch(e){}
+}
+window.setBass=function(db){
+  try{
+    var n=parseFloat(db);if(!isFinite(n))return;
+    bassDb=Math.max(-12,Math.min(12,n));
+    if(bassFilter)bassFilter.gain.value=bassDb;
+  }catch(e){}
+};
+window.setTreble=function(db){
+  try{
+    var n=parseFloat(db);if(!isFinite(n))return;
+    trebleDb=Math.max(-12,Math.min(12,n));
+    if(trebleFilter)trebleFilter.gain.value=trebleDb;
+  }catch(e){}
+};
+window.setVerb=function(wet,size){
+  try{
+    var w=parseFloat(wet);if(isFinite(w))verbWet=Math.max(0,Math.min(1,w));
+    var s=parseFloat(size);
+    if(isFinite(s)&&s!==verbSize){verbSize=Math.max(.2,Math.min(4,s));makeVerb()}
+    applyVerb();
+  }catch(e){}
+};
+window.setWow=function(depth,rate){
+  try{
+    var d=parseFloat(depth);if(isFinite(d))wowDepth=Math.max(0,Math.min(1,d));
+    var r=parseFloat(rate);if(isFinite(r))wowRate=Math.max(0,Math.min(100,r));
   }catch(e){}
 };
 

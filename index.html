@@ -68,6 +68,50 @@
           <span id="setToneV">open</span>
         </div>
         <div class="setRow">
+          <label>bass</label>
+          <input id="setBass" type="range" min="-12" max="12" step="1" value="0">
+          <span id="setBassV">0 db</span>
+        </div>
+        <div class="setRow">
+          <label>treble</label>
+          <input id="setTreble" type="range" min="-12" max="12" step="1" value="0">
+          <span id="setTrebleV">0 db</span>
+        </div>
+        <div class="setRow">
+          <label>space</label>
+          <input id="setVerb" type="range" min="0" max="100" step="1" value="0">
+          <span id="setVerbV">dry</span>
+        </div>
+        <div class="setRow">
+          <label>room</label>
+          <select id="setVerbSize">
+            <option value="0.6">tight</option>
+            <option value="1.4" selected>room</option>
+            <option value="2.6">void</option>
+          </select>
+          <span></span>
+        </div>
+        <div class="setRow">
+          <label>wow</label>
+          <input id="setWow" type="range" min="0" max="100" step="1" value="0">
+          <span id="setWowV">off</span>
+        </div>
+        <div class="setRow">
+          <label>wobble</label>
+          <input id="setWowRate" type="range" min="0" max="100" step="1" value="40">
+          <span id="setWowRateV">0.9 hz</span>
+        </div>
+        <div class="setRow setPresets">
+          <label>presets</label>
+          <span class="presetBtns">
+            <button type="button" data-eq="flat">flat</button>
+            <button type="button" data-eq="night">late night</button>
+            <button type="button" data-eq="radio">radio</button>
+            <button type="button" data-eq="void">void</button>
+            <button type="button" data-eq="warped">warped</button>
+          </span>
+        </div>
+        <div class="setRow">
           <label>theme</label>
           <select id="themePick">
             <option value="default">void</option>
@@ -193,9 +237,9 @@
 <img id="skelRun" src="skeleton.png" alt="a skeleton runs across the entire screen" hidden>
 <img id="skelPet" src="skeleton.png" alt="a tiny skeleton vibing in the corner" title="he is vibing">
 <script src="tracks.js"></script>
-<script src="visualizer.js"></script>
+<script src="visualizer.js?v=2"></script>
 <script src="achievements.js"></script>
-<script src="player.js?v=10"></script>
+<script src="player.js?v=11"></script>
 <script src="updates.js"></script>
 </body>
 </html>

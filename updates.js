@@ -1,4 +1,10 @@
 var PATCH_LOG=[
+{date:'2026-11-21',type:'feature',title:'the gear panel grows up',notes:[
+'bass and treble shelves sit between the pitch shifter and the tone filter - real low/high boost and cut, ±12 db.',
+'space adds a generated-impulse reverb with a wet/dry knob and tight / room / void decay sizes. no file, no network, just noise with an exponential tail.',
+'wow modulates the read delay in the granular shifter for warped-vinyl wobble, with depth and wobble-rate knobs.',
+'five one-click presets - flat, late night, radio, void and warped - set the whole stack at once. all settings still survive a refresh.'
+]},
 {date:'2026-11-21',type:'feature',title:'ui sound effects',notes:[
 'the deck now has little synthesized clicks, needle drops and blips - play, skip, shuffle, loop, confetti and shelf loads all have their own sound. no audio files, no downloads.',
 'speaker chip next to the crackle and sleep timers toggles them, or hit M. the setting sticks across visits.'
