@@ -1254,7 +1254,7 @@ if('serviceWorker'in navigator&&/^https?:$/.test(location.protocol)){
   window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){})});
 }
 
-// 400-track celebration: confetti rain, auto-once per session + footer button.
+// shelf milestone celebration: confetti rain, auto-once per session + footer button.
 (function(){
   var cv=document.getElementById('confetti');
   if(!cv||!cv.getContext)return;
@@ -1315,9 +1315,9 @@ if('serviceWorker'in navigator&&/^https?:$/.test(location.protocol)){
   window.addEventListener('resize',function(){if(raf)size()});
   var btn=document.getElementById('btnConfetti');
   if(btn)btn.addEventListener('click',window.vrConfetti);
-  if(typeof TRACKS!=='undefined'&&TRACKS.length>=400){
+  if(typeof TRACKS!=='undefined'&&TRACKS.length>=415){
     var seen=false;
-    try{seen=!!sessionStorage.getItem('vrConfetti400');sessionStorage.setItem('vrConfetti400','1')}catch(e){}
+    try{seen=!!sessionStorage.getItem('vrConfetti415');sessionStorage.setItem('vrConfetti415','1')}catch(e){}
     if(!seen)setTimeout(window.vrConfetti,900);
   }
 })();

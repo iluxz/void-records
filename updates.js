@@ -1,4 +1,8 @@
 var PATCH_LOG=[
+{date:'2026-11-21',type:'fix',title:'shelf systems synced to 415',notes:[
+'the whole-shelf achievement hint now says 415 instead of 400. the confetti milestone button and one-per-session trigger moved to 415 too, with a fresh session key so it fires again for the new shelf.',
+'service worker cache bumped to vr-shell-v21 so every browser picks up the corrected achievement, player and shelf files.'
+]},
 {date:'2026-11-21',type:'music pack',title:'music pack 7: fifteen more records',notes:[
 '15 new records - 400 to 415. veeronica typebeat, android in the bios, toxic gossip train, jump in the caac, dont come back thriller man, gurkey turkey, rambunctious emote lyrics, trendhopper vee skating theme, hey its me obesity, teapot palace guitar, die of death settings theme, three split emote variants (including the alt) and cry for me.',
 'all 720p webm with video backgrounds. multiple forsaken emote cuts, one very cursed turkey video and one ironmouse song.'
