@@ -1,4 +1,9 @@
 var PATCH_LOG=[
+{date:'2026-11-21',type:'music pack',title:'one record, cut to the chase',notes:[
+'new: grim fandango rap (dan bull, critical hit #3) - 417 to 418.',
+'trimmed the source file itself: everything before 1:08 and after 4:38 is gone, so the record starts right where the good part does. no seek trick, the actual audio/video is cut.',
+'720p h264 + aac, 210 seconds exactly. the video background comes along for the ride.'
+]},
 {date:'2026-11-21',type:'feature',title:'the gear panel grows up',notes:[
 'bass and treble shelves sit between the pitch shifter and the tone filter - real low/high boost and cut, ±12 db.',
 'space adds a generated-impulse reverb with a wet/dry knob and tight / room / void decay sizes. no file, no network, just noise with an exponential tail.',

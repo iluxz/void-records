@@ -659,7 +659,7 @@ var tutActive=false,tutI=0,tutTimer=null;
 
 var tutSteps=[
   {center:true,btn:'start',title:'void records',
-   text:'417 records, one deck. quick tour - ten clicks, then you are free. you can replay it any time from the footer.'},
+   text:'418 records, one deck. quick tour - ten clicks, then you are free. you can replay it any time from the footer.'},
   {el:'#list li',title:'the shelf',
    text:'every record in the collection. click one and it loads straight onto the deck. the amber row is what is spinning.'},
   {el:'#turntable',title:'the deck',
@@ -1427,9 +1427,9 @@ if('serviceWorker'in navigator&&/^https?:$/.test(location.protocol)){
   window.addEventListener('resize',function(){if(raf)size()});
   var btn=document.getElementById('btnConfetti');
   if(btn)btn.addEventListener('click',window.vrConfetti);
-  if(typeof TRACKS!=='undefined'&&TRACKS.length>=417){
+  if(typeof TRACKS!=='undefined'&&TRACKS.length>=418){
     var seen=false;
-    try{seen=!!sessionStorage.getItem('vrConfetti417');sessionStorage.setItem('vrConfetti417','1')}catch(e){}
+    try{seen=!!sessionStorage.getItem('vrConfetti418');sessionStorage.setItem('vrConfetti418','1')}catch(e){}
     if(!seen)setTimeout(window.vrConfetti,900);
   }
 })();
