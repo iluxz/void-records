@@ -98,7 +98,15 @@ var PATCH_LOG=[
 'full geometry dash soundtrack: stereo madness through dash, all 23 levels in order.',
 'meme singles: baldi whistle funk, it\'s me it\'s stupidity, the full verity meme remix, spooky scary skeletons, hit the road dude, world\'s smallest violin and peppa pig.',
 'every track is searchable by alias, so "gd", "geometry dash" and "meme remix" all find their sections.',
+'new tracks are full webm video, so turning on video backgrounds in the knobs plays them behind the shelf.',
+'video backgrounds also take mp4 now, not just webm.',
 'also fixed the stale 114 track count in the tutorial and the all-tracks achievement.'
+]},
+{date:'2026-11-21',type:'music pack',title:'music pack 3: twelve more videos from the meme shelf',notes:[
+'twelve new records on the shelf - 231 to 243.','full video webm again, so they play behind the shelf when video backgrounds are on.','a mix of ytpmv mashups, slowed edits and song parodies: looping the circus, sad caseoh, it\'s like i\'m not even here, unhappy, sussy baka noot noot, oh ryan, do me a favor, bang bang bang, huss funk, whole server against you, too late already died, and the ubuntu parody.','search "m3" or "meme remix" to find the whole pack.'
+]},
+{date:'2026-11-21',type:'music pack',title:'music pack 3.5: the other whole-server cuts',notes:[
+'five more records - 243 to 248.','the unalt and old cuts of the whole-server song, plus CÓSMICO ultra slowed, no signal (jersey club mix) and with friends (extended).','all full video webm again, so they work with video backgrounds.','search "m3.5" or "m35" for just this batch, or "m3" for the whole 3.x family.'
 ]}
 ];
 var TYPE_COLOR={'patch':'#78b4ff','feature':'#64ffa0','update':'#c878ff','music pack':'#ffb43a'};

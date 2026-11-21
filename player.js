@@ -111,7 +111,7 @@ function loadTrack(i,autoplay){
       if(gen!==loadGen)return;
       if(curBlobUrl){try{URL.revokeObjectURL(curBlobUrl)}catch(e){}}
       var ext=(tr.f.split('.').pop()||'').toLowerCase();
-      var mime=ext==='mp3'?'audio/mpeg':ext==='wav'?'audio/wav':ext==='ogg'?'audio/ogg':ext==='webm'?'audio/webm':'';
+      var mime=ext==='mp3'?'audio/mpeg':ext==='wav'?'audio/wav':ext==='ogg'?'audio/ogg':ext==='webm'?'video/webm':ext==='mp4'?'video/mp4':'';
       curBlobUrl=URL.createObjectURL(mime?new Blob([b],{type:mime}):b);
       audio.src=curBlobUrl;
       vrVideoBgSet(tr,curBlobUrl);
@@ -437,7 +437,7 @@ if(setVideoBgEl)setVideoBgEl.addEventListener('change',function(){
 function vrVideoBgSet(tr, src){
   var vid=document.getElementById('bgVideo');
   if(!vid||!tr)return;
-  var on=!!ST.videoBg && /\.webm$/i.test(tr.f);
+  var on=!!ST.videoBg && /\.(webm|mp4)$/i.test(tr.f);
   if(!on){try{vid.pause()}catch(e){};vid.classList.remove('on');vid.hidden=true;try{vid.removeAttribute('src');vid.load()}catch(e){};return}
   vid.hidden=false;
   if(src)vid.src=src;
@@ -519,7 +519,7 @@ var tutActive=false,tutI=0,tutTimer=null;
 
 var tutSteps=[
   {center:true,btn:'start',title:'void records',
-   text:'231 records, one deck. quick tour - ten clicks, then you are free. you can replay it any time from the footer.'},
+   text:'248 records, one deck. quick tour - ten clicks, then you are free. you can replay it any time from the footer.'},
   {el:'#list li',title:'the shelf',
    text:'every record in the collection. click one and it loads straight onto the deck. the amber row is what is spinning.'},
   {el:'#turntable',title:'the deck',
