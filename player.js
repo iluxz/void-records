@@ -32,6 +32,20 @@ try{vrLast=JSON.parse(localStorage.getItem('vr_last')||'{}')||{}}catch(e){}
 try{ST=JSON.parse(localStorage.getItem('vr_settings')||'{}')||{}}catch(e){}
 function saveSetting(k,v){ST[k]=v;try{localStorage.setItem('vr_settings',JSON.stringify(ST))}catch(e){}}
 
+// clean-listen ledger: a record only counts when it runs start to finish at
+// normal speed with no seeking/skipping and the tab in focus the whole time.
+var vrClean={},cleanRun=false,cleanFile='',cleanDead=false,cleanStarted=false;
+try{vrClean=JSON.parse(localStorage.getItem('vr_clean')||'{}')||{}}catch(e){}
+function cleanSave(){try{localStorage.setItem('vr_clean',JSON.stringify(vrClean))}catch(e){}}
+function cleanBreak(){if(cleanRun||cleanFile){cleanRun=false;cleanDead=true}}
+function cleanFocused(){try{return document.visibilityState==='visible'&&document.hasFocus()}catch(e){return true}}
+function cleanMark(){
+  if(!cleanRun||!cleanFile)return;
+  vrClean[cleanFile]=true;cleanSave();
+  cleanRun=false;cleanFile='';
+  if(typeof vrAch==='function')vrAchScan();
+}
+
 var listEl=document.getElementById('list');
 var nowTitle=document.getElementById('nowTitle');
 var nowMeta=document.getElementById('nowMeta');
@@ -80,6 +94,7 @@ function havexyEgg(f){
 function loadTrack(i,autoplay){
   if(i<0||i>=TRACKS.length)return;
   pos=i;
+  cleanRun=false;cleanDead=false;cleanStarted=false;cleanFile=TRACKS[i].f;
   var tr=TRACKS[i];
   havexyEgg(tr.f);
   if(typeof skelMaybe==='function')skelMaybe();
@@ -184,7 +199,7 @@ function nextTrack(){
 function prevTrack(){
   if(window.vrSfx)vrSfx('prev');
   if(pos<0)return loadTrack(0,true);
-  if(audio.currentTime>3){audio.currentTime=0;return}
+  if(audio.currentTime>3){cleanBreak();audio.currentTime=0;return}
   var at=order.indexOf(pos);
   loadTrack(at>0?order[at-1]:order[order.length-1],true);
 }
@@ -200,6 +215,7 @@ btnShuffle.addEventListener('click',function(){
   if(shuffle&&typeof vrAch==='function')vrAch('shuffle_on');
 });
 btnLoop.addEventListener('click',function(){
+  cleanBreak();
   if(window.vrSfx)vrSfx('loop');
   loopOne=!loopOne;
   btnLoop.classList.toggle('on',loopOne);
@@ -216,6 +232,7 @@ document.getElementById('vol').addEventListener('change',function(){
   if(this.value>=100&&!volRedlineFired&&typeof vrAch==='function'){volRedlineFired=true;vrAch('redline');}
 });
 seek.addEventListener('input',function(){
+  cleanBreak();
   if(audio.duration){
     audio.currentTime=(this.value/1000)*audio.duration;
     bgVideoSync(true);
@@ -229,13 +246,26 @@ audio.addEventListener('play',function(){
   bgVideoSync(true);
 });
 audio.addEventListener('pause',function(){setPlayingUI(false);if(window.setCrackleLevel)setCrackleLevel(0);bgVideoSync()});
-audio.addEventListener('ended',function(){if(!loopOne)nextTrack()});
+audio.addEventListener('ended',function(){cleanMark();if(!loopOne)nextTrack()});
+// a clean listen can only begin from the top of a freshly loaded record, at 1x,
+// with the tab actually in front. anything that breaks that state is permanent.
+audio.addEventListener('playing',function(){
+  if(cleanStarted)return; // buffering resume, not a fresh start
+  cleanStarted=true;
+  if(cleanDead||!cleanFile||loopOne||audio.playbackRate!==1||!cleanFocused()){cleanRun=false;return}
+  cleanRun=true;
+});
+audio.addEventListener('seeking',function(){if(cleanStarted)cleanBreak()});
+audio.addEventListener('ratechange',function(){if(audio.playbackRate!==1)cleanBreak()});
+document.addEventListener('visibilitychange',function(){if(cleanRun&&!cleanFocused())cleanBreak()});
+window.addEventListener('blur',function(){if(cleanRun)cleanBreak()});
 audio.addEventListener('timeupdate',function(){
   tCur.textContent=fmt(audio.currentTime);
   if(audio.duration){
     tDur.textContent=fmt(audio.duration);
     seek.value=Math.round((audio.currentTime/audio.duration)*1000);
   }
+  if(cleanRun&&(audio.playbackRate!==1||!cleanFocused()))cleanBreak();
   bgVideoSync();
   lyTick();
 });
@@ -373,6 +403,7 @@ document.addEventListener('drop',function(e){
   var f=e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files[0];
   if(!f)return;
   if(!/^audio\//.test(f.type)&&!/\.(mp3|wav|ogg|webm|m4a|mp4)$/i.test(f.name))return;
+  cleanBreak();cleanFile='';
   pos=-1;
   markPlaying();
   audio.src=URL.createObjectURL(f);
@@ -400,6 +431,7 @@ document.getElementById('btnSet').addEventListener('click',function(){
 });
 var overdriveFired=false;
 document.getElementById('setSpeed').addEventListener('input',function(){
+  cleanBreak();
   var v=parseFloat(this.value);
   audio.playbackRate=v;
   document.getElementById('setSpeedV').textContent=v.toFixed(2)+'\u00d7';
@@ -1242,6 +1274,7 @@ function infoRender(pos){
     ['aliases',tr.a.length?tr.a.join(', '):'-',null],
     ['shelf',String(pos+1)+' of '+TRACKS.length,null],
     ['plays',String(vrPlays[tr.f]||0),null],
+    ['clean listen',vrClean[tr.f]?'done':'not yet',null],
     ['last played',last,null],
     ['favorite',vrFavs.indexOf(tr.f)>=0?'starred on your shelf':'not starred',null],
     ['deep link',link,link]
@@ -1304,6 +1337,7 @@ function statsRender(){
   block('listening stats');
   infoRow('total spins',String(total));
   infoRow('tracks spun',touched+' of '+TRACKS.length);
+  infoRow('clean listens',vrCleanCount()+' of '+TRACKS.length);
   infoRow('favorites',String(vrFavs.length));
   infoRow('top track',spun.length?spun[0].n+' \u00d7'+spun[0].c:'-');
   block('most spun');

@@ -1,4 +1,9 @@
 var PATCH_LOG=[
+{date:'2026-11-21',type:'achievement',title:'the long way round',notes:[
+'new achievement: hear all 418 records start to finish with no skipping, no seeking, playback at 1x, and your face on the tab the entire time.',
+'each song keeps its own clean-listen flag in vr_clean. touch the seek bar, change speed, toggle loop, switch tabs or lose window focus and that run is dead - reload the record to try again. pausing is allowed.',
+'clean listens show up in stats and in each record\'s info tab so you can see how far along you are.'
+]},
 {date:'2026-11-21',type:'music pack',title:'one record, cut to the chase',notes:[
 'new: grim fandango rap (dan bull, critical hit #3) - 417 to 418.',
 'trimmed the source file itself: everything before 1:08 and after 4:38 is gone, so the record starts right where the good part does. no seek trick, the actual audio/video is cut.',
