@@ -617,7 +617,23 @@ if(qTrack){
   var qq=qTrack.toLowerCase().replace(/[^a-z0-9]/g,'');
   for(var qi=0;qi<TRACKS.length;qi++){
     var hay=(TRACKS[qi].n+' '+TRACKS[qi].a.join(' ')+' '+TRACKS[qi].f).toLowerCase().replace(/[^a-z0-9]/g,'');
-    if(qq&&hay.indexOf(qq)>=0){loadTrack(qi,false);if(typeof vrAch==='function')vrAch('deep_link');break}
+    if(qq&&hay.indexOf(qq)>=0){
+      loadTrack(qi,true);
+      if(typeof vrAch==='function')vrAch('deep_link');
+      // fresh tabs can block autoplay - resume on the first gesture if it did not start
+      setTimeout(function(){
+        if(!audio.paused)return;
+        var arm=function(){
+          if(!audio.paused||!audio.src)return;
+          tryPlay();
+          window.removeEventListener('pointerdown',arm,true);
+          window.removeEventListener('keydown',arm,true);
+        };
+        window.addEventListener('pointerdown',arm,true);
+        window.addEventListener('keydown',arm,true);
+      },700);
+      break;
+    }
   }
 }
 
