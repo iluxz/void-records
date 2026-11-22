@@ -208,8 +208,8 @@
     var lavg=0;
     for(i=0;i<levelHist.length;i++)lavg+=levelHist[i];
     lavg/=(levelHist.length||1);
-    var loudThreshold=Math.min(.76,Math.max(.62,lavg*.90));
-    var loud=s.energy>loudThreshold || (s.energy>.30 && s.energy>lavg*1.18);
+    var loudThreshold=Math.min(.80,Math.max(.70,lavg*.92));
+    var loud=s.energy>loudThreshold || (levelHist.length>20 && lavg>.08 && s.energy>.42 && s.energy>lavg*1.30);
     if(loud){
       if(!loudSince)loudSince=now;
       quietSince=0;
@@ -218,19 +218,19 @@
       loudSince=0;
     }
     s.loudFor=loudSince?(now-loudSince)/1000:0;
-    if(!s.rainbow&&s.loudFor>=.12){
+    if(!s.rainbow&&s.loudFor>=.15){
       s.rainbow=true;
       document.body.classList.add('ve-rainbow');
       VE.emit('rainbow',{on:true,energy:s.energy,loudFor:s.loudFor});
-    }else if(s.rainbow&&quietSince&&now-quietSince>=700){
+    }else if(s.rainbow&&quietSince&&now-quietSince>=750){
       s.rainbow=false;
       document.body.classList.remove('ve-rainbow');
       VE.emit('rainbow',{on:false,energy:s.energy});
     }
-    var intensity=Math.max(0,Math.min(1,(s.energy-.40)/.45));
+    var intensity=Math.max(0,Math.min(1,(s.energy-.45)/.45));
     var overTarget=loud?intensity:0;
     s.overdrive=smooth(s.overdrive,overTarget,dt,loud?.35:.55);
-    var rainbowTarget=s.rainbow?Math.max(.40,intensity):0;
+    var rainbowTarget=s.rainbow?Math.max(.45,intensity):0;
     s.rainbowLevel=smooth(s.rainbowLevel,rainbowTarget,dt,s.rainbow?.12:.55);
     if(s.rainbowLevel>.01)rainbowHue=(rainbowHue+dt*(90+s.energy*300))%360;
     s.rainbowHue=rainbowHue;
