@@ -1,4 +1,8 @@
 var PATCH_LOG=[
+{date:'2026-11-21',type:'music pack',title:'music pack 11: men - calm mode on',notes:[
+'one new record - 432. "men - calm mode on" from men, a friend of lux. 720p av1 webm with opus audio and a video background.',
+'search "men", "m11", "pack 11" or "music pack 11" to find it.'
+]},
 {date:'2026-11-21',type:'music pack',title:'music pack 10: thirteen more records',notes:[
 '13 new records - 419 to 431. anonymous hacking music, gotham chess edit, bad piggies x everything, dont need you, both join us for a bite cuts plus the purple-murdered versions, proud to be expendable, kwik flip, chronoshift (regretevator edition), the whole-server song, and cant killean the zilean (the real one - the original chronoshift is built from).',
 'eleven are 720p webm with video backgrounds, two came down as mp4 and are stored as proper .mp4. search "m10", "pack 10" or "music pack 10" for the whole batch.',
@@ -15,7 +19,7 @@ var PATCH_LOG=[
 {date:'2026-11-21',type:'feature',title:'the local server bridge',notes:[
 'new opt-in switch in the gear panel: point the deck at a local void records server and stream records from it instead of straight off disk. off by default, everything still works with zero network.',
 'when linked, clean listens, achievements, settings and favourites are pushed to the server and merged back on load - local progress is never erased. any other project using the server sees the same list.',
-'lyrics stay offline-only. the server reads a prebuilt dump file and never makes a live LRCLIB call.'
+'lyrics stay offline-only. the server reads a prebuilt lyric file and never makes a live LRCLIB call.'
 ]},
 {date:'2026-11-21',type:'achievement',title:'the right way',notes:[
 'new achievement: hear all 418 records start to finish with no skipping, no seeking, playback at 1x, and your face on the tab the entire time.',
