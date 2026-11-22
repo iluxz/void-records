@@ -480,7 +480,7 @@ document.addEventListener('keydown',function(e){
 });
 
 // --- external sources -------------------------------------------------------
-// dropped files and pasted youtube links live outside the 418-track shelf, so
+// dropped files and pasted youtube links live outside the shelf, so
 // they can never count toward "the right way". blob urls get revoked on replace.
 var externalMode=false,externalVideoSrc=null,localQueue=[],externalBlob=null;
 function showSrcMsg(text,kind){
@@ -909,7 +909,7 @@ var tutActive=false,tutI=0,tutTimer=null;
 
 var tutSteps=[
   {center:true,btn:'start',title:'void records',
-   text:'418 records, one deck. quick tour - ten clicks, then you are free. you can replay it any time from the footer.'},
+   text:'431 records, one deck. quick tour - ten clicks, then you are free. you can replay it any time from the footer.'},
   {el:'#list li',title:'the shelf',
    text:'every record in the collection. click one and it loads straight onto the deck. the amber row is what is spinning.'},
   {el:'#turntable',title:'the deck',
@@ -1679,9 +1679,9 @@ if('serviceWorker'in navigator&&/^https?:$/.test(location.protocol)){
   window.addEventListener('resize',function(){if(raf)size()});
   var btn=document.getElementById('btnConfetti');
   if(btn)btn.addEventListener('click',window.vrConfetti);
-  if(typeof TRACKS!=='undefined'&&TRACKS.length>=418){
+  if(typeof TRACKS!=='undefined'&&TRACKS.length>=431){
     var seen=false;
-    try{seen=!!sessionStorage.getItem('vrConfetti418');sessionStorage.setItem('vrConfetti418','1')}catch(e){}
+    try{seen=!!sessionStorage.getItem('vrConfetti431');sessionStorage.setItem('vrConfetti431','1')}catch(e){}
     if(!seen)setTimeout(window.vrConfetti,900);
   }
 })();

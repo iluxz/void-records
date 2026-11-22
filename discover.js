@@ -132,7 +132,7 @@ function discScan(){
     DISC.source=raw;
     DISC.scanned=j.items;
     discSave();discRender();
-    discMsg('found '+j.count+' candidates - metadata only, nothing joined the 418','ok');
+    discMsg('found '+j.count+' candidates - metadata only, nothing joined the shelf','ok');
   }).catch(function(err){
     if(btn)btn.disabled=false;
     if(gen!==discGen)return;

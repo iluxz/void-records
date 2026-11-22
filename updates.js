@@ -1,18 +1,15 @@
 var PATCH_LOG=[
-{date:'2026-11-21',type:'feature',title:'the discovery queue',notes:[
-'new discover button in the footer. scan a youtube playlist, a ytsearch: query, or a single video link and get a metadata-only list of candidates - titles, channels, durations. no audio is downloaded, nothing joins the shelf.',
-'preview anything right from the list. keep the ones you like and they collect in a separate kept pool that never touches the 418 and never counts toward the right way.',
-'spotify and apple music playlists get a plain answer: no direct extractor, use a youtube playlist or a ytsearch: query instead.'
-]},
-{date:'2026-11-21',type:'feature',title:'sandbox radio',notes:[
-'new radio switch in the footer. it shuffles your kept pool (or the last scan if you kept nothing), resolves each record on demand and plays forever. video bg follows along when the source has one.',
-'this is deliberately non-canon: infinite playback, zero achievements, zero vr_clean, zero shelf stats. failed streams get skipped and the station retunes itself instead of dying.',
-'both features reuse the opt-in local server. turn the server switch on in settings first; from an https page you need an https tunnel url.'
+{date:'2026-11-21',type:'music pack',title:'music pack 10: thirteen more records',notes:[
+'13 new records - 419 to 431. anonymous hacking music, gotham chess edit, bad piggies x everything, dont need you, both join us for a bite cuts plus the purple-murdered versions, proud to be expendable, kwik flip, chronoshift (regretevator edition), the whole-server song, and cant killean the zilean (the real one - the original chronoshift is built from).',
+'eleven are 720p webm with video backgrounds, two came down as mp4 and are stored as proper .mp4. search "m10", "pack 10" or "music pack 10" for the whole batch.',
+'this pack also carries the discovery queue: new discover button scans youtube playlists, ytsearch: queries and single video links as metadata only, with preview and a separate kept pool that never joins the shelf.',
+'and sandbox radio: new switch shuffles the kept pool, resolves each record on demand and plays forever. non-canon on purpose - no achievements, no vr_clean, no shelf stats. spotify and apple links get a plain error instead of a fake result.',
+'both extras reuse the opt-in local server. turn it on in settings first; from an https page you need an https tunnel url.'
 ]},
 {date:'2026-11-21',type:'feature',title:'outside the shelf',notes:[
 'drop files anywhere on the deck: mp3, wav, ogg, m4a, webm and mp4 all load now. drop a bunch and they queue up and play through in order. video files turn the 92% video bg on automatically.',
 'new source box under the deck: paste a youtube link and the local void records server resolves it to a playable stream, with the video bg synced to the audio clock. short youtu.be and shorts links work too, and you can drag a link straight onto the turntable.',
-'if a link is not a youtube url, the server is off, or the stream fails or expires, you get a plain-English error instead of a silent dead player. anything loaded this way stays outside the 418 and can never count toward the right way.'
+'if a link is not a youtube url, the server is off, or the stream fails or expires, you get a plain-English error instead of a silent dead player. anything loaded this way stays outside the shelf and can never count toward the right way.'
 ]},
 {date:'2026-11-21',type:'feature',title:'the local server bridge',notes:[
 'new opt-in switch in the gear panel: point the deck at a local void records server and stream records from it instead of straight off disk. off by default, everything still works with zero network.',
