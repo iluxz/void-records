@@ -24,9 +24,74 @@
   var hud=null,raf=0,last=0,applyAcc=0,prev=null,lastBeat=0,beatPulse=0;
   var energyHist=[],levelHist=[],intervals=[],silenced=false;
   var loudSince=0,quietSince=0,rainbowHue=0,ringEl=null,lastSrc='';
+  var eCtx=null,eAnalyser=null,eData=null,eSrc=null,eAudio=null,eSrcUrl='',eWantPlay=false;
 
-  function spectrum(){return typeof window.vrSpectrum==='function'?window.vrSpectrum():null}
   function pitchRatio(){return typeof window.vrPitchRatio==='function'?window.vrPitchRatio():1}
+
+  function ensureEngineAudio(){
+    if(eAudio)return eAudio;
+    eAudio=new Audio();
+    eAudio.preload='auto';
+    eAudio.crossOrigin='anonymous';
+    eAudio.volume=1;
+    eAudio.muted=false;
+    eAudio.style.display='none';
+    document.body.appendChild(eAudio);
+    return eAudio;
+  }
+  function ensureEngineAnalyser(){
+    if(eAnalyser)return eAnalyser;
+    try{
+      var Ctx=window.AudioContext||window.webkitAudioContext;
+      if(!Ctx)return null;
+      eCtx=eCtx||new Ctx();
+      var el=ensureEngineAudio();
+      eSrc=eSrc||eCtx.createMediaElementSource(el);
+      eAnalyser=eCtx.createAnalyser();
+      eAnalyser.fftSize=256;
+      eAnalyser.smoothingTimeConstant=.82;
+      eData=new Uint8Array(eAnalyser.frequencyBinCount);
+      eSrc.connect(eAnalyser);
+      // analyser only; no destination so engine hears at max volume without audible output
+    }catch(e){eAnalyser=null}
+    return eAnalyser;
+  }
+  function syncEngineAudio(){
+    var main=window.audioEl||null;
+    var el=ensureEngineAudio();
+    if(!main)return;
+    var src=main.currentSrc||main.src||'';
+    if(src && src!==eSrcUrl){
+      eSrcUrl=src;
+      try{el.pause()}catch(e){}
+      el.src=src;
+      try{el.load()}catch(e){}
+      el.volume=1; el.muted=false;
+    }
+    var rate=main.playbackRate||1;
+    if(el.playbackRate!==rate)try{el.playbackRate=rate}catch(e){}
+    if(main.paused||!src){
+      eWantPlay=false;
+      if(!el.paused)try{el.pause()}catch(e){}
+      return;
+    }
+    eWantPlay=true;
+    if(eCtx&&eCtx.state==='suspended')eCtx.resume().catch(function(){});
+    ensureEngineAnalyser();
+    if(isFinite(main.currentTime)&&isFinite(el.currentTime)&&Math.abs(el.currentTime-main.currentTime)>0.35){
+      try{el.currentTime=main.currentTime}catch(e){}
+    }
+    if(el.paused){
+      var p=el.play();
+      if(p&&p.catch)p.catch(function(){});
+    }
+  }
+  function engineSpectrum(){
+    if(!ensureEngineAnalyser()||!eData)return null;
+    syncEngineAudio();
+    eAnalyser.getByteFrequencyData(eData);
+    return eData;
+  }
 
   function reset(){
     VE.state.bass=VE.state.mid=VE.state.high=VE.state.energy=0;
@@ -162,13 +227,13 @@
     if(document.hidden)return;
 
     var a=window.audioEl||null;
-    var d=spectrum();
     var s=VE.state;
     var src=a?(a.currentSrc||a.src):'';
     if(src&&src!==lastSrc){lastSrc=src;reset();silenced=false;energyHist=[];levelHist=[];intervals=[];prev=null}
     s.playing=!!(a&&!a.paused&&!a.ended);
     s.rate=a?(a.playbackRate||1):1;
     s.pitch=pitchRatio();
+    var d=VE.enabled?engineSpectrum():null;
 
     if(!VE.enabled||!d||!s.playing){
       if(VE.enabled&&!s.playing&&silenced===false){reset();silenced=true}
