@@ -49,6 +49,11 @@ var PATCH_LOG=[
   "59 new records from men, a friend of lux, pulled from all 7 of his playlists. names always start with \"men - \" and every record carries the men alias.",
   "attachment, inadequate pursuit, the ### ## ###### OSTs, buttersaken, tgwyktgotr, midnight pizza delivery, MFGR and calm mode on.",
   "shelf is now 490. search \"men\", \"m11\", \"pack 11\" or \"music pack 11\" for the whole set."
+]},
+{date:"2026-11-21",type:"music pack",title:"music pack 12: the havexy video era",notes:[
+  "all 23 havexy audio-only records were replaced by their official music videos - gypsy verity, folk valley, both hyperbaiters and every disstrack now has a real video background.",
+  "eight new records joined the shelf: master baiter, big d randy, gooners, tom pearl, roblox ceo, chainsfr, keys commenters and corn bot.",
+  "ui panels went translucent again so the video reads through while it stays behind the text. shelf is now 498 - search \"m12\", \"pack 12\" or \"music pack 12\"."
 ]}
 ];
 var TYPE_COLOR={'patch':'#78b4ff','feature':'#64ffa0','update':'#c878ff','music pack':'#ffb43a'};

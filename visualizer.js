@@ -1,5 +1,13 @@
 window.audioEl=null;
-var audioCtx=null,analyser=null,freqData=null;
+var audioCtx=null,analyser=null,freqData=null,volumeGain=null,silentTap=null;
+var playbackVolume=1;
+// user volume lives after the analyser, so the engine always hears the track
+// at its default level regardless of the slider, mute, fades or DSP settings.
+window.setPlaybackVolume=function(v){
+  playbackVolume=Math.max(0,Math.min(1,parseFloat(v)||0));
+  try{if(volumeGain)volumeGain.gain.value=playbackVolume}catch(e){}
+};
+window.getPlaybackVolume=function(){return playbackVolume};
 
 function initVisualizer(el){
   if(audioCtx)return;
@@ -11,6 +19,15 @@ function initVisualizer(el){
     analyser=audioCtx.createAnalyser();
     analyser.fftSize=256;
     analyser.smoothingTimeConstant=.82;
+    // analyser taps the raw source: no eq, tone, reverb, pitch or volume.
+    // the silent sink keeps the tap processing without duplicating audio.
+    silentTap=audioCtx.createGain();
+    silentTap.gain.value=0.000001;
+    src.connect(analyser);
+    analyser.connect(silentTap);
+    silentTap.connect(audioCtx.destination);
+    volumeGain=audioCtx.createGain();
+    volumeGain.gain.value=playbackVolume;
 
     // filters are built before the DSP so the chain exists even if the shifter fails
     bassFilter=audioCtx.createBiquadFilter();
@@ -44,11 +61,11 @@ function initVisualizer(el){
     bassFilter.connect(trebleFilter);
     trebleFilter.connect(toneFilter);
     toneFilter.connect(dryGain);
-    dryGain.connect(analyser);
+    dryGain.connect(volumeGain);
     toneFilter.connect(convolver);
     convolver.connect(wetGain);
-    wetGain.connect(analyser);
-    analyser.connect(audioCtx.destination);
+    wetGain.connect(volumeGain);
+    volumeGain.connect(audioCtx.destination);
     freqData=new Uint8Array(analyser.frequencyBinCount);
     makeCrackle();
     console.log('VR audio graph ready', audioCtx.state, 'tone', toneHz);
@@ -208,7 +225,8 @@ function makeCrackle(){
     var hp=audioCtx.createBiquadFilter();hp.type='highpass';hp.frequency.value=180;
     var lp=audioCtx.createBiquadFilter();lp.type='lowpass';lp.frequency.value=6800;
     crackleGain=audioCtx.createGain();crackleGain.gain.value=0;
-    s.connect(hp);hp.connect(lp);lp.connect(crackleGain);crackleGain.connect(audioCtx.destination);
+    s.connect(hp);hp.connect(lp);lp.connect(crackleGain);
+    crackleGain.connect(volumeGain||audioCtx.destination);
     s.start(0);
   }catch(e){}
 }
@@ -228,6 +246,10 @@ function audioBands(){
   for(var i=40;i<64;i++)h+=freqData[i];h/=24*255;
   return{bass:b,mid:m,high:h};
 }
+// shared taps for the void engine - reuses this analyser, never makes a second one
+window.vrSpectrum=function(){return analyser&&freqData?freqData:null};
+window.vrAudioCtx=function(){return audioCtx};
+window.vrPitchRatio=function(){return pitchRatio};
 
 var barsCv=document.getElementById('bars');
 var barsCtx=barsCv.getContext('2d');

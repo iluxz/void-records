@@ -15,13 +15,21 @@ var curBlobUrl=null;
 var loadGen=0;
 var durCache={};
 var volBase=.7,fadeInt=null,fadeInNext=false;
+// the element stays at 1 once the web audio graph exists; volume is a gain
+// node after the analyser so the engine always hears the track's own level.
+function setVol(v){
+  v=Math.max(0,Math.min(1,v));
+  if(typeof setPlaybackVolume==='function')setPlaybackVolume(v);else audio.volume=v;
+}
+function getVol(){return typeof getPlaybackVolume==='function'?getPlaybackVolume():audio.volume}
+if(audioCtx){audio.volume=1;setVol(volBase)}
 function fadeVol(to,dur,done){
   if(fadeInt){clearInterval(fadeInt);fadeInt=null}
-  var from=audio.volume,steps=Math.max(2,Math.round(dur/30)),n=0;
-  if(Math.abs(from-to)<.001){audio.volume=to;if(done)done();return}
+  var from=getVol(),steps=Math.max(2,Math.round(dur/30)),n=0;
+  if(Math.abs(from-to)<.001){setVol(to);if(done)done();return}
   fadeInt=setInterval(function(){
     n++;
-    audio.volume=Math.max(0,Math.min(1,from+(to-from)*(n/steps)));
+    setVol(Math.max(0,Math.min(1,from+(to-from)*(n/steps))));
     if(n>=steps){clearInterval(fadeInt);fadeInt=null;if(done)done()}
   },30);
 }
@@ -146,7 +154,7 @@ var hxTimer=null;
 function havexyEgg(f){
   var el=document.getElementById('havexyEgg');
   if(!el)return;
-  if(!/^hv-|^havexy-/.test(f))return;
+  if(!/^hv-|^havexy-|^m12-/.test(f))return;
   el.hidden=false;
   el.classList.remove('pop');
   void el.offsetWidth;
@@ -166,7 +174,7 @@ function loadTrack(i,autoplay){
   if(typeof skelMaybe==='function')skelMaybe();
   fadeInNext=true;
   if(!audio.paused)fadeVol(0,450);
-  else audio.volume=0;
+  else setVol(0);
   try{
     vrPlays[tr.f]=(vrPlays[tr.f]||0)+1;
     vrLast[tr.f]=Date.now();
@@ -305,7 +313,7 @@ btnLoop.addEventListener('click',function(){
 var volRedlineFired=false;
 document.getElementById('vol').addEventListener('input',function(){
   volBase=this.value/100;
-  if(!fadeInt)audio.volume=volBase;
+  if(!fadeInt)setVol(volBase);
   saveSetting('volume',parseInt(this.value,10));
 });
 document.getElementById('vol').addEventListener('change',function(){
@@ -477,7 +485,7 @@ btnSleep.addEventListener('click',function(){
       clearInterval(sleepTimer);sleepTimer=null;
       btnSleep.textContent='\u23F1';btnSleep.classList.remove('on');
       nowMeta.textContent='sleep timer ended. goodnight.';
-      fadeVol(0,2500,function(){audio.pause();audio.volume=volBase});
+      fadeVol(0,2500,function(){audio.pause();setVol(volBase)});
     }else{btnSleep.textContent=sleepMins+'m'}
   },60000);
 });
@@ -829,7 +837,7 @@ function vrVideoBgSet(tr, src){
 }
 function vrVideoBgApply(){ if(pos>=0&&pos<TRACKS.length) vrVideoBgSet(TRACKS[pos], curBlobUrl||TRACKS[pos].f) }
 
-if(typeof ST.volume==='number'){document.getElementById('vol').value=ST.volume;volBase=ST.volume/100;audio.volume=volBase}
+if(typeof ST.volume==='number'){document.getElementById('vol').value=ST.volume;volBase=ST.volume/100;setVol(volBase)}
 if(typeof ST.speed==='number'){audio.playbackRate=ST.speed;document.getElementById('setSpeed').value=ST.speed;document.getElementById('setSpeedV').textContent=ST.speed.toFixed(2)+'\u00d7'}
 if(typeof ST.pitch==='number'){document.getElementById('setPitch').value=ST.pitch;if(window.setPitchRatio)setPitchRatio(Math.pow(2,ST.pitch/12));document.getElementById('setPitchV').textContent=(ST.pitch>0?'+':'')+ST.pitch+' st'}
 if(typeof ST.tone==='number'){document.getElementById('setToneS').value=ST.tone;if(window.setTone)setTone(ST.tone);document.getElementById('setToneV').textContent=fmtTone(ST.tone)}
@@ -925,7 +933,7 @@ var tutActive=false,tutI=0,tutTimer=null;
 
 var tutSteps=[
   {center:true,btn:'start',title:'void records',
-   text:'490 records, one deck. quick tour - ten clicks, then you are free. you can replay it any time from the footer.'},
+   text:'498 records, one deck. quick tour - ten clicks, then you are free. you can replay it any time from the footer.'},
   {el:'#list li',title:'the shelf',
    text:'every record in the collection. click one and it loads straight onto the deck. the amber row is what is spinning.'},
   {el:'#turntable',title:'the deck',
@@ -1164,7 +1172,7 @@ var LYR_PRESETS={
   }
 };
 var LYR_IDS={
-  'havexy-hyperbaiter.mp3':36014973,
+  'm12-BGSgMILPOeg.webm':36014973,
   'm3-too_late_already_died.webm':36118285,
   'm3-if_you_see_me_use_ubuntu.webm':36896646,
   'm4-5VsyzvvbXLQ.webm':37262336,
