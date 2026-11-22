@@ -511,7 +511,7 @@ function sortTracks(idxs){
   });
   return idxs;
 }
-var LYR_META={"m12-BGSgMILPOeg.webm":{"w":false,"s":false,"p":true},"m3-too_late_already_died.webm":{"w":false,"s":true,"p":true},"m3-if_you_see_me_use_ubuntu.webm":{"w":false,"s":false,"p":true},"m4-5VsyzvvbXLQ.webm":{"w":false,"s":true,"p":true},"m45-0-pbkPm8oAg.webm":{"w":true,"s":true,"p":true},"m45-0VKY7Moy4so.webm":{"w":true,"s":true,"p":true},"sinister-02.webm":{"w":true,"s":true,"p":true},"sinister-03.mp3":{"w":false,"s":true,"p":true},"m5-ri1SiiTeUis.webm":{"w":false,"s":true,"p":true},"m5-J1DAmmROUX8.webm":{"w":true,"s":true,"p":true},"m5-fHEQc0oVlZc.webm":{"w":true,"s":true,"p":true},"m7-J7Xzgcu6vVk.webm":{"w":true,"s":true,"p":true},"m7-K3xJH7DqE7c.webm":{"w":false,"s":true,"p":true},"m45-HsZQOXZbWkQ.webm":{"w":true,"s":true,"p":true},"m45--eDYT_20YhM.webm":{"w":true,"s":true,"p":true},"m45-hbuNxmAXdNk.webm":{"w":true,"s":true,"p":true},"m45-cF91xil98Mc.webm":{"w":false,"s":true,"p":true},"tally-rulerofeverything.mp3":{"w":true,"s":true,"p":true},"tally-bananaman.mp3":{"w":false,"s":true,"p":true},"m12-nebNhtYSlFw.webm":{"w":true,"s":true,"p":true},"hskunx-heyitsme.mp3":{"w":true,"s":true,"p":true}};
+var LYR_META={"m12-BGSgMILPOeg.webm":{"w":false,"s":false,"p":true},"m3-too_late_already_died.webm":{"w":false,"s":true,"p":true},"m3-if_you_see_me_use_ubuntu.webm":{"w":false,"s":false,"p":true},"m4-5VsyzvvbXLQ.webm":{"w":false,"s":true,"p":true},"m45-0-pbkPm8oAg.webm":{"w":true,"s":true,"p":true},"m45-0VKY7Moy4so.webm":{"w":true,"s":true,"p":true},"sinister-02.webm":{"w":true,"s":true,"p":true},"sinister-03.mp3":{"w":false,"s":true,"p":true},"m5-ri1SiiTeUis.webm":{"w":false,"s":true,"p":true},"m5-J1DAmmROUX8.webm":{"w":true,"s":true,"p":true},"m5-fHEQc0oVlZc.webm":{"w":true,"s":true,"p":true},"m7-J7Xzgcu6vVk.webm":{"w":true,"s":true,"p":true},"m7-K3xJH7DqE7c.webm":{"w":false,"s":true,"p":true},"m45-HsZQOXZbWkQ.webm":{"w":true,"s":true,"p":true},"m45--eDYT_20YhM.webm":{"w":true,"s":true,"p":true},"m45-hbuNxmAXdNk.webm":{"w":true,"s":true,"p":true},"m45-cF91xil98Mc.webm":{"w":false,"s":true,"p":true},"tally-rulerofeverything.mp3":{"w":true,"s":true,"p":true},"tally-bananaman.mp3":{"w":false,"s":true,"p":true},"m12-nebNhtYSlFw.webm":{"w":true,"s":true,"p":true},"hskunx-heyitsme.mp3":{"w":true,"s":true,"p":true},"sinister-04.mp3":{"w":false,"s":true,"p":true},"sinister-05.mp3":{"w":false,"s":true,"p":true},"sinister-06.mp3":{"w":false,"s":true,"p":true},"sinister-07.mp3":{"w":false,"s":true,"p":true},"sinister-08.mp3":{"w":false,"s":true,"p":true},"sinister-09.mp3":{"w":true,"s":true,"p":true},"sinister-12.mp3":{"w":false,"s":true,"p":true},"sinister-13.mp3":{"w":false,"s":true,"p":true},"sinister-14.mp3":{"w":false,"s":true,"p":true},"sinister-15.mp3":{"w":true,"s":true,"p":true},"sinister-16.mp3":{"w":false,"s":false,"p":true},"sinister-17.mp3":{"w":false,"s":true,"p":true},"random-gleeco.mp3":{"w":false,"s":true,"p":true},"hskunx-lordverity.mp3":{"w":false,"s":true,"p":true},"sinister-11.mp3":{"w":false,"s":true,"p":true}};
 function hasLyrics(f){return !!(LYR_PRESETS[f]||(LYR_META[f]&&LYR_META[f].p)||(lyCache[f]&&lyCache[f].p));}
 function hasSynced(f){return !!((LYR_META[f]&&LYR_META[f].s)||(lyCache[f]&&lyCache[f].s));}
 function hasWordSynced(f){return !!((LYR_META[f]&&LYR_META[f].w)||(lyCache[f]&&lyCache[f].w));}
@@ -1378,6 +1378,7 @@ document.getElementById('btnAch').addEventListener('click',function(){openOsWin(
 var discEl=document.getElementById('disc');
 var scratch=false,scratchWas=false,scratchLastA=0,scratchBase=0;
 function discCenter(){
+  if(!discEl||!discEl.getBoundingClientRect)return {x:0,y:0};
   var r=discEl.getBoundingClientRect();
   return {x:r.left+r.width/2,y:r.top+r.height/2};
 }
@@ -1446,6 +1447,22 @@ var LYR_IDS={
   'm45-0VKY7Moy4so.webm':28780317,
   'sinister-02.webm':17202052,
   'sinister-03.mp3':26401682,
+  'sinister-04.mp3':34123146,
+  'sinister-05.mp3':16160040,
+  'sinister-06.mp3':30109986,
+  'sinister-07.mp3':30116975,
+  'sinister-08.mp3':30116669,
+  'sinister-09.mp3':30116359,
+  'sinister-11.mp3':30262774,
+  'bang-bang-bang-chainsaw-man.webm':32488447,
+  'bang-bang-bang-lilyappa-remix.webm':39005350,
+  'sinister-12.mp3':30111875,
+  'sinister-13.mp3':30110574,
+  'sinister-14.mp3':32700570,
+  'sinister-15.mp3':27764751,
+  'sinister-16.mp3':35947637,
+  'sinister-17.mp3':24453346,
+  'random-gleeco.mp3':30117486,
   'm5-ri1SiiTeUis.webm':26401682,
   'm5-J1DAmmROUX8.webm':10479079,
   'm5-fHEQc0oVlZc.webm':22825767,
@@ -1458,6 +1475,7 @@ var LYR_IDS={
   'tally-rulerofeverything.mp3':14601874,
   'tally-bananaman.mp3':9401367,
   'hskunx-heyitsme.mp3':37357262,
+  'hskunx-lordverity.mp3':39990526,
   'm12-nebNhtYSlFw.webm':29416080
 };
 
