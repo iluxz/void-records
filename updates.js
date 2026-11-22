@@ -2,6 +2,7 @@ var PATCH_LOG=[
 {date:'2026-11-21',type:'music pack',title:'music pack 10: thirteen more records',notes:[
 '13 new records - 419 to 431. anonymous hacking music, gotham chess edit, bad piggies x everything, dont need you, both join us for a bite cuts plus the purple-murdered versions, proud to be expendable, kwik flip, chronoshift (regretevator edition), the whole-server song, and cant killean the zilean (the real one - the original chronoshift is built from).',
 'eleven are 720p webm with video backgrounds, two came down as mp4 and are stored as proper .mp4. search "m10", "pack 10" or "music pack 10" for the whole batch.',
+'catalog rows now wrap long names instead of clipping them, and only show the pack tag inline - the full alias list lives in the hover tooltip so it stops eating the song title.',
 'this pack also carries the discovery queue: new discover button scans youtube playlists, ytsearch: queries and single video links as metadata only, with preview and a separate kept pool that never joins the shelf.',
 'and sandbox radio: new switch shuffles the kept pool, resolves each record on demand and plays forever. non-canon on purpose - no achievements, no vr_clean, no shelf stats. spotify and apple links get a plain error instead of a fake result.',
 'both extras reuse the opt-in local server. turn it on in settings first; from an https page you need an https tunnel url.'

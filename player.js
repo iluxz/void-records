@@ -400,7 +400,10 @@ function buildList(filter){
       '<span class="pc"></span>'+
       '<span class="du"></span>';
     li.querySelector('.nm').textContent=tr.n;
-    li.querySelector('.al').textContent=tr.a.length?tr.a.join(' '):'';
+    // keep the row readable: pack tag inline, every alias in the hover tooltip
+    var packTag=tr.a.filter(function(a){return /^m\d+$/.test(a)})[0]||'';
+    li.querySelector('.al').textContent=packTag;
+    li.title=tr.n+(tr.a.length?'\n'+tr.a.join(' · '):'');
     var pcEl=li.querySelector('.pc');
     var pcN=vrPlays[tr.f]||0;
     if(pcN)pcEl.textContent='\u00d7'+pcN;
