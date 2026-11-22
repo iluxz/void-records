@@ -898,3 +898,10 @@ li.emptyNote:hover{background:transparent}
 @media(max-width:640px){
   #discWin{top:10px;right:10px;width:calc(100vw - 20px);height:calc(100vh - 20px)}
 }
+#ctxMenu{position:fixed;z-index:9000;min-width:220px;max-width:280px;background:var(--panel);border:1px solid var(--edge);border-radius:8px;box-shadow:0 14px 44px rgba(0,0,0,.6);padding:6px;font:12px/1.45 ui-monospace,SFMono-Regular,Consolas,monospace;color:var(--ink)}
+#ctxMenu[hidden]{display:none}
+#ctxMenu .ctxTitle{padding:5px 8px 7px;color:var(--dim);border-bottom:1px solid var(--line);margin-bottom:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#ctxMenu button{display:block;width:100%;text-align:left;background:none;border:0;color:var(--ink);font:inherit;padding:7px 8px;border-radius:5px;cursor:pointer}
+#ctxMenu button:hover,#ctxMenu button:focus{background:var(--raised);color:var(--cyan);outline:none}
+#ctxToast{position:fixed;left:50%;bottom:34px;transform:translateX(-50%);z-index:9001;background:var(--raised);border:1px solid var(--edge);color:var(--ink);padding:8px 14px;border-radius:999px;font:12px ui-monospace,SFMono-Regular,Consolas,monospace;box-shadow:0 8px 30px rgba(0,0,0,.55)}
+#ctxToast[hidden]{display:none}

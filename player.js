@@ -1773,3 +1773,59 @@ if('serviceWorker'in navigator&&/^https?:$/.test(location.protocol)){
   if(sfxBtn)sfxBtn.addEventListener('click',window.vrSfxToggle);
   paint();
 })();
+
+// ---- track row right-click menu ----
+(function(){
+  var menu=document.getElementById('ctxMenu');
+  var toast=document.getElementById('ctxToast');
+  if(!menu||!toast||!listEl)return;
+  var ctxPos=-1,toastTimer=null;
+  function hide(){menu.hidden=true;ctxPos=-1}
+  function flash(msg){
+    toast.textContent=msg;toast.hidden=false;
+    if(toastTimer)clearTimeout(toastTimer);
+    toastTimer=setTimeout(function(){toast.hidden=true},1600);
+  }
+  function copy(text,msg){
+    function fallback(){
+      var ta=document.createElement('textarea');
+      ta.value=text;ta.style.position='fixed';ta.style.opacity='0';
+      document.body.appendChild(ta);ta.select();
+      try{document.execCommand('copy');flash(msg)}catch(e){flash('copy failed')}
+      document.body.removeChild(ta);
+    }
+    if(navigator.clipboard&&navigator.clipboard.writeText)
+      navigator.clipboard.writeText(text).then(function(){flash(msg)},fallback);
+    else fallback();
+  }
+  listEl.addEventListener('contextmenu',function(e){
+    var li=e.target&&e.target.closest?e.target.closest('li[data-pos]'):null;
+    if(!li||!listEl.contains(li))return;
+    e.preventDefault();
+    var t=TRACKS[+li.dataset.pos];
+    if(!t)return;
+    ctxPos=+li.dataset.pos;
+    menu.querySelector('.ctxTitle').textContent=t.n;
+    menu.hidden=false;
+    var x=Math.min(e.clientX,window.innerWidth-menu.offsetWidth-8);
+    var y=Math.min(e.clientY,window.innerHeight-menu.offsetHeight-8);
+    menu.style.left=Math.max(6,x)+'px';
+    menu.style.top=Math.max(6,y)+'px';
+  });
+  menu.addEventListener('click',function(e){
+    var b=e.target&&e.target.closest?e.target.closest('button[data-act]'):null;
+    if(!b||ctxPos<0)return;
+    var t=TRACKS[ctxPos];hide();
+    if(!t)return;
+    var link=location.origin+location.pathname+'?track='+encodeURIComponent(t.n);
+    if(b.dataset.act==='link')copy(link,'deep link copied');
+    else if(b.dataset.act==='file')copy(t.f,'file name copied');
+    else if(b.dataset.act==='open')window.open(link,'_blank','noopener');
+  });
+  document.addEventListener('pointerdown',function(e){
+    if(!menu.hidden&&!menu.contains(e.target))hide();
+  },true);
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')hide()});
+  window.addEventListener('scroll',hide,true);
+  window.addEventListener('resize',hide);
+})();
