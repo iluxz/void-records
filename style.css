@@ -124,7 +124,18 @@ section{
   font-size:10px;letter-spacing:2px;text-transform:uppercase;
   color:var(--amber);
 }
-.paneHint{font-size:9px;letter-spacing:1px;color:var(--dim)}
+.paneHint{font-size:9px;letter-spacing:1px;color:var(--dim);margin-right:auto}
+.paneBtns{display:flex;gap:6px}
+.paneBtn{font:inherit;font-size:10px;background:#1a1430;border:1px solid #3b2f5e;color:var(--dim);padding:3px 8px;border-radius:4px;cursor:pointer}
+.paneBtn:hover,.paneBtn.on{border-color:var(--cyan);color:var(--cyan)}
+body.theater #listWrap{display:none}
+body.theater #stage{grid-template-columns:1fr;max-width:1100px}
+body.theater #deck{min-height:68vh}
+body.mini #stage{grid-template-columns:1fr;max-width:560px}
+body.mini #listWrap,body.mini #bars,body.mini .paneHint,body.mini #srcRow,body.mini #srcMsg,body.mini #setPanel,body.mini #moods,body.mini #shelfTools,body.mini #resumeBar,body.mini footer .footLabel{display:none!important}
+body.mini #turntable{width:220px;height:220px;margin:14px auto}
+body.mini #disc{width:220px;height:220px}
+body.mini #deck{padding-bottom:12px}
 
 /* ── deck ── */
 #deck{padding:14px;display:flex;flex-direction:column;gap:12px}
@@ -296,16 +307,26 @@ body[data-theme="halloween"] #labelTitle{color:#1a0500}
 .setPresets button{font-family:inherit;font-size:10px;background:#1c1633;color:var(--dim);border:1px solid var(--line);padding:3px 7px;border-radius:9px;cursor:pointer}
 .setPresets button:hover{border-color:var(--purple);color:var(--amber)}
 .setPresets button.on{background:var(--purple);color:#fff;border-color:var(--purple)}
+.setMsg{font-size:10px;color:var(--dim);line-height:1.4;min-height:14px;padding:0 2px}
+.setMsg.ok{color:var(--cyan)}
+.setMsg.err{color:#ff6b8b}
 
 /* ── list ── */
 #listWrap{display:flex;flex-direction:column;min-height:0}
+#shelfTools{display:flex;gap:8px;padding:12px 14px 8px}
 #filter{
-  font-family:inherit;font-size:13px;
+  flex:1;min-width:0;font-family:inherit;font-size:13px;
   background:#0d0a18;color:var(--ink);
   border:1px solid var(--edge);
-  padding:9px 12px;border-radius:6px;
-  outline:none;margin:12px 14px 8px;width:calc(100% - 28px);
+  padding:9px 12px;border-radius:6px;outline:none;
 }
+#sortSel{font-family:inherit;font-size:11px;background:#0d0a18;color:var(--dim);border:1px solid var(--edge);padding:8px 10px;border-radius:6px;outline:none;max-width:150px}
+#sortSel:focus{border-color:var(--cyan);color:var(--ink)}
+#resumeBar{display:flex;gap:8px;align-items:center;margin:0 14px 8px;padding:8px 10px;border:1px solid rgba(255,180,58,.35);background:rgba(255,180,58,.08);border-radius:6px;font-size:11px;color:var(--ink)}
+#resumeBar[hidden]{display:none!important}
+#resumeText{flex:1;min-width:0}
+#resumeBar button{font:inherit;font-size:10px;background:#1a1430;border:1px solid #3b2f5e;color:var(--dim);padding:4px 8px;border-radius:4px;cursor:pointer}
+#resumeBar button:hover{border-color:var(--amber);color:var(--amber)}
 #filter:focus{border-color:var(--purple);box-shadow:0 0 0 2px var(--glow)}
 #list{flex:1;min-height:0;overflow-y:auto;list-style:none;padding:0 8px 12px 14px}
 #list::-webkit-scrollbar{width:10px}
@@ -332,6 +353,7 @@ body[data-theme="halloween"] #labelTitle{color:#1a0500}
 }
 #list li .pc{color:var(--dim);font-size:10px;flex-shrink:0;opacity:.75}
 #list li .pc:empty{display:none}
+#qCountChip{display:inline-block;min-width:16px;padding:0 5px;border-radius:9px;background:#2a2142;color:var(--amber);font-size:9px;line-height:16px;text-align:center;margin-left:4px}
 
 footer{
   margin-top:12px;padding-top:10px;
@@ -428,7 +450,7 @@ footer button:hover{border-color:var(--amber);color:var(--amber)}
 #tutSpot[hidden],#tutTip[hidden],#tutSkip[hidden]{display:none !important}
 
 /* ── playlist lyrics button ── */
-.lyBtn{
+.lyBtn,.qBtnAdd{
   font-family:inherit;font-size:11px;line-height:1;
   background:#1c1633;color:var(--dim);
   border:1px solid var(--line);
@@ -436,7 +458,8 @@ footer button:hover{border-color:var(--amber);color:var(--amber)}
   border-radius:3px;cursor:pointer;
   flex-shrink:0;transition:all .12s;
 }
-.lyBtn:hover{border-color:var(--cyan);color:var(--cyan);box-shadow:0 0 8px rgba(94,230,255,.4)}
+.lyBtn:hover,.qBtnAdd:hover{border-color:var(--cyan);color:var(--cyan);box-shadow:0 0 8px rgba(94,230,255,.4)}
+#list li.pinned .nm::after{content:" offline";font-size:9px;color:var(--cyan);border:1px solid rgba(94,230,255,.35);padding:0 4px;border-radius:3px;margin-left:6px;vertical-align:middle;letter-spacing:.5px}
 .favBtn{
   font-family:inherit;font-size:11px;line-height:1;
   background:#1c1633;color:#3f3860;
@@ -447,6 +470,14 @@ footer button:hover{border-color:var(--amber);color:var(--amber)}
 }
 .favBtn:hover{border-color:var(--amber);color:var(--amber)}
 .favBtn.on{color:var(--amber);border-color:rgba(255,180,58,.5);text-shadow:0 0 8px rgba(255,180,58,.7)}
+.qCtrls{display:flex;gap:8px;margin:8px 0 12px}
+.qRow{display:flex;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid #2a2340}
+.qNm{flex:1;min-width:0;font-size:12px;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.qActs{display:flex;gap:6px;flex-wrap:wrap}
+.qBtn{font:inherit;font-size:10px;background:#1a1430;border:1px solid #3b2f5e;color:var(--dim);padding:3px 8px;border-radius:4px;cursor:pointer}
+.qBtn:hover{border-color:var(--purple);color:var(--ink)}
+.qBtn.danger:hover{border-color:#ff6b8b;color:#ff6b8b}
+.qBtn:disabled{opacity:.4;cursor:default}
 li.emptyNote{
   justify-content:center;
   color:#4a4368;font-style:italic;font-size:12px;
@@ -563,9 +594,18 @@ li.emptyNote:hover{background:transparent}
   text-shadow:0 0 12px rgba(255,180,58,.55);
   transform:translateX(5px);
 }
-.lyWord{color:inherit;transition:color .12s ease,text-shadow .12s ease}
+.lyWord{color:inherit;transition:color .12s ease,text-shadow .12s ease;cursor:pointer;border-radius:2px;padding:0 1px}
+.lyWord:hover{color:var(--ink);background:rgba(94,230,255,.08)}
 .lyWord.now{color:var(--cyan);text-shadow:0 0 10px rgba(94,230,255,.7)}
-.lyHit{color:var(--cyan);font-size:11px;letter-spacing:1px;margin-bottom:10px}
+.lyWord.linger{color:rgba(94,230,255,.72);text-shadow:0 0 6px rgba(94,230,255,.25)}
+.lyTop{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px}
+.lyHit{color:var(--cyan);font-size:11px;letter-spacing:1px;min-width:0}
+.lyCtrls{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.lyCtrls .qBtn{padding:2px 8px;font-size:10px}
+.lyOffset{display:flex;align-items:center;gap:6px;margin:6px 0 10px;color:var(--dim);font-size:10px}
+.lyOffset input[type=range]{width:120px}
+.lyLine{cursor:pointer}
+.lyLine:hover{color:var(--ink)}
 .infoRow{
   display:grid;grid-template-columns:78px 1fr;gap:8px;
   font-size:12px;padding:7px 0;

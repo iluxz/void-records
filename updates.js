@@ -54,6 +54,21 @@ var PATCH_LOG=[
   "all 23 havexy audio-only records were replaced by their official music videos - gypsy verity, folk valley, both hyperbaiters and every disstrack now has a real video background.",
   "eight new records joined the shelf: master baiter, big d randy, gooners, tom pearl, roblox ceo, chainsfr, keys commenters and corn bot.",
   "ui panels went translucent again so the video reads through while it stays behind the text. shelf is now 498 - search \"m12\", \"pack 12\" or \"music pack 12\"."
+]},
+{date:"2026-11-22",type:"update",title:"500 records and quality-of-life pass",notes:[
+  "tracks 499 and 500 landed: Weird Al Yankovic - Albuquerque: THE MOVIE and lux - mr agitato. the shelf hit 500 and the confetti button caught up.",
+  "stale shelf counts were cleaned up across the header, manifest and readme.",
+  "backup/export/import, queue/play-next, and more player polish rolled in so the 500-track shelf is easier to live with."
+]},
+{date:"2026-11-22",type:"update",title:"quality-of-life pass 2",notes:[
+  "resume listening: the player remembers your last shelf track/position and offers a resume prompt when you come back.",
+  "shelf sorting: switch between shelf order, a-z, artist, most played, recently played, duration and unplayed.",
+  "sleep timer upgrade: added an end-of-track mode on top of the timed fade-out options."
+]},
+{date:"2026-11-22",type:"update",title:"quality-of-life pass 3",notes:[
+  "lyrics QoL: follow/free-scroll toggle, timing offset slider, click a synced line to seek, and copy lyrics. synced karaoke still highlights as before.",
+  "theater and mini player view modes: quick deck buttons for a big-screen listen or a compact controller; choice persists in settings.",
+  "offline pinning: pin/unpin shelf tracks from the info pane or right-click menu. pinned audio is cached in a dedicated service worker audio cache for offline playback; shelf stats/achievements rules stay unchanged."
 ]}
 ];
 var TYPE_COLOR={'patch':'#78b4ff','feature':'#64ffa0','update':'#c878ff','music pack':'#ffb43a'};

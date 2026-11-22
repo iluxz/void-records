@@ -25,6 +25,9 @@
   var energyHist=[],levelHist=[],intervals=[],silenced=false;
   var loudSince=0,quietSince=0,rainbowHue=0,ringEl=null,lastSrc='';
   var eCtx=null,eAnalyser=null,eData=null,eSrc=null,eAudio=null,eSrcUrl='',eWantPlay=false;
+  var eGesture=false;
+  function eGestureOk(){return eGesture||(typeof navigator!=='undefined'&&navigator.userActivation&&navigator.userActivation.hasBeenActive)}
+  ['pointerdown','keydown','touchstart'].forEach(function(ev){document.addEventListener(ev,function(){eGesture=true;if(eCtx&&eCtx.state==='suspended')eCtx.resume().catch(function(){})},{passive:true})});
 
   function pitchRatio(){return typeof window.vrPitchRatio==='function'?window.vrPitchRatio():1}
 
@@ -41,10 +44,12 @@
   }
   function ensureEngineAnalyser(){
     if(eAnalyser)return eAnalyser;
+    if(!eGestureOk())return null;
     try{
       var Ctx=window.AudioContext||window.webkitAudioContext;
       if(!Ctx)return null;
       eCtx=eCtx||new Ctx();
+      if(eCtx.state==='suspended'){var _r=eCtx.resume.bind(eCtx);eCtx.resume=function(){return _r().catch(function(){})};eCtx.resume().catch(function(){});}
       var el=ensureEngineAudio();
       eSrc=eSrc||eCtx.createMediaElementSource(el);
       eAnalyser=eCtx.createAnalyser();
@@ -76,7 +81,7 @@
       return;
     }
     eWantPlay=true;
-    if(eCtx&&eCtx.state==='suspended')eCtx.resume().catch(function(){});
+    if(eCtx&&eCtx.state==='suspended'&&eGestureOk())eCtx.resume().catch(function(){});
     ensureEngineAnalyser();
     if(isFinite(main.currentTime)&&isFinite(el.currentTime)&&Math.abs(el.currentTime-main.currentTime)>0.35){
       try{el.currentTime=main.currentTime}catch(e){}
@@ -294,7 +299,8 @@
     s.overdrive=smooth(s.overdrive,overTarget,dt,loud?.35:.55);
     var rainbowTarget=s.rainbow?Math.max(.45,intensity):0;
     s.rainbowLevel=smooth(s.rainbowLevel,rainbowTarget,dt,s.rainbow?.14:.55);
-    if(s.rainbowLevel>.01)rainbowHue=(rainbowHue+dt*(90+s.energy*300))%360;
+    if(s.rainbowLevel<0.005){s.rainbowLevel=0;rainbowHue=0}
+    else rainbowHue=(rainbowHue+dt*(90+s.energy*300))%360;
     s.rainbowHue=rainbowHue;
 
     applyAcc+=dt;

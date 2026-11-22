@@ -1,14 +1,14 @@
-var CACHE='vr-shell-v66';
+var CACHE='vr-shell-v92';
 var SHELL=[
   './',
   'index.html',
-  'style.css?v=12',
-  'player.js?v=27',
+  'style.css?v=17',
+  'player.js?v=49',
   'discover.js?v=3',
-  'visualizer.js?v=5',
-  'void-engine.js?v=19',
-  'tracks.js',
-  'updates.js?v=2',
+  'visualizer.js?v=6',
+  'void-engine.js?v=23',
+  'tracks.js?v=2',
+  'updates.js?v=5',
   'achievements.js?v=9',
   'favicon.svg',
   'havexy.svg',
@@ -24,17 +24,29 @@ self.addEventListener('install',function(e){
 self.addEventListener('activate',function(e){
   e.waitUntil(
     caches.keys().then(function(keys){
-      return Promise.all(keys.map(function(k){return k===CACHE?null:caches.delete(k)}));
+      return Promise.all(keys.map(function(k){return (k===CACHE||k===AUDIO_CACHE)?null:caches.delete(k)}));
     }).then(function(){return self.clients.claim()})
   );
 });
+var AUDIO_CACHE='vr-audio';
 self.addEventListener('fetch',function(e){
   var req=e.request;
   if(req.method!=='GET')return;
   var url=new URL(req.url);
   if(url.origin!==location.origin)return;
-  if(req.destination==='audio')return;
-  if(/\.(mp3|wav|ogg|webm|m4a|mp4)$/i.test(url.pathname))return;
+  var isAudio=req.destination==='audio'||/\.(mp3|wav|ogg|webm|m4a|mp4)$/i.test(url.pathname);
+  if(isAudio){
+    e.respondWith(caches.open(AUDIO_CACHE).then(function(ac){
+      return ac.match(req).then(function(hit){
+        if(hit && req.cache !== 'reload') return hit;
+        return fetch(req).then(function(res){
+          if(hit && res && res.ok){ ac.put(req, res.clone()); }
+          return res;
+        }).catch(function(){ return hit || Response.error(); });
+      });
+    }));
+    return;
+  }
   if(req.mode==='navigate'){
     e.respondWith(
       fetch(req).then(function(res){

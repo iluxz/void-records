@@ -1,7 +1,7 @@
 {
   "name": "void records",
   "short_name": "void records",
-  "description": "a record player for the void records collection - 114 tracks, one deck.",
+  "description": "a record player for the void records collection - 500 tracks, one deck.",
   "start_url": ".",
   "scope": ".",
   "display": "standalone",

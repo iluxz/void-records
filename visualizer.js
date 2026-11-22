@@ -14,7 +14,11 @@ function initVisualizer(el){
   try{
     window.audioEl=el;
     audioCtx=new(window.AudioContext||window.webkitAudioContext)();
-    if(audioCtx.state==='suspended')audioCtx.resume().catch(function(){});
+    if(audioCtx.state==='suspended'){
+      var _vr=audioCtx.resume.bind(audioCtx);
+      audioCtx.resume=function(){return _vr().catch(function(){})};
+      audioCtx.resume();
+    }
     var src=audioCtx.createMediaElementSource(el);
     analyser=audioCtx.createAnalyser();
     analyser.fftSize=256;
@@ -231,10 +235,11 @@ function makeCrackle(){
   }catch(e){}
 }
 window.setCrackleLevel=function(v){try{if(crackleGain)crackleGain.gain.value=v}catch(e){}};
-document.addEventListener('click',function(){
-  if(audioCtx&&audioCtx.state==='suspended')audioCtx.resume().catch(function(){});
-  else if(!audioCtx&&window.audioEl)initVisualizer(window.audioEl);
-});
+function vrResumeAudio(){
+  try{if(!audioCtx&&window.audioEl)initVisualizer(window.audioEl)}catch(e){}
+  try{if(audioCtx&&audioCtx.state==='suspended')audioCtx.resume().catch(function(){})}catch(e){}
+}
+['pointerdown','keydown','touchstart'].forEach(function(ev){document.addEventListener(ev,vrResumeAudio,{passive:true})});
 
 function audioBands(){
   var r={bass:0,mid:0,high:0};

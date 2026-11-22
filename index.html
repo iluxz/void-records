@@ -7,7 +7,7 @@
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <meta name="theme-color" content="#0a0812">
 <link rel="manifest" href="manifest.json">
-<link rel="stylesheet" href="style.css?v=12">
+<link rel="stylesheet" href="style.css?v=17">
 </head>
 <body>
 <canvas id="waves"></canvas>
@@ -19,14 +19,14 @@
   <header>
     <div class="brand">
       <span class="brandMark" aria-hidden="true"></span>
-      <span class="brandText"><h1>void records</h1><p>498 tracks &middot; offline shelf</p></span>
+      <span class="brandText"><h1>void records</h1><p>500 tracks &middot; offline shelf</p></span>
     </div>
-    <div class="headMeta"><span class="headChip" id="veHud" title="void engine · press v to toggle">void engine · idle</span><span class="headChip">no ads</span><span class="headChip">no accounts</span><span class="headChip">no tracking</span></div>
+    <div class="headMeta"><span class="headChip" id="veHud" title="void engine Â· press v to toggle">void engine Â· idle</span><span class="headChip">no ads</span><span class="headChip">no accounts</span><span class="headChip">no tracking</span></div>
   </header>
 
   <div id="stage">
     <section id="deck">
-      <div class="paneHead"><span class="paneTag">01 / deck</span><span class="paneHint">drop files or paste a youtube link</span></div>
+      <div class="paneHead"><span class="paneTag">01 / deck</span><span class="paneHint">drop files or paste a youtube link</span><span class="paneBtns"><button id="btnTheater" class="paneBtn" data-sfx="click" title="theater mode">theater</button><button id="btnMini" class="paneBtn" data-sfx="click" title="mini player">mini</button></span></div>
       <div id="turntable">
         <div id="disc">
           <div id="label"><span id="labelTitle">void</span></div>
@@ -144,6 +144,15 @@
           <input id="setServerUrl" type="text" spellcheck="false" placeholder="http://127.0.0.1:8787">
           <span></span>
         </div>
+        <div class="setRow setPresets">
+          <label>backup</label>
+          <span class="presetBtns">
+            <button type="button" id="btnExport">export</button>
+            <button type="button" id="btnImport">import</button>
+          </span>
+        </div>
+        <input id="importFile" type="file" accept="application/json,.json" hidden>
+        <div id="backupMsg" class="setMsg" role="status" aria-live="polite"></div>
       </div>
 
       <canvas id="bars"></canvas>
@@ -158,15 +167,30 @@
         <button data-sfx="click" data-mood="weird">weird</button>
         <button data-sfx="click" data-mood="sleep">sleep</button>
         <button data-sfx="click" data-mood="sad">sad</button>
+        <button data-sfx="click" data-filter="lyrics">lyrics</button>
+        <button data-sfx="click" data-filter="synced">synced</button>
+        <button data-sfx="click" data-filter="word synced">word synced</button>
       </div>
-      <input id="filter" type="text" placeholder="filter&hellip;" spellcheck="false">
+      <div id="shelfTools">
+        <input id="filter" type="text" placeholder="filter&hellip;" spellcheck="false">
+        <select id="sortSel" aria-label="sort shelf">
+          <option value="shelf">shelf order</option>
+          <option value="az">a-z</option>
+          <option value="artist">artist</option>
+          <option value="plays">most played</option>
+          <option value="recent">recently played</option>
+          <option value="duration">duration</option>
+          <option value="unheard">unplayed</option>
+        </select>
+      </div>
+      <div id="resumeBar" hidden><span id="resumeText"></span><button id="resumeGo" type="button" data-sfx="click">resume</button><button id="resumeDismiss" type="button" data-sfx="click">dismiss</button></div>
       <ol id="list"></ol>
     </section>
   </div>
 
   <footer>
     <span class="footLabel">void records powered by the void engine</span>
-    <span class="footBtns"><button id="btnTutorial" data-sfx="click">replay tutorial</button><button id="btnDisc" data-sfx="click">discover</button><button id="btnRadio" data-sfx="click">radio: off</button><button id="btnLog" data-sfx="click">update log</button><button id="btnAch" data-sfx="click">achievements</button><button id="btnHalloween" data-sfx="click">🎃 halloween</button><button id="btnConfetti" data-sfx="confetti" title="drop confetti">🎉 489</button></span>
+    <span class="footBtns"><button id="btnTutorial" data-sfx="click">replay tutorial</button><button id="btnDisc" data-sfx="click">discover</button><button id="btnRadio" data-sfx="click">radio: off</button><button id="btnQueue" data-sfx="click">queue <span id="qCountChip">0</span></button><button id="btnLog" data-sfx="click">update log</button><button id="btnAch" data-sfx="click">achievements</button><button id="btnHalloween" data-sfx="click">ðŸŽƒ halloween</button><button id="btnConfetti" data-sfx="confetti" title="drop confetti">🎉 500</button></span>
   </footer>
 </div>
 
@@ -190,6 +214,7 @@
   <div id="osTabs">
     <button class="osTab on" data-tab="lyrics">lyrics</button>
     <button class="osTab" data-tab="info">info</button>
+    <button class="osTab" data-tab="queue">queue</button>
     <button class="osTab" data-tab="stats">stats</button>
     <button class="osTab" data-tab="credits">credits</button>
     <button class="osTab" data-tab="awards">awards</button>
@@ -197,6 +222,7 @@
   <div id="osBody">
     <div class="osPane" id="paneLyrics"></div>
     <div class="osPane" id="paneInfo" hidden></div>
+    <div class="osPane" id="paneQueue" hidden></div>
     <div class="osPane" id="paneStats" hidden></div>
     <div class="osPane" id="paneCredits" hidden>
       <div class="crSec">
@@ -282,17 +308,20 @@
 <img id="skelPet" src="skeleton.png" alt="a tiny skeleton vibing in the corner" title="he is vibing">
 <div id="ctxMenu" hidden>
   <div class="ctxTitle"></div>
+  <button type="button" data-act="next">play next</button>
+  <button type="button" data-act="queue">add to queue</button>
+  <button type="button" data-act="pin">pin for offline</button>
   <button type="button" data-act="link">copy deep link</button>
   <button type="button" data-act="open">open deep link in new tab</button>
   <button type="button" data-act="file">copy file name</button>
 </div>
 <div id="ctxToast" hidden></div>
-<script src="tracks.js"></script>
-<script src="visualizer.js?v=5"></script>
-<script src="void-engine.js?v=19"></script>
+<script src="tracks.js?v=2"></script>
+<script src="visualizer.js?v=6"></script>
+<script src="void-engine.js?v=23"></script>
 <script src="achievements.js?v=9"></script>
-<script src="player.js?v=27"></script>
+<script src="player.js?v=49"></script>
 <script src="discover.js?v=3"></script>
-<script src="updates.js?v=2"></script>
+<script src="updates.js?v=5"></script>
 </body>
 </html>
