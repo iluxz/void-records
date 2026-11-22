@@ -1,4 +1,4 @@
-var CACHE='vr-shell-v65';
+var CACHE='vr-shell-v66';
 var SHELL=[
   './',
   'index.html',
