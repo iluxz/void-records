@@ -215,7 +215,20 @@ function tryPlay(){
   if(!audioCtx&&window.audioEl)try{initVisualizer(window.audioEl)}catch(e){}
   if(audioCtx&&audioCtx.state==='suspended')audioCtx.resume().catch(function(){});
   var p=audio.play();
-  if(p&&p.catch)p.catch(function(){});
+  if(p&&p.catch)p.catch(function(){
+    // fresh tab: unmuted autoplay is blocked. start muted, unmute on first gesture.
+    if(audio.muted)return;
+    audio.muted=true;
+    var un=function(){
+      audio.muted=false;
+      window.removeEventListener('pointerdown',un,true);
+      window.removeEventListener('keydown',un,true);
+    };
+    window.addEventListener('pointerdown',un,true);
+    window.addEventListener('keydown',un,true);
+    var q=audio.play();
+    if(q&&q.catch)q.catch(function(){});
+  });
 }
 function markPlaying(){
   var lis=listEl.children;
@@ -617,23 +630,7 @@ if(qTrack){
   var qq=qTrack.toLowerCase().replace(/[^a-z0-9]/g,'');
   for(var qi=0;qi<TRACKS.length;qi++){
     var hay=(TRACKS[qi].n+' '+TRACKS[qi].a.join(' ')+' '+TRACKS[qi].f).toLowerCase().replace(/[^a-z0-9]/g,'');
-    if(qq&&hay.indexOf(qq)>=0){
-      loadTrack(qi,true);
-      if(typeof vrAch==='function')vrAch('deep_link');
-      // fresh tabs can block autoplay - resume on the first gesture if it did not start
-      setTimeout(function(){
-        if(!audio.paused)return;
-        var arm=function(){
-          if(!audio.paused||!audio.src)return;
-          tryPlay();
-          window.removeEventListener('pointerdown',arm,true);
-          window.removeEventListener('keydown',arm,true);
-        };
-        window.addEventListener('pointerdown',arm,true);
-        window.addEventListener('keydown',arm,true);
-      },700);
-      break;
-    }
+    if(qq&&hay.indexOf(qq)>=0){loadTrack(qi,true);if(typeof vrAch==='function')vrAch('deep_link');break}
   }
 }
 
