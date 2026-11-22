@@ -195,7 +195,8 @@ function loadTrack(i,autoplay){
   nowMeta.innerHTML=nowMeta.textContent;
   labelTitle.textContent=tr.n;
   var gen=++loadGen;
-  var srcUrl=serverOn()?serverBase()+'/audio/'+encodeURIComponent(tr.f):tr.f;
+  var localUrl='tracks/'+tr.f;
+  var srcUrl=serverOn()?serverBase()+'/audio/'+encodeURIComponent(tr.f):localUrl;
   try{
     fetch(srcUrl).then(function(r){if(!r.ok)throw 0;return r.blob()}).then(function(b){
       if(gen!==loadGen)return;
@@ -208,13 +209,13 @@ function loadTrack(i,autoplay){
       if(autoplay!==false)tryPlay();
     }).catch(function(){
       if(gen!==loadGen)return;
-      audio.src=tr.f;
-      vrVideoBgSet(tr,tr.f);
+      audio.src=localUrl;
+      vrVideoBgSet(tr,localUrl);
       if(autoplay!==false)tryPlay();
     });
   }catch(e){
-    audio.src=tr.f;
-    vrVideoBgSet(tr,tr.f);
+    audio.src=localUrl;
+    vrVideoBgSet(tr,localUrl);
     if(autoplay!==false)tryPlay();
   }
   markPlaying();
@@ -826,7 +827,7 @@ function vrVideoBgSet(tr, src){
     vid.hidden=true;
     return;
   }
-  var next=src||tr.f;
+  var next=src||('tracks/'+tr.f);
   if(vid.getAttribute('src')!==next){
     vid.src=next;
     try{vid.load()}catch(e){}
@@ -835,7 +836,7 @@ function vrVideoBgSet(tr, src){
   vid.classList.add('on');
   bgVideoSync(true);
 }
-function vrVideoBgApply(){ if(pos>=0&&pos<TRACKS.length) vrVideoBgSet(TRACKS[pos], curBlobUrl||TRACKS[pos].f) }
+function vrVideoBgApply(){ if(pos>=0&&pos<TRACKS.length) vrVideoBgSet(TRACKS[pos], curBlobUrl||('tracks/'+TRACKS[pos].f)) }
 
 if(typeof ST.volume==='number'){document.getElementById('vol').value=ST.volume;volBase=ST.volume/100;setVol(volBase)}
 if(typeof ST.speed==='number'){audio.playbackRate=ST.speed;document.getElementById('setSpeed').value=ST.speed;document.getElementById('setSpeedV').textContent=ST.speed.toFixed(2)+'\u00d7'}
@@ -1487,7 +1488,7 @@ function fmtSize(b){
 }
 function fileSize(f,cb){
   if(sizeCache[f]!==undefined){cb(sizeCache[f]);return}
-  fetch(f,{method:'HEAD'}).then(function(r){
+  fetch('tracks/'+f,{method:'HEAD'}).then(function(r){
     var l=r.headers.get('content-length');
     sizeCache[f]=l?fmtSize(+l):null;
     cb(sizeCache[f]);
