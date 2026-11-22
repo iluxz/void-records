@@ -1,217 +1,54 @@
 var PATCH_LOG=[
-{date:'2026-11-21',type:'music pack',title:'music pack 11: men - calm mode on',notes:[
-'one new record - 432. "men - calm mode on" from men, a friend of lux. 720p av1 webm with opus audio and a video background.',
-'search "men", "m11", "pack 11" or "music pack 11" to find it.'
+{date:"2026-10-21",type:"feature",title:"void records goes live",notes:[
+  "the shelf hit 68 tracks and the tonearm actually learned where to land. one deck, one very long list of records."
 ]},
-{date:'2026-11-21',type:'music pack',title:'music pack 10: thirteen more records',notes:[
-'13 new records - 419 to 431. anonymous hacking music, gotham chess edit, bad piggies x everything, dont need you, both join us for a bite cuts plus the purple-murdered versions, proud to be expendable, kwik flip, chronoshift (regretevator edition), the whole-server song, and cant killean the zilean (the real one - the original chronoshift is built from).',
-'eleven are 720p webm with video backgrounds, two came down as mp4 and are stored as proper .mp4. search "m10", "pack 10" or "music pack 10" for the whole batch.',
-'catalog rows now wrap long names instead of clipping them, and only show the pack tag inline - the full alias list lives in the hover tooltip so it stops eating the song title.',
-'this pack also carries the discovery queue: new discover button scans youtube playlists, ytsearch: queries and single video links as metadata only, with preview and a separate kept pool that never joins the shelf.',
-'and sandbox radio: new switch shuffles the kept pool, resolves each record on demand and plays forever. non-canon on purpose - no achievements, no vr_clean, no shelf stats. spotify and apple links get a plain error instead of a fake result.',
-'both extras reuse the opt-in local server. turn it on in settings first; from an https page you need an https tunnel url.'
+{date:"2026-10-21",type:"feature",title:"v2: knobs and shortcuts",notes:[
+  "music settings, now playing everywhere, favorites, the lyrics window and lyrics presets.",
+  "polish pass, real haydee zone names, and housekeeping underneath it all."
 ]},
-{date:'2026-11-21',type:'feature',title:'outside the shelf',notes:[
-'drop files anywhere on the deck: mp3, wav, ogg, m4a, webm and mp4 all load now. drop a bunch and they queue up and play through in order. video files turn the 92% video bg on automatically.',
-'new source box under the deck: paste a youtube link and the local void records server resolves it to a playable stream, with the video bg synced to the audio clock. short youtu.be and shorts links work too, and you can drag a link straight onto the turntable.',
-'if a link is not a youtube url, the server is off, or the stream fails or expires, you get a plain-English error instead of a silent dead player. anything loaded this way stays outside the shelf and can never count toward the right way.'
+{date:"2026-10-22",type:"feature",title:"karaoke mode and 26 achievements",notes:[
+  "karaoke mode went live and the first 26 achievements gave people something to chase.",
+  "this update log showed up so you can see how it got here."
 ]},
-{date:'2026-11-21',type:'feature',title:'the local server bridge',notes:[
-'new opt-in switch in the gear panel: point the deck at a local void records server and stream records from it instead of straight off disk. off by default, everything still works with zero network.',
-'when linked, clean listens, achievements, settings and favourites are pushed to the server and merged back on load - local progress is never erased. any other project using the server sees the same list.',
-'lyrics stay offline-only. the server reads a prebuilt lyric file and never makes a live LRCLIB call.'
+{date:"2026-10-22",type:"music pack",title:"the big haul: 68 to 114 tracks",notes:[
+  "slime rancher and grim fandango soundtracks added, plus five new rooms to put them in."
 ]},
-{date:'2026-11-21',type:'achievement',title:'the right way',notes:[
-'new achievement: hear all 418 records start to finish with no skipping, no seeking, playback at 1x, and your face on the tab the entire time.',
-'called "the right way" because this is the site used exactly as it was meant to be. lux demanded this achievement.',
-'each song keeps its own clean-listen flag in vr_clean. touch the seek bar, change speed, toggle loop, switch tabs or lose window focus and that run is dead - reload the record to try again. pausing is allowed.',
-'clean listens show up in stats and in each record\'s info tab so you can see how far along you are.'
+{date:"2026-11-21",type:"music pack",title:"music packs 2 to 4: geometry dash, memes and ultrakill",notes:[
+  "music pack 2 added geometry dash and the meme shelf, pack 3 brought twelve more videos and pack 3.5 the other whole-server cuts.",
+  "music pack 4 brought the entire ultrakill ost and the pizza place shelf. search \"ultrakill\" for the ost or \"wapp\" for the pizza place tracks.",
+  "credits went where they belonged along the way."
 ]},
-{date:'2026-11-21',type:'music pack',title:'one record, cut to the chase',notes:[
-'new: grim fandango rap (dan bull, critical hit #3) - 417 to 418.',
-'trimmed the source file itself: everything before 1:08 and after 4:38 is gone, so the record starts right where the good part does. no seek trick, the actual audio/video is cut.',
-'720p h264 + aac, 210 seconds exactly. the video background comes along for the ride.'
+{date:"2026-11-21",type:"music pack",title:"music pack 5: weird youtube shelf",notes:[
+  "the odd corners of youtube, filed properly, with five more pack 4.5 singles.",
+  "music pack 4.5 brought in the flavor foley vocal shelf."
 ]},
-{date:'2026-11-21',type:'feature',title:'the gear panel grows up',notes:[
-'bass and treble shelves sit between the pitch shifter and the tone filter - real low/high boost and cut, ±12 db.',
-'space adds a generated-impulse reverb with a wet/dry knob and tight / room / void decay sizes. no file, no network, just noise with an exponential tail.',
-'wow modulates the read delay in the granular shifter for warped-vinyl wobble, with depth and wobble-rate knobs.',
-'five one-click presets - flat, late night, radio, void and warped - set the whole stack at once. all settings still survive a refresh.'
+{date:"2026-11-21",type:"music pack",title:"music pack 6: the 400th record",notes:[
+  "music pack 6 crossed 400 tracks and the confetti button grew with the shelf.",
+  "word-synced karaoke arrived - live word highlighting in the lyrics window, with per-song presets for tracks the public database cannot match.",
+  "lyrics stay offline-only. the server reads a prebuilt file and never makes a live LRCLIB call."
 ]},
-{date:'2026-11-21',type:'feature',title:'ui sound effects',notes:[
-'the deck now has little synthesized clicks, needle drops and blips - play, skip, shuffle, loop, confetti and shelf loads all have their own sound. no audio files, no downloads.',
-'speaker chip next to the crackle and sleep timers toggles them, or hit M. the setting sticks across visits.'
+{date:"2026-11-21",type:"music pack",title:"music pack 7: fifteen more records",notes:[
+  "fifteen new videos from the meme shelf, plus the deck and shelf rework and the gear panel glow-up.",
+  "ui sound effects landed, preset lyrics arrived for its me its verity, and i miss the quiet finally got its video background."
 ]},
-{date:'2026-11-21',type:'music pack',title:'music pack 8: two more records',notes:[
-'2 new records - 415 to 417. guy vibing to markiplier full outro song and jump for me (jumper x cry for me rmx).',
-'both 720p webm with video backgrounds, count and cache bumped so browsers pick up the new shelf.'
+{date:"2026-11-21",type:"feature",title:"outside the shelf",notes:[
+  "music pack 8 added two more records and the shelf reached 415 with all systems synced.",
+  "discover button scans youtube playlists, ytsearch: queries and single video links as metadata only, with a preview and a separate kept pool that never joins the shelf.",
+  "sandbox radio shuffles the kept pool, resolves each record on demand and plays forever. non-canon on purpose - no achievements, no shelf stats.",
+  "local server bridge at 127.0.0.1:8787 for manifest, resolve, lyrics and tunnel config. https pages need an https tunnel url."
 ]},
-{date:'2026-11-21',type:'fix',title:'shelf systems synced to 415',notes:[
-'the whole-shelf achievement hint now says 415 instead of 400. the confetti milestone button and one-per-session trigger moved to 415 too, with a fresh session key so it fires again for the new shelf.',
-'service worker cache bumped to vr-shell-v21 so every browser picks up the corrected achievement, player and shelf files.'
+{date:"2026-11-21",type:"music pack",title:"music pack 9: one record, cut to the chase",notes:[
+  "one new record on the shelf, plus the fix that taught the deck where the needle actually lands."
 ]},
-{date:'2026-11-21',type:'music pack',title:'music pack 7: fifteen more records',notes:[
-'15 new records - 400 to 415. veeronica typebeat, android in the bios, toxic gossip train, jump in the caac, dont come back thriller man, gurkey turkey, rambunctious emote lyrics, trendhopper vee skating theme, hey its me obesity, teapot palace guitar, die of death settings theme, three split emote variants (including the alt) and cry for me.',
-'all 720p webm with video backgrounds. multiple forsaken emote cuts, one very cursed turkey video and one ironmouse song.'
+{date:"2026-11-21",type:"music pack",title:"music pack 10: thirteen more records",notes:[
+  "13 new records - 419 to 431. anonymous hacking music, gotham chess edit, bad piggies x everything, both join us for a bite cuts, proud to be expendable, kwik flip, chronoshift (regretevator edition), the whole-server song and cant killean the zilean (the real one).",
+  "eleven are 720p webm with video backgrounds, two came down as mp4 and are stored as proper .mp4.",
+  "catalog rows now wrap long names instead of clipping them - only the pack tag shows inline, full aliases live in the hover tooltip."
 ]},
-{date:'2026-11-21',type:'ui',title:'deck and shelf rework',notes:[
-'void records got a proper ui pass - numbered deck and shelf panes, a brand/status strip, rounder controls, a real footer bar and cleaner window chrome.',
-'same dark monospace void records identity, same turntable and 92% video bg - no glass or aero reskin. every button, shortcut and tutorial step still works.'
-]},
-{date:'2026-11-21',type:'lyrics',title:'its me its verity preset lyrics',notes:[
-'"hey its me its verity (horror skunx)" now opens straight to its word-synced LRCLIB lyrics (track 37357262) - no searching, no API guessing.'
-]},
-{date:'2026-11-21',type:'feature',title:'400 track confetti',notes:[
-'confetti drops from the sky once per session now that the shelf hit 400. the 🎉 400 button in the footer re-triggers it whenever you want.',
-'also confirmed the repo already had .nojekyll, so GitHub Pages was already skipping the useless Jekyll build - my earlier file check missed hidden files.'
-]},
-{date:'2026-11-21',type:'music pack',title:'music pack 6: the 400th record',notes:[
-'5 new records - 395 to 400. two cattle auctioneer retrowave rap gods, yooh - destroy (agitato), glee co x leave me alone (x mix), and chinese rap.',
-'full video webm with video backgrounds, searchable under \"m6\" or \"music pack 6\".'
-]},
-{date:'2026-11-21',type:'visual',title:'i miss the quiet gets a video',notes:[
-'lord x - i miss the quiet now uses the official hq video from churgney gurgney as its background.',
-'243s exact match to the word-synced lyrics, so karaoke timing still lines up.'
-]},
-{date:'2026-11-21',type:'music pack',title:'music pack 5: weird youtube shelf',notes:[
-'16 new records - 380 to 395. ultrakill piano, lord peterson, war without drumming, the verity x aura farmer mashup, abu yahya, portal radio, you must answer, exasperation day jingle, no mercy in brazil, a320 asmr, supraland credits, stanley elevator bossa, bread, twerknation28, my salsa, and void star.',
-'full video webm with video backgrounds, searchable under "m5" or "pack 5".',
-'preset lyrics added for i miss the quiet (lord x), you must answer, it\'s me it\'s verity, bread, and warum warum (supraland credits).'
-]},
-{date:'2026-11-21',type:'feature',title:'word-synced karaoke',notes:[
-'lyrics now use lrclib\'s word-level timing when it exists, so individual words light up instead of whole lines.',
-'falls back to normal line sync for tracks without word timing, and to plain text if there are no synced lyrics at all.',
-'jazzy juice and muga million were the first ones to get the upgraded treatment.'
-]},
-{date:'2026-11-21',type:'music pack',title:'five more pack 4.5 singles',notes:[
-'379 tracks now. mark roberity - verity dih, kingsammelot - jazzy juice, kingsammelot - muga million, overcooked - sus squad disstrack, and if asian parents made a rap song.',
-'full video webm with video backgrounds, searchable under "m45" or "pack 4.5".'
-]},
-{date:'2026-11-21',type:'music pack',title:'music pack 4.5: the flavor foley vocal shelf',notes:[
-'14 new records - 360 to 374. the full BUTCHER VANITY / rawdog / weathergirl / WARD ROMANCE / Water the Roses / Queen of Venus / ELECTRIC WEEKEND ZONE / Static / Spoken For / Human / CONNECT:COMMUNE / Ego Renegade Boy / streetcat / Clover playlist.',
-'full video webm with video backgrounds, 720p capped just like pack 4.',
-'search "m45" or "pack 4.5" for the whole batch, "flavor foley" for the vocal synth shelf.'
-]},
-{date:'2026-10-22',type:'patch',title:'lyrics that are actually right',notes:[
-'hyperbaiter now pulls live from lrclib instead of a hardcoded copy.',
-'lyrics search is stricter now: a track only shows lyrics when the title really matches, so homonyms and wrong matches (like "&" showing "Welcome to Tally Hall") no longer slip through.',
-'failed lookups are cached for 20 seconds and the player stops hammering lrclib under load.',
-'lrclib hiccups show an honest message instead of "unreachable".'
-]},
-{date:'2026-10-21',type:'feature',title:'void records goes live',notes:[
-'the cube chapter moved out of this repo. void records is now a side project: spinning vinyl deck, tonearm, spectrum bars, waveform background.',
-'seek bar, volume, shuffle, loop, and a filterable track list - click a row to drop the needle.',
-'58 tracks on the shelf to start.',
-'works offline too: open index.html straight from a folder, no server needed.'
-]},
-{date:'2026-10-21',type:'music pack',title:'the shelf hits 68 tracks',notes:[
-'ten more tracks added: employment, science\'s downfall, wake up stanley, moon rotation, bro is in a box, folk theme, something bad x2, grotto x2.',
-'the haydee zone tracks (credits, water, gg ez, ...) keep their old names as aliases, so old links still work.',
-'fixed the "espa ol" typo - now español.'
-]},
-{date:'2026-10-21',type:'patch',title:'the tonearm actually lands on the record',notes:[
-'the arm was pointing at the wrong part of the vinyl.',
-'three geometry fixes later: parked at +35, playing at +46, needle always sitting on the grooves.'
-]},
-{date:'2026-10-21',type:'feature',title:'v2: knobs and shortcuts',notes:[
-'vinyl crackle layer (off by default), sleep timer (15/30/60 min), and drag & drop any local mp3 onto the deck.',
-'keyboard: space = play/pause, arrows = prev/next, S = shuffle, L = loop, C = crackle.',
-'?track=employment style deep links open straight to a song.'
-]},
-{date:'2026-10-21',type:'feature',title:'music settings',notes:[
-'gear panel with three knobs: speed (0.5x-2x), pitch (-12 to +12 semitones), tone (lowpass, for muffled late-night listening).',
-'pitch runs through a granular shifter, so changing it doesn\'t force the speed to change with it.'
-]},
-{date:'2026-10-21',type:'update',title:'polish pass',notes:[
-'favicon: a little vinyl with an amber play triangle.',
-'first-time tutorial with spotlight steps, replayable from the footer.',
-'header trimmed to just the name + track count.',
-'the audio context now starts on your first click instead of page load - no more browser warnings in the console.',
-'lrclib rate limits now say "lrclib is tired, give it a minute" instead of failing weirdly.'
-]},
-{date:'2026-10-21',type:'update',title:'real haydee zone names',notes:[
-'zone tracks renamed to Green Zone, Dark Zone, Yellow Zone, Red Zone, Blue Zone, White Zone and Main Menu.',
-'credits stays credits, old names kept as aliases.'
-]},
-{date:'2026-10-21',type:'feature',title:'lyrics window',notes:[
-'every row in the list has a note button: opens a window with traffic-light controls that you can drag around.',
-'lyrics tab pulls from lrclib (timed lyrics when the song has them), info tab shows the deep link.',
-'the window follows the player - switch tracks while it\'s open and it updates.'
-]},
-{date:'2026-10-21',type:'feature',title:'now playing everywhere + favorites',notes:[
-'the browser tab title shows the current track, and media keys / lock screen controls work.',
-'settings (volume, speed, pitch, tone, crackle) are saved and survive a refresh.',
-'star any track to favorite it. type "favorites" in the filter to see only those.',
-'the info tab now shows the full sheet: artist, track, file, format, size, length, aliases, play count, last played and favorite status.'
-]},
-{date:'2026-10-21',type:'feature',title:'lyrics presets',notes:[
-'some songs get hard-coded lyrics instead of trusting the API.',
-'landscaping by windows96 no longer shows up as a "shordie shordie" song. it\'s instrumental and it says so.'
-]},
-{date:'2026-10-21',type:'patch',title:'housekeeping',notes:[
-'the info tab used to open completely empty on every song - it was never being called. fixed.',
-'removed seven leftover voice blip files from the cube days (1.mp3 - 7.mp3), nobody was using them.'
-]},
-{date:'2026-10-22',type:'feature',title:'this update log',notes:[
-'footer button, this book. entries are typed: patch, feature, update, music pack.',
-'new entries land here every time the site changes.'
-]},
-{date:'2026-10-22',type:'music pack',title:'the big haul: 68 -> 114 tracks',notes:[
-'forty-six new songs on the shelf.',
-'tally hall & miracle musical: &, the mind electric, murders, the bidding.',
-'havexy pack 2: thirteen tracks, tiktok ranters to hentai virus (yes, thats hantavirus, hes just like that).',
-'the entire Bad Things OST - all 22 songs, roblox psychological horror included.',
-'horror skunx: hey its me its verity + the OFFICIAL lord verity. the old lordverity file was a mashup and is now labeled "i miss the players" so nobody confuses them again.',
-"also new: who? hyperbaiter! (havexy), meltdown, terrible things, outcast of the sulphurous seas, i'm talking to you!"
-]},
-{date:'2026-10-22',type:'patch',title:'credits where they belong',notes:[
-'the nine vexy-era tracks (gypsy verity, folk valley, and all seven disstracks) now say (havexy) in the title - they were his all along.',
-'the lyrics for who? hyperbaiter! are hardcoded now, the full disstrack shows every time without asking lrclib.'
-]},
-{date:'2026-10-22',type:'feature',title:'five new rooms',notes:[
-'stats tab - total spins, top 10 tracks with bars, and recently spun history, all read straight from this browser (never uploaded).',
-'credits tab - who made what, the mirror links, and a shoutout to xul and men.',
-'the list now shows a spin count on every played row (×3 next to the duration), and the filter takes "recent" to sort everything by last played.',
-'smooth fades - switching records dips the old one and fades the new one in instead of a hard cut, and the sleep timer fades out over a couple seconds before it pauses.',
-'installable - void records can be added to your desktop as an app now, and the shell works offline once you have visited it once.'
-]},
-{date:'2026-10-22',type:'feature',title:'karaoke mode',notes:[
-'when lrclib has timed lyrics for a song, the lyrics tab now lines up with the music - the current line lights amber and follows along as it plays.',
-'same lrclib search as before, it just prefers the timed version now. songs without timing fall back to the plain text like always.',
-'try it on ruler of everything or the mind electric.'
-]},
-{date:'2026-10-22',type:'feature',title:'achievements! 26 of them',notes:[
-'a new awards tab in the record window (plus an achievements button in the footer) - progress bar, section filters, hints for the locked ones. all brand new, built for void records only.',
-'four sections: the deck (spins, the whole-shelf challenge), the knobs (shuffle, loop, pitch, redline, overdrive, tone, crackle, sleep), the window (tabs, karaoke, this log, install), the shelf (favorites, recent filter, local files, havexy).',
-'one of them is watching for something extremely rare crossing the screen. no hints. it sprints, it vanishes, you either saw it or you did not.',
-'unlocks pop an os-style toast in the corner. everything lives in this browser, same as your stats.'
-]},
-{date:'2026-10-22',type:'music pack',title:'slime rancher soundtrack added',notes:[
-'fifty-two more records on the shelf - songs 115 to 166.',
-'the full slime rancher soundtrack: dry reef, moss blanket, indigo quarry, ancient ruins, glass desert, nimble valley, the wilds, viktor\'s workshop, mochi\'s manor, ogden\'s retreat, the ranch, the slime sea and the slimeulation.',
-'late night, relaxed and night variants for the main zones, the radio tracks, and both ravenous rainbows.'
-]},
-{date:'2026-10-22',type:'music pack',title:'grim fandango soundtrack added',notes:[
-'thirty-one more records on the shelf - songs 171 to 201.',
-'the full grim fandango soundtrack: brennis, ledge peckers, domino\'s office, companeros, casino calavera, swanky maximino, smooth hector, she sailed away, gamboling glottis, blue casket bop, rubacava, temple gate, 9th heaven and nuevo marrow.',
-'search "gf" or "grim fandango" to find the whole pack.'
-]},{date:'2026-11-21',type:'music pack',title:'music pack 2: geometry dash + the meme shelf',notes:[
-'thirty new records on the shelf - 201 to 231.',
-'full geometry dash soundtrack: stereo madness through dash, all 23 levels in order.',
-'meme singles: baldi whistle funk, it\'s me it\'s stupidity, the full verity meme remix, spooky scary skeletons, hit the road dude, world\'s smallest violin and peppa pig.',
-'every track is searchable by alias, so "gd", "geometry dash" and "meme remix" all find their sections.',
-'new tracks are full webm video, so turning on video backgrounds in the knobs plays them behind the shelf.',
-'video backgrounds also take mp4 now, not just webm.',
-'also fixed the stale 114 track count in the tutorial and the all-tracks achievement.'
-]},
-{date:'2026-11-21',type:'music pack',title:'music pack 3: twelve more videos from the meme shelf',notes:[
-'twelve new records on the shelf - 231 to 243.','full video webm again, so they play behind the shelf when video backgrounds are on.','a mix of ytpmv mashups, slowed edits and song parodies: looping the circus, sad caseoh, it\'s like i\'m not even here, unhappy, sussy baka noot noot, oh ryan, do me a favor, bang bang bang, huss funk, whole server against you, too late already died, and the ubuntu parody.','search "m3" or "meme remix" to find the whole pack.'
-]},
-{date:'2026-11-21',type:'music pack',title:'music pack 3.5: the other whole-server cuts',notes:[
-'nine records total - 243 to 252.','the unalt and old cuts of the whole-server song, CÓSMICO ultra slowed, no signal (jersey club mix), with friends (extended), flower in a hurricane, and three cory in the house tracks (boss fight extended, final showdown, vs cory).','eight full video webm, plus the 65-minute cory boss theme as mp3 because its source is just a still image.','search "m3.5" or "m35" for just this batch, or "m3" for the whole 3.x family.'
-]},
-{date:'2026-11-21',type:'music pack',title:'music pack 4: the entire ultrakill ost and the pizza place shelf',notes:[
-'108 new records - 252 to 360.','the full work at a pizza place OST (14), the full ULTRAKILL soundtrack playlist (81), and 13 singles: slander audio final boss, the jersey strategy, locked in ammonia, teto begs for nitro, trust the showman x2, skies forever gray, obey your master, the red hot chili peppers bit, meet your lord, learn your lesson, the extended cut of if you see me use ubuntu, and mark rober - ocean dih.','everything is full video webm with video backgrounds, except the 65-minute cory boss theme from pack 3.5 which is mp3 now.','search "m4" or "pack 4" for this whole batch, "ultrakill" for the OST, or "wapp" for the pizza place tracks.','also added synced preset lyrics for "nope your too late i already died" via lrclib id 36118285, since the normal search could not find it.'
+{date:"2026-11-21",type:"music pack",title:"music pack 11: men's music",notes:[
+  "59 new records from men, a friend of lux, pulled from all 7 of his playlists. names always start with \"men - \" and every record carries the men alias.",
+  "attachment, inadequate pursuit, the ### ## ###### OSTs, buttersaken, tgwyktgotr, midnight pizza delivery, MFGR and calm mode on.",
+  "shelf is now 490. search \"men\", \"m11\", \"pack 11\" or \"music pack 11\" for the whole set."
 ]}
 ];
 var TYPE_COLOR={'patch':'#78b4ff','feature':'#64ffa0','update':'#c878ff','music pack':'#ffb43a'};
@@ -245,6 +82,7 @@ var TYPE_COLOR={'patch':'#78b4ff','feature':'#64ffa0','update':'#c878ff','music 
     }
   }
   function show(){
+    idx=0;
     win.hidden=false;
     win.classList.remove('out','anim');
     void win.offsetWidth;
